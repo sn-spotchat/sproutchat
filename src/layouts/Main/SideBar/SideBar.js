@@ -13,14 +13,14 @@ const Container = styled.div`
   left: 0;
   height: 100%;
   width: 240px;
-  background-color: lightgreen;
+  background-color: rgb(238,233,196);
 `;
 
 /* Constant Variables */
 const items = [
-  { label: "홈", href: "/home" },
-  { label: "게시판", href: "/board" },
-  { label: "상품", href: "/product" }
+  { label: "Map", href: "/home" },
+  { label: "chat1", href: "/board" },
+  { label: "chat2", href: "/product" }
 ];
 
 /* Main Compoent */

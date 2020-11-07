@@ -7,6 +7,7 @@ import styled from 'styled-components';
 
 /* Styled Components */
 const Container = styled.div`
+  background-color: white;
 `;
 
 /* Main Component */
