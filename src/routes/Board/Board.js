@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 /* Styled */
 import styled from 'styled-components';
+import Naverlogin from '../../components/naverlogin';
 
 /* Styled Components */
 const Container = styled.div`
@@ -18,7 +19,8 @@ const Board = props => {
   /* Renderer */
   return (
     <Container className={ className }>
-      Board
+      Board 
+      <Naverlogin/>
     </Container>
   );
 }
