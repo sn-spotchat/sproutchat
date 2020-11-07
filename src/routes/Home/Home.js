@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Map from '../../components/Map.js';
 
 /* Styled */
 import styled from 'styled-components';
@@ -18,7 +19,8 @@ const Board = props => {
   /* Renderer */
   return (
     <Container className={ className }>
-      Home
+      {/*Home*/}
+      <Map/>
     </Container>
   );
 }

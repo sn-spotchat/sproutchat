@@ -45,7 +45,7 @@ const Main = props => {
     <Container className={ className }>
       <GlobalStyle />
       <Header />
-      <SideBar />
+      <SideBar/>
       <Section>
         { children }
       </Section>
