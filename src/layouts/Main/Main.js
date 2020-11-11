@@ -10,7 +10,6 @@ import Header from './Header';
 import Footer from './Footer';
 import SideBar from './SideBar';
 import Section from './Section';
-import Naverlogin from '../../components/naverlogin';
 
 /* Global Styled */
 const GlobalStyle = createGlobalStyle`
@@ -47,7 +46,6 @@ const Main = props => {
       <GlobalStyle />
       <Header />
       <SideBar/>
-      <Naverlogin/>
       <Section>
         { children }
       </Section>

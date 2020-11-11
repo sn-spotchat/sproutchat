@@ -15,8 +15,6 @@ const naverlogin = ()=>{
 }
 var client_id = '8HkITidEmr1tQaw5jtAL'
 var redirectURI = encodeURI("http://localhost:3000/chat")
-//var naver_id_login = new window.naver_id_login(client_id, redirectURI)
-//var state = naver_id_login.getUniqState()
 
 class NaverLogin extends Component{
     componentDidMount() {
@@ -28,7 +26,7 @@ class NaverLogin extends Component{
         naver_id_login.init_naver_id_login()
     }
     render(){
-        return <div id="naver_id_login"></div>
+        return <div id="naver_id_login">login</div>
     }
 }
 class Success extends Component {

@@ -20,7 +20,6 @@ const Board = props => {
   /* Renderer */
   return (
     <Container className={ className }>
-      {/*Home*/}
       <Map/>
     </Container>
   );

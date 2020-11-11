@@ -6,7 +6,6 @@ import styled from 'styled-components';
 
 /* Sub Components */
 import SideBarNav from './SideBarNav';
-import Naverlogin from '../../../components/naverlogin.js';
 
 /* Styled Components */
 const Container = styled.div`
@@ -35,7 +34,6 @@ const SideBar = props => {
   return (
     <Container className={ className }>
       SideBar
-      <Naverlogin/>
       <SideBarNav items={ items } />
     </Container>
   );

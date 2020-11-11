@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { firestore } from './firebase';
 import sproutIcon from './icon.png'
 import { RenderAfterNavermapsLoaded, NaverMap, Marker } from 'react-naver-maps'; // 패키지 불러오기
-import { scryRenderedComponentsWithType } from 'react-dom/test-utils';
-import { scryRenderedDOMComponentsWithTag } from 'react-dom/test-utils';
+//import { scryRenderedComponentsWithType } from 'react-dom/test-utils';
+//import { scryRenderedDOMComponentsWithTag } from 'react-dom/test-utils';
 
 class DrawMarker extends Component {
   render(){ 
@@ -31,8 +31,8 @@ class Map extends Component {
   }
 
   updateList = () => { // 나중에 거리별 필터링도 여기서 수행 가능할듯!
-    const { stores } = this.state;
-    var rows = [];
+    //const { stores } = this.state;
+    //var rows = [];
     firestore.collection("stores").get().then((docs) => {
       docs.forEach((doc) => {
         this.setState({

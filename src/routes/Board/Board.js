@@ -19,7 +19,6 @@ const Board = props => {
   /* Renderer */
   return (
     <Container className={ className }>
-      Board 
       <Naverlogin/>
     </Container>
   );
