@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 /* Styled */
 import styled from 'styled-components';
 import Naverlogin from '../../components/naverlogin';
+import Login from '../../layouts/Main/Login';
 
 /* Styled Components */
 const Container = styled.div`
