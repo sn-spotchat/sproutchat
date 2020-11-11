@@ -28,8 +28,8 @@ const Header = props => {
   return (
     <Container className={ className }>
       <div>
-        <img src={ SproutIcon } width='60px' height='48px' padding-top='10px' alt="" />
-        <img src ={title} width='150px' height='60px' alt=""/>
+        <a href="/home"><img src={ SproutIcon } width='60px' height='48px' padding-top='10px' alt=""/>
+        <img src ={title} width='150px' height='60px' alt=""/></a>
       </div>
     </Container>
   );

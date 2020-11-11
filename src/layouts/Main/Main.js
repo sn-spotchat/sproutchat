@@ -10,7 +10,7 @@ import Header from './Header';
 import Footer from './Footer';
 import SideBar from './SideBar';
 import Section from './Section';
-
+import Login from './Login';
 /* Global Styled */
 const GlobalStyle = createGlobalStyle`
   html, body {
