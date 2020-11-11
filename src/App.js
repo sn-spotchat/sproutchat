@@ -31,11 +31,11 @@ function App() {
           component={ Product }
         />
         <RouteWithLayout
-          path="/not-found"
+          path="/chat"
           layout={ MainLayout }
           component={ NotFoundPage }
         />
-        <Redirect to="/not-found" />
+        <Redirect to="/home" />
       </Switch>
     </Router>
   );
