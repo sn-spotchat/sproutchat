@@ -4,10 +4,14 @@ import PropTypes from 'prop-types';
 /* Styled */
 import styled from 'styled-components';
 import Naverlogin from '../../components/naverlogin';
+//import NaverLogin from 'react-naver-login';
+//import Naverlogin from '../../components/node_login';
 
+//import SproutIcon from '../../components/icon.png';
 /* Styled Components */
 const Container = styled.div`
 `;
+//var str = '#access_token';
 
 /* Main Component */
 const Login = props => {
@@ -15,7 +19,13 @@ const Login = props => {
   const {
     className,
   } = props;
-
+/*
+  function getToken(){
+    if(window.location.hash.match('#access_token')==str){
+      alert(window.location.hash.match('#access_token'))
+      window.location.href = "www.naver.com";
+    }
+  }*/
   /* Renderer */
   return (
     <Container className={ className }>
@@ -25,9 +35,22 @@ const Login = props => {
             <p><input type="password" placeholder="password" id="loginPw" autocomplete="off"/></p>
             <p><input class="btn" type="submit" value="로그인"/></p>
         </form>
-      <Naverlogin/>
+     {/* <NaverLogin
+          client_id = '8HkITidEmr1tQaw5jtAL'
+          callbackUrl = "http://localhost:3000/chat"
+          callbackHandle="true"
+          render={
+            (props)=>
+            <div onClick={props.onClick}>
+              <img src={ SproutIcon } width='60px' height='48px' padding-top='10px' alt=""/>
+            </div>
+          }
+          onSuccess={(result)=> console.log(result)}
+        />*/}
+        <Naverlogin/>
     </Container>
   );
+
 }
 
 /* Main Component Settings */

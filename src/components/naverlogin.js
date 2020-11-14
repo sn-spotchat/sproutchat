@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 //import ReactDOM from "react-dom";
 //import callback from "./chat.html"
-import {BrowserRouter, Route} from "react-router-dom";
+import {BrowserRouter, Route} from 'react-router-dom';
 
 const naverlogin = ()=>{
     return (
@@ -26,10 +26,15 @@ class NaverLogin extends Component{
         naver_id_login.init_naver_id_login()
     }
     render(){
-        return <div id="naver_id_login">login</div>
+        return <div id="naver_id_login"></div>
     }
 }
 class Success extends Component {
+  render() {
+    return (
+      <div>환영합니다 님</div>
+    )
+/*
     state = {
       nickname: ''
     }
@@ -37,6 +42,7 @@ class Success extends Component {
       super(props)
       window.naverSignInCallback = this.naverSignInCallback.bind(this)
     }
+    
     naverSignInCallback() {
      var naver_id_login = new window.naver_id_login(client_id, redirectURI)
       this.setState({
@@ -51,7 +57,8 @@ class Success extends Component {
     render() {
       return (
         <div>환영합니다 {this.state.nickname}님</div>
-      )
+      )*/
     }
-  }
+}
+
 export default naverlogin;
