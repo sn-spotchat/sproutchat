@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/script.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+</head>
+<body>
+<div id="wrapper">
+    <div id="userWrap">
+        <nav>
+            <span>
+                <big>SPROUT CHAT</big>
+            </span>
+        </nav>
+        <div id="menuList">
+            <div id="menuHeader">메뉴</div>
+            <div class="button menuBtn" id="loginBtn">LOGIN</div>
+            <div class="button menuBtn" id="joinBtn">JOIN</div>
+            <!-- 네이버아이디로로그인 버튼 노출 영역 -->
+            <form id = "naverForm" name="naverForm">  
+                
+                <div id="naver_id_login" type=hidden>
+                    
+                    <script type="text/javascript">
+                        
+                        var naver_id_login = new naver_id_login("8HkITidEmr1tQaw5jtAL", "http://localhost:3000/chat");
+                        var state = naver_id_login.getUniqState();
+                        naver_id_login.setButton("white", 3, 43);
+                        
+                        naver_id_login.setDomain("http://localhost:3000/chat");
+                        naver_id_login.setState(state);
+                        //naver_id_login.setPopup();
+                        naver_id_login.init_naver_id_login();
+    
+                        // 네이버 접근 토큰 저장
+                        var login_access = naver_id_login.oauthParams.access_token;
+
+                        // 네이버 사용자 프로필 조회
+                        naver_id_login.get_naver_userprofile("naverSignInCallback()");
+                        naver_id_login.get_naver_userprofile("naverSignInCallback2()");
+                        
+                        var str = '#access_token';
+                        
+                        // 네이버 사용자 프로필 조회 이후 프로필 정보를 처리할 callback function
+                        function naverSignInCallback() {
+                            
+                            alert(naver_id_login.getProfileData('name') + ' ' + naver_id_login.getProfileData('email'));
+                            return naver_id_login.getProfileData('id');
+                        }
+                        function naverSignInCallback2() {
+                            
+                            return naver_id_login.getProfileData('name');
+                        }
+                        
+                        if(location.hash.match('#access_token') == str){
+                            alert(location.hash.match('#access_token'))
+                            document.naverForm.submit();
+                        }
+                    </script>
+                </div>
+                
+            </form>
+            
+                
+        </div>
+        <form id="loginForm">
+            <h1>LOGIN</h1>
+            <p><input type="text" placeholder="id" id="loginId" autocomplete="off"></p>
+            <p><input type="password" placeholder="password" id="loginPw" autocomplete="off"></p>
+            <p><input class="btn" type="submit" value="로그인"></p>
+            
+        </form>
+        <form id="joinForm">
+            <h1>JOIN</h1>
+            <p><input type="text" placeholder="id" id="joinId" autocomplete="off"></p>
+            <p><input type="password" placeholder="password" id="joinPw" autocomplete="off"></p>
+            <p><input class="btn" type="submit" value="회원가입"></p>
+            
+        </form>
+    </div>
+
+    <div id="contentWrap">
+        <nav>
+            <span id="nav-header">
+                <big>SPROUT CHAT</big>
+            </span>
+            <span id="logoutBtn">
+                로그아웃
+            </span>
+        </nav>
+        <div id="contentCover">
+            <div id="roomWrap">
+                <div id="roomList">
+                    <div id="roomHeader">채팅 방 목록</div>
+                    <div id="roomSelect">
+                        <div class="roomEl active" data-id="1">Chat 1 - 고이짱 돈가스</div>
+                        <div class="roomEl" data-id="2">Chat 2 - 투썸플레이스</div>
+                        <div class="roomEl" data-id="3">Chat 3 - </div>
+                        <div class="roomEl" data-id="4">Chat 4 - </div>
+                    </div>
+                </div>
+            </div>
+            <div id="chatWrap">
+                <div id="chatHeader">Please enter the room</div>
+                <div id="chatLog">
+                     
+                </div>
+                <form id="chatForm">
+                    <input type="text" autocomplete="off" size="20" id="message" placeholder="메시지를 입력하세요">
+                    <input type="submit" value="보내기">
+                </form>
+            </div>
+            <div id="memberWrap">
+                <div id="memberList">
+                    <div id="memberHeader">사람</div>
+                    <div id="memberSelect"></div>
+                         
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+</body>
+</html>

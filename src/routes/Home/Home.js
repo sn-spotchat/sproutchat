@@ -11,7 +11,7 @@ const Container = styled.div`
 `;
 
 /* Main Component */
-const Board = props => {
+const Home = props => {
   /* Props */
   const {
     className,
@@ -26,9 +26,9 @@ const Board = props => {
 }
 
 /* Main Component Settings */
-Board.propTypes = {
+Home.propTypes = {
   className: PropTypes.string,
 }
 
 /* Exports */
-export default Board;
+export default Home;

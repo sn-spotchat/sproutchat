@@ -18,7 +18,8 @@ const Container = styled.div`
 
 /* Constant Variables */
 const items = [
-  { label: "login", href: "/board" },
+  { label: "login", href: "/login" },
+  { label: "join", href: "/join" },
   { label: "Map", href: "/home" },
   { label: "chat2", href: "/product" }
 ];
