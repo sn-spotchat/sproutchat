@@ -6,9 +6,11 @@ import RouteWithLayout from './layouts/RouteWithLayout';
 import MainLayout from './layouts/Main';
 
 import Home from './routes/Home';
-import Board from './routes/Board';
+import Login from './routes/Board/login';
 import Product from './routes/Product';
 import NotFoundPage from './routes/NotFoundPage';
+import Chatting from './chat/chatting';
+import Join from './routes/Board/join';
 
 function App() {
   return (
@@ -21,21 +23,26 @@ function App() {
           component={ Home }
         />
         <RouteWithLayout
-          path="/board"
+          path="/login"
           layout={ MainLayout }
-          component={ Board }
+          component={ Login }
+        />
+        <RouteWithLayout
+          path="/join"
+          layout={ MainLayout }
+          component={ Join }
         />
         <RouteWithLayout
           path="/product"
           layout={ MainLayout }
-          component={ Product }
+          component={ Chatting }
         />
         <RouteWithLayout
-          path="/chat"
+          path="/notfoundpage"
           layout={ MainLayout }
           component={ NotFoundPage }
         />
-        <Redirect to="/home" />
+        {/*<Redirect to="/home" />*/}
       </Switch>
     </Router>
   );

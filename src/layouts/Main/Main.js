@@ -36,8 +36,8 @@ const Container = styled.div`
 const Main = props => {
   /* Props */
   const {
-    className,
-    children,
+    className, /*폴더 명*/
+    children, /*하위 항목의 const*/
   } = props;
   
   /* Renderer */

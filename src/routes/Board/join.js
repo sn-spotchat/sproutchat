@@ -3,15 +3,13 @@ import PropTypes from 'prop-types';
 
 /* Styled */
 import styled from 'styled-components';
-import Naverlogin from '../../components/naverlogin';
-import Login from '../../layouts/Main/Login';
 
 /* Styled Components */
 const Container = styled.div`
 `;
 
 /* Main Component */
-const Board = props => {
+const Join = props => {
   /* Props */
   const {
     className,
@@ -20,15 +18,20 @@ const Board = props => {
   /* Renderer */
   return (
     <Container className={ className }>
-      <Naverlogin/>
+        <form>
+            <h1>JOIN</h1>
+            <p><input type="text" placeholder="id" id="joinId" autocomplete="off"/></p>
+            <p><input type="password" placeholder="password" id="joinPw" autocomplete="off"/></p>
+            <p><input class="btn" type="submit" value="회원가입"/></p>
+        </form>
     </Container>
   );
 }
 
 /* Main Component Settings */
-Board.propTypes = {
+Join.propTypes = {
   className: PropTypes.string,
 }
 
 /* Exports */
-export default Board;
+export default Join;

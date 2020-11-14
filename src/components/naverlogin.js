@@ -7,7 +7,7 @@ const naverlogin = ()=>{
     return (
         <BrowserRouter>
         <div>
-          <Route exact path="/board" component={NaverLogin} />
+          <Route exact path="/login" component={NaverLogin} />
           <Route path="/chat" component={Success} />
         </div>
       </BrowserRouter>
