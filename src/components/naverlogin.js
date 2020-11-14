@@ -30,11 +30,7 @@ class NaverLogin extends Component{
     }
 }
 class Success extends Component {
-  render() {
-    return (
-      <div>환영합니다 님</div>
-    )
-/*
+
     state = {
       nickname: ''
     }
@@ -57,7 +53,7 @@ class Success extends Component {
     render() {
       return (
         <div>환영합니다 {this.state.nickname}님</div>
-      )*/
+      )
     }
 }
 
