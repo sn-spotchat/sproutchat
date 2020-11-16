@@ -1,4 +1,4 @@
-var express = require('express');
+/*var express = require('express');
 var app = express();
 var token = naver_id_login.oauthParams.access_token;
 var header = "Bearer " + token; // Bearer 다음에 공백 추가
@@ -24,4 +24,4 @@ app.get('/member', function (req, res) {
  });
  app.listen(3000, function () {
    console.log('http://127.0.0.1:3000/member app listening on port 3000!');
- });
+ });*/
