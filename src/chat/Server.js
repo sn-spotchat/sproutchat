@@ -20,7 +20,7 @@ var express = require('express'),
     onlineUsers = {}; // 현재 online인 회원이 담기는 object
  
 
-const api = require('../index');
+const api = require('../serverindex');
 app.use('/api', api);
 
 app.use(express.static('public')); // 정적파일(css, js...)을 사용하기 위한 path 지정
