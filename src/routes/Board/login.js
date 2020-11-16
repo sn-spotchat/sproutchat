@@ -35,18 +35,7 @@ const Login = props => {
             <p><input type="password" placeholder="password" id="loginPw" autocomplete="off"/></p>
             <p><input class="btn" type="submit" value="로그인"/></p>
         </form>
-     {/* <NaverLogin
-          client_id = '8HkITidEmr1tQaw5jtAL'
-          callbackUrl = "http://localhost:3000/chat"
-          callbackHandle="true"
-          render={
-            (props)=>
-            <div onClick={props.onClick}>
-              <img src={ SproutIcon } width='60px' height='48px' padding-top='10px' alt=""/>
-            </div>
-          }
-          onSuccess={(result)=> console.log(result)}
-        />*/}
+
         <Naverlogin/>
     </Container>
   );

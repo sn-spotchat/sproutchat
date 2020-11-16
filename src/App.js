@@ -11,6 +11,7 @@ import Product from './routes/Product';
 import NotFoundPage from './routes/NotFoundPage';
 import Chatting from './chat/chatting';
 import Join from './routes/Board/join';
+import Success from './components/naverlogin';
 
 function App() {
   return (
@@ -37,12 +38,12 @@ function App() {
           layout={ MainLayout }
           component={ Chatting }
         />
-        <RouteWithLayout
-          path="/notfoundpage"
+        {/*<RouteWithLayout
+          path="/chat" //naverlogin.js 안의 Success진행 
           layout={ MainLayout }
-          component={ NotFoundPage }
+          component={ Success }
         />
-        {/*<Redirect to="/home" />*/}
+        <Redirect to="/home" />*/}
       </Switch>
     </Router>
   );
