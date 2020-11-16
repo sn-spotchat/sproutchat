@@ -7,10 +7,10 @@ var api_url = "";
 
 //서버
 var express = require('express'),
-    port = process.env.PORT || 3000,
+    port = process.env.PORT || 3002,
     app = express(),
     server = require('http').createServer(app),
-    io = require('socket.io').listen(server), // socket.io 를 사용하기 위한 io 객체 생성
+    io = require('socket.io')(server), // socket.io 를 사용하기 위한 io 객체 생성 --- .listen 삭제
     users = {
         'test' : {
             id : 'test', 
@@ -18,24 +18,24 @@ var express = require('express'),
         }
     }, // 기본 회원이 담기는 object
     onlineUsers = {}; // 현재 online인 회원이 담기는 object
-   
-app.use(express.static('public')); // 정적파일(css, js...)을 사용하기 위한 path 지정
+ 
 
+const api = require('../index');
+app.use('/api', api);
+
+app.use(express.static('public')); // 정적파일(css, js...)을 사용하기 위한 path 지정
 
 app.get('/', function (req, res) {
     res.redirect('/chat');
 }); // '/' 로 들어오는 요쳥을 '/chat'으로 리다이렉팅
 
 app.get('/chat', function (req, res) {
-    res.sendFile(__dirname + '/chat.html');
+    //res.sendFile(__dirname + '/new_login'); //tsx는 다운이 받아져따...
+    
 }); // '/chat'으로 들어오는 요청은 chat.html 을 렌더링
 
-app.get('/submit', function (req, res) {
-    res.sendFile(__dirname + '/submit.html');
-}); // '/submit'으로 들어오는 요청은 submit.html 을 렌더링
-
 server.listen(port, () => {
-    console.log(`server open ${port}`);
+    console.log(`server open ${port}`);//이건 출력 된당
 }); // 3000 포트로 서버 open
 
 
@@ -112,7 +112,7 @@ io.sockets.on('connection', function (socket) {
     });
 
     function naverCheck(data) {
-        const loggedIn = location.search === '#access_token'
+        const loggedIn = window.location.search === '#access_token'
         if(loggedIn){
             console.log('로그인 완료')
         } else {
@@ -166,3 +166,4 @@ io.sockets.on('connection', function (socket) {
         return userstemp;
     }
 });
+
