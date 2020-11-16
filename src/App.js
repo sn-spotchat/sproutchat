@@ -17,7 +17,7 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Redirect exact from="/" to="/home" />
+        <Redirect exact from="/sproutchat" to="/home" />
         <RouteWithLayout
           path="/home"
           layout={ MainLayout }
