@@ -20,16 +20,16 @@ class Join extends React.Component {
         .then(res=>res.json())
         .then(data=>this.setState({username:data.username}));
   }
-render() {
-  const {username} = this.state;
-  return (
-      <div className="App">
-        <header className="App-header">
-          {username ? `Hello ${username}` : 'Hello World'}
-        </header>
-      </div>
-  );
-  ;
+  render() {
+    const {username} = this.state;
+    return (
+        <div className="App">
+          <header className="App-header">
+            {username ? `Hello ${username}` : 'Hello World'}
+          </header>
+        </div>
+    );
+    ;
 }
 }
 
