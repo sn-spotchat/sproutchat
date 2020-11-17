@@ -9,7 +9,6 @@ const Container = styled.div`
 `;
 
 class Join extends React.Component {
-
   constructor(props) {
       super(props);
       this.state = {

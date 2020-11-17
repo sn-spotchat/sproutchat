@@ -15,7 +15,9 @@ app.get(): get요청에만 동작하는 미들웨어
     선택적으로 다음으로 넘어갈 미들웨어 함수 지정 가능
 */
 //app.use('/api',api);
-app.use('/api',(req,res)=>res.json({username:'jinyoung'}));
+const cors=require('cors');
+app.use(cors());
+app.use('/api',(req,res)=>res.send({username:'jinyoung'}));
 ///api/(...)로 get요청이 들어오면 api라는 라우터 미들웨어가 처리
 ///api에 해당하는 index.js로 가서 router.get(...)에서 처리
 
