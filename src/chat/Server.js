@@ -18,6 +18,7 @@ app.get(): get요청에만 동작하는 미들웨어
 ///api/(...)로 get요청이 들어오면 api라는 라우터 미들웨어가 처리
 ///api에 해당하는 index.js로 가서 router.get(...)에서 처리
 const cors=require('cors');
+const { useEffect } = require('react')
 app.use(cors());
 
 //app.use('/api',(req,res)=>res.send({username:'jinyoung'}));
@@ -35,13 +36,24 @@ server.listen(port, () => {
 }); // 3001 포트로 서버 open
 
 io.on("connection", socket => {
-    socket.on('send message', (item) => {
-		const msg = item.name + ' : ' + item.message;
+    
+    socket.on('join', (item) => {
+		const msg = item.id + ' : ' + item.password;
 		console.log(msg);
-		io.emit('receive message', {name:item.name, message:item.message});
+		io.emit('join complete', {id:item.id, password:item.password});
     });
     socket.on('disconnect', function () {
 		console.log('user disconnected: ', socket.id);
 	});
-   
 });
+/*
+io.on('connection', socket => {
+	socket.on('send message', (item) => {
+		const msg = item.name + ' : ' + item.message;
+		console.log(msg);
+		io.emit('receive message', {name:item.name, message:item.message});
+	});
+    socket.on('disconnect', function () {
+		console.log('user disconnected: ', socket.id);
+	});
+});*/

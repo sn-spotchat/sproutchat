@@ -3,11 +3,13 @@ import './test.css';
 import socketIOClient from "socket.io-client";
 
 interface Message { name: string, message: string }
+
 const Test: React.FC = () => {
-  const [messageList, setMessageList] = React.useState<Message[]>([]);
-  const [name, setName] = React.useState('');
+  const [messageList, setMessageList] = React.useState<Message[]>([]);// <>: type 설정, 배열
+  const [name, setName] = React.useState(''); //컴포넌트 상태 관리. [현재 상태, setter함수]
   const [value, setValue] = React.useState('');
-  const socket = socketIOClient('localhost:3000');
+  const socket = socketIOClient('http://localhost:3000/');
+
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     socket.emit('send message', { name: name, message: value });

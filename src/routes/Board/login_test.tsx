@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 //import { io } from 'socket.io-client'
+import socketIOClient from "socket.io-client";
 
 type FormData = {
   id: string
@@ -59,7 +60,8 @@ const LoginForm: FC<{
 }
 
 const LoginTest: FC = (props) => {
-  const socket = useRef(io()).current
+ // const socket = useRef(io()).current
+ const socket = socketIOClient('localhost:3000');
   if(socket.connect().connected) { alert('yes')} else {alert('no')}
   const handleLogin = (id: string, pw: string) => {
     console.log('handleLogin')//나옴
