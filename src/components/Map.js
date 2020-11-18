@@ -9,16 +9,19 @@ class DrawMarker extends Component {
   render(){ 
     //const { row } = this.props;
     return(
+      
       <Marker
         key={1}
+        
         position={{lat: this.props.row.latitude, lng: this.props.row.longitude}}
-        animation={1}
+        animation={2}
         icon={{
           url:  sproutIcon,
           size:{width:90, height:60},
           scaledSize:{width:90,height:60},
           anchor: {x:90, y:75}
         }}
+        title = {this.props.row.name}
         onClick={() => {alert(`${this.props.row.name}`);}}
       />
     )
@@ -29,6 +32,7 @@ class Map extends Component {
   state = {
     stores: [{}]
   }
+
 
   updateList = () => { // 나중에 거리별 필터링도 여기서 수행 가능할듯!
     //const { stores } = this.state;
@@ -42,18 +46,25 @@ class Map extends Component {
     });
   }
 
+  componentDidMount(){
+    firestore.collection("stores").get().then((docs) => {
+      docs.forEach((doc) => {
+        this.setState({
+          stores: this.state.stores.concat({name: doc.data().name, latitude: doc.data().location.latitude, longitude: doc.data().location.longitude, ...doc })
+        });
+      });
+    });
+  }
   render() {
     const { stores } = this.state;
     const list = stores.map(function(row){ 
       return row.name; 
     });
     
+
     return ( 
       <view>
-        <a onClick = {this.updateList}> 
-          Search 
-          {list}
-        </a>
+        
         <RenderAfterNavermapsLoaded
         ncpClientId={'8tdwhciu8m'} // 자신의 네이버 계정에서 발급받은 Client ID
         error={<p>Maps Load Error</p>}

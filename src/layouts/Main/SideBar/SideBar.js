@@ -12,16 +12,16 @@ const Container = styled.div`
   position: fixed;
   left: 0;
   height: 100%;
-  width: 240px;
+  width: 189px;
   background-color: rgb(238,233,196);
 `;
 
 /* Constant Variables */
 const items = [
-  { label: "login", href: "/login" },
-  { label: "join", href: "/join" },
   { label: "Map", href: "/home" },
-  { label: "chat2", href: "/product" }
+  { label: "Login", href: "/login" },
+  { label: "Join", href: "/join" },
+  { label: "Chat", href: "/chat" }
 ];
 
 /* Main Compoent */
@@ -34,7 +34,11 @@ const SideBar = props => {
   /* Renderer */
   return (
     <Container className={ className }>
-      SideBar
+        {<br>
+          
+        </br>
+        }
+        SideBar
       <SideBarNav items={ items } />
     </Container>
   );

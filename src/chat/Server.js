@@ -1,10 +1,11 @@
+/*
 const { callbackify } = require('util');
 var client_id = '8HkITidEmr1tQaw5jtAL';
 var client_secret = 'UEoWMdGYuq';
 var state = "RAMDOM_STATE";
 var redirectURI = encodeURI("http://localhost:3000/chat");
 var api_url = "";
-
+*/
 //서버
 var express = require('express'),
     port = process.env.PORT || 3002,
@@ -21,7 +22,11 @@ var express = require('express'),
  
 
 const api = require('../serverindex');
-app.use('/api', api);
+//app.use('/api', api);
+
+const cors=require('cors');
+app.use(cors());
+app.use('/api',(req,res)=>res.send({username:'Sejin'}));
 
 app.use(express.static('public')); // 정적파일(css, js...)을 사용하기 위한 path 지정
 
@@ -38,9 +43,17 @@ server.listen(port, () => {
     console.log(`server open ${port}`);//이건 출력 된당
 }); // 3000 포트로 서버 open
 
-
-
+io.on('connection', socket => {
+    console.log('connect');
+    socket.on('chat-msg', (msg) => {
+        console.log('message:', msg)
+        // 모든 클라이언트에게 전송 --- (※6)
+        io.emit('chat-msg', msg)
+    })
+});
+/*
 io.sockets.on('connection', function (socket) {
+
     socket.on("join user", function (data, cb) {
         if (joinCheck(data)) {
             cb({result: false, data: "이미 존재하는 회원입니다."});
@@ -167,3 +180,4 @@ io.sockets.on('connection', function (socket) {
     }
 });
 
+*/

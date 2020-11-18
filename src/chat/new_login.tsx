@@ -46,7 +46,7 @@ const LoginForm: FC<{
 
   return (
     <form onSubmit={onSubmit}>
-      <h1>LOGIN</h1>
+      <h1>NEW LOGIN</h1>
       <p>
         <input
           ref={register}
