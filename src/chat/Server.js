@@ -1,5 +1,5 @@
 const express = require('express')
-const port = process.env.PORT || 3001
+const port = process.env.PORT || 3000
 const app = express()
 const server = require('http').createServer(app)
 const io = require('socket.io')(server) // socket.io 를 사용하기 위한 io 객체 생성
@@ -15,29 +15,33 @@ app.get(): get요청에만 동작하는 미들웨어
     선택적으로 다음으로 넘어갈 미들웨어 함수 지정 가능
 */
 //app.use('/api',api);
-const cors=require('cors');
-app.use(cors());
-app.use('/api',(req,res)=>res.send({username:'jinyoung'}));
 ///api/(...)로 get요청이 들어오면 api라는 라우터 미들웨어가 처리
 ///api에 해당하는 index.js로 가서 router.get(...)에서 처리
+const cors=require('cors');
+app.use(cors());
 
-app.get('/', function (req, res) {
-    res.redirect('/chat');
+//app.use('/api',(req,res)=>res.send({username:'jinyoung'}));
+
+/*app.get('/', function (req, res) {
+    res.redirect('/sproutchat');
 }); // '/' 로 들어오는 요쳥을 '/chat'으로 리다이렉팅*/
     
-app.get('/chat', function (req, res) {
+/*app.get('/sproutchat', function (req, res) {
     res.sendFile(__dirname + '/prev_page.html'); 
-}); // '/chat'으로 들어오는 요청 렌더링. html파일만 적용가능. 다른 파일은 코드 자체 출력.
+}); // '/chat'으로 들어오는 요청 렌더링. html파일만 적용가능. 다른 파일은 코드 자체 출력.*/
     
 server.listen(port, () => {
     console.log(`server open ${port}`);
 }); // 3001 포트로 서버 open
 
-io.on('connection', socket => {
-    console.log('connect');
-    socket.on('chat-msg', (msg) => {
-        console.log('message:', msg)
-        // 모든 클라이언트에게 전송 --- (※6)
-        io.emit('chat-msg', msg)
-      })
+io.on("connection", socket => {
+    socket.on('send message', (item) => {
+		const msg = item.name + ' : ' + item.message;
+		console.log(msg);
+		io.emit('receive message', {name:item.name, message:item.message});
+    });
+    socket.on('disconnect', function () {
+		console.log('user disconnected: ', socket.id);
+	});
+   
 });

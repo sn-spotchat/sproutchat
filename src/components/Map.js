@@ -4,7 +4,6 @@ import sproutIcon from './icon.png'
 import { RenderAfterNavermapsLoaded, NaverMap, Marker } from 'react-naver-maps'; // 패키지 불러오기
 //import { scryRenderedComponentsWithType } from 'react-dom/test-utils';
 //import { scryRenderedDOMComponentsWithTag } from 'react-dom/test-utils';
-import styled from 'styled-components';
 
 class DrawMarker extends Component {
   render(){ 

@@ -7,12 +7,12 @@ import styled from 'styled-components';
 /* Styled Components */
 const Container = styled.div`
 `;
-
 class Join extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
-          username:null
+          id:null,
+          password:null
       };
   }
   componentDidMount() {
@@ -23,11 +23,11 @@ class Join extends React.Component {
   render() {
     const {username} = this.state;
     return (
-        <div className="App">
+       <div className="App">
           <header className="App-header">
             {username ? `Hello ${username}` : 'Hello World'}
           </header>
-        </div>
+      </div>
     );
     ;
 }

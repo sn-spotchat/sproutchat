@@ -33,7 +33,7 @@ class NaverLogin extends Component{
 }
 class Success extends Component {
     state = {
-      nickname: ''
+      name: ''
     }
     constructor(props) {
       super(props)
@@ -44,9 +44,9 @@ class Success extends Component {
      var naver_id_login = new window.naver_id_login('8HkITidEmr1tQaw5jtAL', "http://localhost:3000/login/chat")
      
       this.setState({
-        nickname: naver_id_login.getProfileData('nickname')
+        name: naver_id_login.getProfileData('name')
       })
-      alert(naver_id_login.getProfileData('nickname')) /*undefined (2) */
+      alert(naver_id_login.getProfileData('name')) /*undefined (2) */
     }
     componentDidMount() {
       var naver_id_login = new window.naver_id_login('8HkITidEmr1tQaw5jtAL', "http://localhost:3000/login/chat")
@@ -55,7 +55,7 @@ class Success extends Component {
     }
     render() {
       return (
-        <div>환영합니다 {this.state.nickname}님</div>
+        <div>환영합니다 {this.state.name}님</div>
       )
     }
 }
