@@ -66,7 +66,8 @@ const LoginTest: FC = (props) => {
   const handleLogin = (id: string, pw: string) => {
     console.log('handleLogin')//나옴
     socket.emit(
-      SocketMessage.LOGIN_USER,
+      //SocketMessage.LOGIN_USER,
+      'login',
       { id, pw },
       (res: Record<string, unknown>) => {
         if (res.result) {
@@ -91,14 +92,14 @@ const LoginTest: FC = (props) => {
     socket.on('event', (data: unknown) => {
       console.log(data)
     })
-    socket.on(SocketMessage.LOGIN_USER, (data: FormData, cb: Function) => {
-      console.log('hi')
+    socket.on('login', (data: FormData, cb: Function) => {
+      console.log('hi client')
       if (loginCheck(data)) {
         alert(`로그인에 성공했습니다: ${data.id}`)
       } else {
         alert('등록된 회원이 없습니다')
       }
-    })
+    })//change on to emit
   }, [socket])
   return (
     <div className="App">
