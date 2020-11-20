@@ -13,13 +13,12 @@ import Chatting from './chat/chatting';
 import Join from './routes/Board/login_test';
 //import Join from './routes/Board/test';
 //import Join from './routes/Board/join';
-import Success from './components/naverlogin';
 
 function App() {
   return (
     <Router>
       <Switch>
-        <Redirect exact from="/" to="/home" />
+
         <Redirect exact from="/sproutchat" to="/home" />
         <RouteWithLayout
           path="/home"

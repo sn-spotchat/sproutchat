@@ -36,13 +36,13 @@ class Join extends React.Component {
 }
 */
 /* Main Component */
-interface data { id: string, password: string }
+/*interface data { id: string, password: string }
 
 const Join: React.FC= () => {
   const [joinList, setJoinList] = React.useState<data[]>([]);// <>: type 설정, 배열
   const [id, setId] = React.useState(''); //컴포넌트 상태 관리. [현재 상태, setter함수]
   const [password, setPassword] = React.useState('');
-  const socket = socketIOClient('localhost:3000');
+  const socket = socketIOClient('localhost:3002');
   
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -91,4 +91,4 @@ Join.propTypes = {
 }*/
 
 /* Exports */
-export default Join;
+//export default Join;

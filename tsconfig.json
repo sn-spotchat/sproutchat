@@ -21,6 +21,6 @@
     "jsx": "react"
   },
   "include": [
-    "src"
+    "src", "server/Server.js", "server/router.js", "src/setProxy.js"
   ]
 }

@@ -1,9 +1,16 @@
-const express = require('express')
-const port = process.env.PORT || 3000
-const app = express()
-const server = require('http').createServer(app)
-const io = require('socket.io')(server) // socket.io 를 사용하기 위한 io 객체 생성
-const api = require('./index');//여러 경로를 module화 해놓은 파일
+const express = require('express');
+const socket = require('socket.io');
+const http = require('http');
+const cors = require('cors');
+
+const port = 3002
+
+const router = require('./router');
+const app = express();
+const server = http.createServer(app);
+const io = socket(server); // socket.io 를 사용하기 위한 io 객체 생성
+
+app.use(cors());
 
 //먼저 로드 되는 함수가 먼저 실행. 코드 순서 중요.
 /*
@@ -17,8 +24,6 @@ app.get(): get요청에만 동작하는 미들웨어
 //app.use('/api',api);
 ///api/(...)로 get요청이 들어오면 api라는 라우터 미들웨어가 처리
 ///api에 해당하는 index.js로 가서 router.get(...)에서 처리
-//const cors=require('cors');
-//app.use(cors());
 
 //app.use('/api',(req,res)=>res.send({username:'jinyoung'}));
 
@@ -30,26 +35,27 @@ app.get(): get요청에만 동작하는 미들웨어
     res.sendFile(__dirname + '/prev_page.html'); 
 }); // '/chat'으로 들어오는 요청 렌더링. html파일만 적용가능. 다른 파일은 코드 자체 출력.*/
     
-server.listen(port, () => {
-    console.log(`server open ${port}`);
-}); // 3001 포트로 서버 open
 
-io.on("connection", socket => {
-	console.log('connected in server')
+io.on('connection', (socket) => {
+	console.log('connected in server');
+	socket.emit('connect');
+/*
     socket.on('join', (item) => {
 		const msg = item.id + ' : ' + item.password;
 		console.log(msg);
 		io.emit('join complete', {id:item.id, password:item.password});
-    });
-    socket.on('disconnect', function () {
+	});*/
+	socket.on('server',(id)=>{console.log('get server');});
+	socket.on('login', ({id,password}, callback) => {
+		console.log('hi server')
+		socket.emit('login',({id,password},callback))
+	})
+	socket.on('disconnect', function () {
 		console.log('user disconnected: ', socket.id);
 	});
-	socket.on('login', () => {
-		console.log('hi server')
-	})
 });
 /*
-io.on('connection', socket => {
+io.on('connection', (socket) => {
 	socket.on('send message', (item) => {
 		const msg = item.name + ' : ' + item.message;
 		console.log(msg);
@@ -59,3 +65,8 @@ io.on('connection', socket => {
 		console.log('user disconnected: ', socket.id);
 	});
 });*/
+//app.use(router);
+
+server.listen(3002, () => {
+    console.log(`server open *:3002`);
+}); 

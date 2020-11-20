@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
-//import { io } from 'socket.io-client'
-import socketIOClient from "socket.io-client";
+import  io  from 'socket.io-client'
+//import socketIOClient from "socket.io-client";
 
 type FormData = {
   id: string
@@ -60,11 +60,15 @@ const LoginForm: FC<{
 }
 
 const LoginTest: FC = (props) => {
- // const socket = useRef(io()).current
- const socket = socketIOClient('localhost:3000');
-  if(socket.connect().connected) { alert('yes')} else {alert('no')}
+   //const socket = useRef(io()).current;
+  const socket = io.connect('http://localhost:3002');
+  /*const socket = socketIOClient('/',{
+    transports:['websocket'],
+    path:'/socket',
+  });*/
+
   const handleLogin = (id: string, pw: string) => {
-    console.log('handleLogin')//나옴
+    console.log('handleLogin');//나옴
     socket.emit(
       //SocketMessage.LOGIN_USER,
       'login',
@@ -86,7 +90,7 @@ const LoginTest: FC = (props) => {
     socket.on('connect', () => {
       console.log('connected')
     })
-    socket.on('discounnect', () => {
+    socket.on('disconnect', () => {
       console.log('discounnected')
     })
     socket.on('event', (data: unknown) => {
@@ -99,7 +103,7 @@ const LoginTest: FC = (props) => {
       } else {
         alert('등록된 회원이 없습니다')
       }
-    })//change on to emit
+    })
   }, [socket])
   return (
     <div className="App">
