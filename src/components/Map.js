@@ -20,26 +20,48 @@ class Map extends Component {
 
   /*state.place에 저장된 검색어와 이름이 같은 점포 찾기*/
   handleSubmit = (e) => {
+    var isFound = false; // 검색 성공하면 true, 실패하면 false
+    const list = [];
+
     this.state.stores.forEach((store) => {
       store.animation = 0;
-      if(store.name == this.state.place){
+      if(store.name === this.state.place){
         const navermaps = window.naver.maps;
         this.setState(() => ({ center : new navermaps.LatLng(store.latitude, store.longitude)})); // 지도 중심 이동
         store.animation = 1; // 마커 통통 뛴다!
+        isFound = true;
       }
-    })
+    });
 
+    /*검색 실패하면 검색어가 포함된 가게 추천*/
+    if(isFound === false){
+      this.state.stores.forEach((store) => {
+        if(store.name.indexOf(this.state.place) !== -1){
+          if(list.length <= 5){
+            list.push(store.name); // 검색어가 포함된 가게 최대 5개 추가
+          }
+        }
+      })
+      this.setState({recomList: list});
+    }
     e.preventDefault();
   }
 
   /*마커 클릭 시 채팅방으로 이동*/
-  goToChat = (e) =>{
-    console.log(e);
+  goToChat = (id) =>{
     this.props.history.push("/product")
+    console.log("chat " + id)//
   }
 
   /* DB에 저장된 stores 정보 받아오기*/
-  componentDidMount() {
+  componentDidMount() { 
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.state.center.lat = position.coords.latitude;
+      this.state.center.lng = position.coords.longitude;
+      console.log("Latitude is :", position.coords.latitude);
+      console.log("Longitude is :", position.coords.longitude);
+    });
+    
     firestore.collection("stores").get().then((docs) => {
       docs.forEach((doc) => {
         this.setState({
@@ -51,7 +73,7 @@ class Map extends Component {
 
   render() {
     const { stores, center } = this.state;
-    
+
     return ( 
       <view>
         <form onSubmit={this.handleSubmit}>
@@ -63,6 +85,9 @@ class Map extends Component {
         />
         <input type="submit" value="search" onClick={this.handleChange}/>
         </form>
+
+        <div> {this.state.recomList /*검색어가 포함된 가게 이름 출력*/} </div>
+
         <RenderAfterNavermapsLoaded
         ncpClientId={'8tdwhciu8m'} // 자신의 네이버 계정에서 발급받은 Client ID
         error={<p>Maps Load Error</p>}
