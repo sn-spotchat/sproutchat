@@ -53,8 +53,9 @@ class Map extends Component {
     console.log("chat " + id)//
   }
 
-  /* DB에 저장된 stores 정보 받아오기*/
+  
   componentDidMount() { 
+    /* geolocation: 사용자 위치 가져오기 */
     navigator.geolocation.getCurrentPosition((position) => {
       this.state.center.lat = position.coords.latitude;
       this.state.center.lng = position.coords.longitude;
@@ -62,6 +63,7 @@ class Map extends Component {
       console.log("Longitude is :", position.coords.longitude);
     });
     
+    /* DB에 저장된 stores 정보 받아오기 */
     firestore.collection("stores").get().then((docs) => {
       docs.forEach((doc) => {
         this.setState({
