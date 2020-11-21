@@ -21,7 +21,7 @@ var express = require('express'),
     onlineUsers = {}; // 현재 online인 회원이 담기는 object
  
 
-const api = require('../serverindex');
+//const api = require('../serverindex');
 //app.use('/api', api);
 
 const cors=require('cors');
@@ -42,7 +42,7 @@ app.get('/chat', function (req, res) {
 server.listen(port, () => {
     console.log(`server open ${port}`);//이건 출력 된당
 }); // 3000 포트로 서버 open
-
+/*
 io.on('connection', socket => {
     console.log('connect');
     socket.on('chat-msg', (msg) => {
@@ -51,8 +51,38 @@ io.on('connection', socket => {
         io.emit('chat-msg', msg)
     })
 });
-/*
+*/
+
+
 io.sockets.on('connection', function (socket) {
+    
+    var joinForm = ('#joinForm');
+    joinForm.submit(function (e) {
+        alert('join')
+        console.log(document.getElementsById('joinId').value);
+        e.preventDefault();
+        let id = ("#joinId");
+        let pw = ("#joinPw");
+        if (id.val() === "" || pw.val() === "") {
+            alert("check validation");
+            return false;
+        } else {
+            socket.emit('join user', {
+                id: id.val(),
+                pw: pw.val()
+            }, function (res) {
+                if (res.result) {
+                    alert(res.data);
+                    id.val("");
+                    pw.val("");
+                    //("#loginBtn").click();
+                } else {
+                    alert(res.data);
+                    return false;
+                }
+            });
+        }
+    });
 
     socket.on("join user", function (data, cb) {
         if (joinCheck(data)) {
@@ -179,5 +209,3 @@ io.sockets.on('connection', function (socket) {
         return userstemp;
     }
 });
-
-*/

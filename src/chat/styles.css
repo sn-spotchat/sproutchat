@@ -1,5 +1,29 @@
 .App {
     font-family: sans-serif;
     text-align: center;
-  }
+}
   
+
+#joinForm {
+  float: left;
+  /*display: none;*/
+  width: 400px;
+  text-align: center;
+  margin: 20px; 
+}
+
+
+#LoginForm {
+  float: left;
+  width: 400px;
+  text-align: center;
+  margin: 20px; 
+}
+
+
+.LoginForm {
+  float: left;
+  width: 400px;
+  text-align: center;
+  margin: 20px; 
+}

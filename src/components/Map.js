@@ -57,9 +57,9 @@ class Map extends Component {
   }
   render() {
     const { stores } = this.state;
-    const list = stores.map(function(row){ 
-      return row.name; 
-    });
+    //const list = stores.map(function(row){ 
+    //  return row.name; 
+    //});
     
 
     return ( 
