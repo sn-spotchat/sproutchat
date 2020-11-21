@@ -9,6 +9,7 @@ class Map extends Component {
     center: {lat: 37.551764, lng: 126.941048},
     stores: [],
     place: '',
+    recomList: []
   }
 
   /*검색창에 쓴 검색어를 state.place에 저장*/
@@ -20,21 +21,39 @@ class Map extends Component {
 
   /*state.place에 저장된 검색어와 이름이 같은 점포 찾기*/
   handleSubmit = (e) => {
+    var isFound = false; // 검색 성공하면 true, 실패하면 false
+    const list = [];
+
     this.state.stores.forEach((store) => {
       store.animation = 0;
-      if(store.name == this.state.place){
+      if(store.name === this.state.place){
         const navermaps = window.naver.maps;
         this.setState(() => ({ center : new navermaps.LatLng(store.latitude, store.longitude)})); // 지도 중심 이동
         store.animation = 1; // 마커 통통 뛴다!
+        isFound = true;
       }
-    })
+    });
+
+    /*검색 실패하면 검색어가 포함된 가게 추천*/
+    if(isFound === false){
+      this.state.stores.forEach((store) => {
+        if(store.name.indexOf(this.state.place) !== -1){
+          if(list.length <= 5){
+            list.push(store.name); // 검색어가 포함된 가게 최대 5개 추가
+          }
+        }
+      })
+
+      this.setState({recomList: list});
+    }
 
     e.preventDefault();
   }
 
   /*마커 클릭 시 채팅방으로 이동*/
-  goToChat = (e) =>{
+  goToChat = (id) =>{
     this.props.history.push("/product")
+    console.log("chat " + id)//
   }
 
   /* DB에 저장된 stores 정보 받아오기*/
@@ -42,7 +61,7 @@ class Map extends Component {
     firestore.collection("stores").get().then((docs) => {
       docs.forEach((doc) => {
         this.setState({
-          stores: this.state.stores.concat({id: doc.data().id, name: doc.data().name, latitude: doc.data().location.latitude, longitude: doc.data().location.longitude, animation: 0, ...doc })
+          stores: this.state.stores.concat({id: doc.data().id, name: doc.data().name, latitude: doc.data().location.latitude, longitude: doc.data().location.longitude, animation: 0,  ...doc })
         });
       });
     });
@@ -50,7 +69,7 @@ class Map extends Component {
 
   render() {
     const { stores, center } = this.state;
-    
+
     return ( 
       <view>
         <form onSubmit={this.handleSubmit}>
@@ -62,6 +81,9 @@ class Map extends Component {
         />
         <input type="submit" value="search" onClick={this.handleChange}/>
         </form>
+
+        <div>{this.state.recomList /*검색어가 포함된 가게 이름 출력*/}</div>
+
         <RenderAfterNavermapsLoaded
         ncpClientId={'8tdwhciu8m'} // 자신의 네이버 계정에서 발급받은 Client ID
         error={<p>Maps Load Error</p>}
@@ -88,7 +110,7 @@ class Map extends Component {
                   anchor: {x:90, y:75}
                 }}
                 title={row.name}
-                onClick={this.goToChat}
+                onClick={() => this.goToChat(row.id)}
               />)
             )}  
           </NaverMap>
