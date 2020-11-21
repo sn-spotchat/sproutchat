@@ -3,11 +3,16 @@ var express = require('express'),
     app = express(),
     server = require('http').createServer(app);
 
-var io = require('socket.io')(server);
+//const cors=require('cors');
 
+//app.use(cors());
 
-const cors=require('cors');
-app.use(cors());
+const options = {
+    cors:true,
+    origins:['http://localhost:3000'],
+}
+
+var io = require('socket.io')(server, options);
 app.use('/api',(req,res)=>res.send({username:'Sejin'}));
 
 server.listen(port, () => {
@@ -16,9 +21,10 @@ server.listen(port, () => {
 
 
 io.on('connection', function (socket) {
+    console.log('server connection')
 
-    socket.emit('connect', () => {
-        console.log('server emit')
+    socket.on('login' , (data, cb) => {
+        socket.emit('login', data, cb);    
     })
 
 });

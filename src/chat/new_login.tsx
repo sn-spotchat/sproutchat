@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form'
 import { io } from 'socket.io-client'
 import './styles.css'
 
+//const socket = io('http://localhost:3005');
+
 type FormData = {
   id: string
   pw: string
@@ -96,13 +98,12 @@ const LoginForm: FC<{
 
 const NewLogin: FC = (props) => {
   
-  const socket = useRef(io()).current
-
+  const socket = useRef(io('http://localhost:3005')).current
+  
   const user = (username: string ) => {
     console.log(username)
   }
   
-  //const socket = io.connect('http://localhost:3005');
   const handleLogin = (id: string, pw: string) => {
     
     socket.emit(
@@ -131,8 +132,8 @@ const NewLogin: FC = (props) => {
     socket.on('connect', () => {
       console.log('connected')
     })
-    socket.on('discounnect', () => {
-      console.log('discounnected')
+    socket.on('disconnect', () => {
+      console.log('disconnected')
     })
     socket.on('event', (data: unknown) => {
       console.log(data)
