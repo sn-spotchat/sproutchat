@@ -12,7 +12,10 @@ const Chatting = props => {
     const {
         className,
       } = props;
-    
+
+      console.log(props);
+      const state = props.location.state;
+      console.log(state);
       /* Renderer */
       return (
         <Container className={ className }>
