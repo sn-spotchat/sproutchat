@@ -5,6 +5,7 @@ import title from '../../../components/title.png';
 
 /* Styled */
 import styled from 'styled-components';
+import '../../../components/Map.css'
 
 /* Styled components */
 const Container = styled.div`
@@ -14,7 +15,7 @@ const Container = styled.div`
   height: 58px;
   width: 100%;
   background-color: #D9CA9C;
-  border:1px solid black;
+  border:1px solid #D9CA9C;
 `;
 
 /* Main Compoent */
@@ -39,10 +40,7 @@ const Header = props => {
           
           </p>
         </form>
-
       </div>
-      
-      
     </Container>
   );
 }
