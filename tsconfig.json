@@ -21,6 +21,9 @@
     "jsx": "react"
   },
   "include": [
-    "src"
+    "src",
+    "src/chat/Server.js",
+    "src/setProxy.js",
+    "src/serverindex.js"
   ]
 }

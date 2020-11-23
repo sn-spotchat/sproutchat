@@ -7,7 +7,7 @@ import MainLayout from './layouts/Main';
 
 import Home from './routes/Home';
 import Login from './routes/Board/login';
-import NewLogin from './chat/new_login';
+import NewLogin from './chat/Login';
 import Join from './routes/Board/join';
 
 function App() {
@@ -32,7 +32,7 @@ function App() {
           component={ Join }
         />
         <RouteWithLayout
-          path="/chat" //naverlogin.js 안의 Success진행 
+          path="/chat" 
           layout={ MainLayout }
           component={ NewLogin }
         />

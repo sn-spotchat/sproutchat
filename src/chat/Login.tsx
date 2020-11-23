@@ -1,20 +1,16 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef, useState} from 'react'
+import {BrowserRouter as Router, Redirect, Route } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { io } from 'socket.io-client'
 import './styles.css'
-
-//const socket = io('http://localhost:3005');
+import Join from '../routes/Board/join';
 
 type FormData = {
   id: string
   pw: string
-  
 }
 
-const NAVER_LOGIN_SCRIPT_URL =
-  'https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js'
-
-
+const NAVER_LOGIN_SCRIPT_URL = 'https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js'
 
 function appendScript(src: string) {
   const script = document.createElement('script')
@@ -30,6 +26,18 @@ function loginCheck(data: FormData) {
   return true
 }
 
+const loginSuccess = () => {
+  
+  return(
+    <Router>
+      {/*<Route exact path= "/chat" component = {Join} />*/}
+      <Redirect from="/chat" to= "/join"/>
+    
+    </Router>
+  )
+  
+}
+
 const LoginForm: FC<{
   handleLogin: (id: string, pw: string) => void
   user: ( username: string) => void
@@ -40,6 +48,7 @@ const LoginForm: FC<{
   const [userstate, setState] = useState({
     state : ''
   });
+
   const onSubmit = handleSubmit(({ id, pw }) => {
     
     console.log(id, pw)
@@ -58,8 +67,10 @@ const LoginForm: FC<{
     
     user(String(userstate.state));
     handleLogin(id, pw)
+
   })
   
+
   return (
     
     <body>
@@ -142,7 +153,10 @@ const NewLogin: FC = (props) => {
     socket.on('login', (data: FormData, cb?: Function) => {
       console.log('hi')
       if (loginCheck(data)) {
-        alert(`로그인에 성공했습니다: ${data.id}`)
+        alert(`로그인에 성공했습니다\n${data.id}님 환영합니다.`)
+
+        //화면 전환
+        loginSuccess();
       } else {
         alert('등록된 회원이 없습니다')
       }
