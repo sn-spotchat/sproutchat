@@ -45,6 +45,7 @@
     border-radius: 0.8rem;
     font-size: 0.8rem;
     outline-style: none;
+    cursor: pointer;
   }
 
   .input{
@@ -56,11 +57,10 @@
   }
 
   .search_form{
-    float: left;
-    display: flex;
-    justify-content: left;
+    display: inline-block;
+    justify-content: space-evenly;
     background-color: #59a85f;
-    padding: 0.35rem;
+    padding: 0.3rem;
     height: auto;
     width: 210px;
     border-radius: 0.8rem;
@@ -68,21 +68,22 @@
   }
 
   .gps_container{
-    float: right;
+    display: inline-block;
     background-color: #59a85f;
     padding: 0.3rem;
     height: auto;
     width: auto;
     border-radius: 0.8rem;
-    margin:3px;
+    margin: 3px 10px;
   }
 
   .search_btn{
-    position: absolute;
-    margin-left: 5px;
-    margin-top: 3px;
+    float: right;
+    margin: 3px;
+    outline-style: none;
   }
 
-  .recom{
-    position: relative;
+  .color{
+    background-color: #f0e2ba;
+    padding-left: 5px;
   }
