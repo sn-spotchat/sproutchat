@@ -1,4 +1,5 @@
-/*$(function(){
+/*
+$(function(){
     var socket = io.connect();
     var $loginForm = $('#loginForm');
     var $joinForm = $('#joinForm');
@@ -59,4 +60,5 @@
         }
     });
 
-});*/
+});
+*/

@@ -27,9 +27,9 @@ const GlobalStyle = createGlobalStyle`
 
 /* Styled Components */
 const Container = styled.div`
-  padding-top: 56px;
+  padding-top: 60px;
   height: 100%;
-  padding-left: 240px;
+  padding-left: 190px;
 `;
 
 /* Main Compoent */

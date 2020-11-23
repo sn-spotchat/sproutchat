@@ -7,22 +7,20 @@ import MainLayout from './layouts/Main';
 
 import Home from './routes/Home';
 import Login from './routes/Board/login';
-import Product from './routes/Product';
-import NotFoundPage from './routes/NotFoundPage';
-import Chatting from './chat/chatting';
+import NewLogin from './chat/Login';
 import Join from './routes/Board/join';
-import Success from './components/naverlogin';
 
 function App() {
   return (
     <Router>
       <Switch>
+        <Redirect exact from="/" to="/home" />
         <Redirect exact from="/sproutchat" to="/home" />
         <RouteWithLayout
           path="/home"
           layout={ MainLayout }
           component={ Home }
-        />
+        />   
         <RouteWithLayout
           path="/login"
           layout={ MainLayout }
@@ -34,16 +32,10 @@ function App() {
           component={ Join }
         />
         <RouteWithLayout
-          path="/product"
+          path="/chat" 
           layout={ MainLayout }
-          component={ Chatting }
+          component={ NewLogin }
         />
-        {/*<RouteWithLayout
-          path="/chat" //naverlogin.js 안의 Success진행 
-          layout={ MainLayout }
-          component={ Success }
-        />
-        <Redirect to="/home" />*/}
       </Switch>
     </Router>
   );

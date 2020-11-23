@@ -27,18 +27,12 @@ class Map extends Component {
     this.state.stores.forEach((store) => {
       store.animation = 0;
       if(store.name === this.state.place){
-<<<<<<< HEAD
-        this.setState(() => ({ center : {lat: store.latitude, lng: store.longitude}})); // 지도 중심 이동
-=======
         const navermaps = window.naver.maps;
         this.setState(() => ({ center : new navermaps.LatLng(store.latitude, store.longitude)})); // 지도 중심 이동
->>>>>>> 38bc5ca228f0fe188d4ee548af2ec71e21e5b62c
         store.animation = 1; // 마커 통통 뛴다!
         isFound = true;
       }
     });
-<<<<<<< HEAD
-=======
 
     /*검색 실패하면 검색어가 포함된 가게 추천*/
     if(isFound === false){
@@ -53,7 +47,6 @@ class Map extends Component {
 
       this.setState({recomList: list});
     }
->>>>>>> 38bc5ca228f0fe188d4ee548af2ec71e21e5b62c
 
     /*검색 실패하면 검색어가 포함된 가게 추천*/
     if(isFound === false){
@@ -73,11 +66,7 @@ class Map extends Component {
   /*마커 클릭 시 채팅방으로 이동*/
   goToChat = (id) =>{
     window.history.pushState(this.state.center, "", "/home");
-<<<<<<< HEAD
-    this.props.history.push("/product", this.state.center);
-=======
     this.props.history.push("/product")
->>>>>>> 38bc5ca228f0fe188d4ee548af2ec71e21e5b62c
     console.log("chat " + id)//
   }
 
@@ -90,21 +79,13 @@ class Map extends Component {
     });
   }
 
-<<<<<<< HEAD
-  componentDidMount() { 
-=======
   componentDidMount() {
     /* 뒤로가기 누르면 이전의 지도 중심 유지 */
->>>>>>> 38bc5ca228f0fe188d4ee548af2ec71e21e5b62c
     window.onpopstate =  (event) => {
       this.setState({center: {lat: event.state.lat, lng: event.state.lng}});
     }
 
-<<<<<<< HEAD
-    /* DB에 저장된 stores 정보 받아오기 */
-=======
     /* DB에 저장된 stores 정보 받아오기*/
->>>>>>> 38bc5ca228f0fe188d4ee548af2ec71e21e5b62c
     firestore.collection("stores").get().then((docs) => {
       docs.forEach((doc) => {
         this.setState({
@@ -129,15 +110,9 @@ class Map extends Component {
         <input type="submit" value="search" onClick={this.handleChange}/>
         
         </form>
-<<<<<<< HEAD
-        <button onClick={this.getGPS}> 현재 위치정보 사용 </button>
-        <div> {this.state.recomList /*검색어가 포함된 가게 이름 출력*/} </div>
-        
-=======
 
         <button onClick={this.getGPS}> 현재 위치정보 사용 </button>
         <div>{this.state.recomList /*검색어가 포함된 가게 이름 출력*/}</div>
->>>>>>> 38bc5ca228f0fe188d4ee548af2ec71e21e5b62c
 
         <RenderAfterNavermapsLoaded
         ncpClientId={'8tdwhciu8m'} // 자신의 네이버 계정에서 발급받은 Client ID
@@ -153,24 +128,6 @@ class Map extends Component {
           center={center} // 지도 초기 위치
           defaultZoom={17} // 지도 초기 확대 배율
           >
-<<<<<<< HEAD
-              {stores.map(row => 
-                (<Marker
-                  key={1}
-                  position={{lat: row.latitude, lng: row.longitude}}
-                  animation={row.animation}
-                  icon={{
-                    url:  sproutIcon,
-                    size:{width:90, height:60},
-                    scaledSize:{width:90,height:60},
-                    anchor: {x:90, y:75}
-                  }}
-                  title={row.name}
-                  onClick={() => this.goToChat(row.id)}
-                />)
-              )}  
-
-=======
             {stores.map(row => 
               (<Marker
                 key={1}
@@ -186,7 +143,6 @@ class Map extends Component {
                 onClick={() => this.goToChat(row.id)}
               />)
             )}  
->>>>>>> 38bc5ca228f0fe188d4ee548af2ec71e21e5b62c
           </NaverMap>
         </RenderAfterNavermapsLoaded> 
       </view>

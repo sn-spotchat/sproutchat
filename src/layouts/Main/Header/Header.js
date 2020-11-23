@@ -11,7 +11,7 @@ const Container = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  height: 54px;
+  height: 58px;
   width: 100%;
   background-color: #D9CA9C;
   border:1px solid black;
@@ -28,9 +28,32 @@ const Header = props => {
   return (
     <Container className={ className }>
       <div>
-        <a href="/home"><img src={ SproutIcon } width='60px' height='48px' padding-top='10px' alt=""/>
-        <img src ={title} width='150px' height='60px' alt=""/></a>
+        <form type="submit">
+          <p>
+          
+          <img src={ SproutIcon } width='50px' height='32px' padding-left='100px' padding-top='10px' alt=""/>
+          <span>
+            {"   "}
+          </span>
+          <img src ={title} width='130px' height='32px' alt=""/>
+          <span>
+          {"   "}
+          </span>
+          <input
+            type="text"
+            name="id"
+            placeholder="Search Place.."
+            autoComplete="off"
+            
+            style = {{width:1200}}
+          />
+          <input className="btn" type="submit" value="검색" />
+          </p>
+        </form>
+
       </div>
+      
+      
     </Container>
   );
 }
