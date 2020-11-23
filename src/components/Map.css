@@ -72,6 +72,7 @@
     background-color: #59a85f;
     padding: 0.3rem;
     height: auto;
+    width: auto;
     border-radius: 0.8rem;
     margin:3px;
   }
@@ -80,4 +81,8 @@
     position: absolute;
     margin-left: 5px;
     margin-top: 3px;
+  }
+
+  .recom{
+    position: relative;
   }

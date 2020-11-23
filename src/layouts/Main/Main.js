@@ -27,9 +27,7 @@ const GlobalStyle = createGlobalStyle`
 
 /* Styled Components */
 const Container = styled.div`
-  padding-top: 60px;
   height: 100%;
-  padding-left: 190px;
 `;
 
 /* Main Compoent */
@@ -44,12 +42,10 @@ const Main = props => {
   return (
     <Container className={ className }>
       <GlobalStyle />
-      <Header />
       <SideBar/>
-      <Section>
+      <Section >
         { children }
       </Section>
-      <Footer />
     </Container>
   );
 }

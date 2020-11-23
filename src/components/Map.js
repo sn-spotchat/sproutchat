@@ -50,7 +50,7 @@ class Map extends Component {
         list.push('검색 결과가 없습니다.');
       }
     }
-
+    
     this.setState({recomList: list});
 
     e.preventDefault();
