@@ -36,18 +36,7 @@ const Header = props => {
             {"   "}
           </span>
           <img src ={title} width='130px' height='32px' alt=""/>
-          <span>
-          {"   "}
-          </span>
-          <input
-            type="text"
-            name="id"
-            placeholder="Search Place.."
-            autoComplete="off"
-            
-            style = {{width:1200}}
-          />
-          <input className="btn" type="submit" value="검색" />
+          
           </p>
         </form>
 

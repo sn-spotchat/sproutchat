@@ -18,9 +18,9 @@ const Container = styled.div`
 
 /* Constant Variables */
 const items = [
-  { label: "Map", href: "/home" },
   { label: "Login", href: "/login" },
   { label: "Join", href: "/join" },
+  { label: "Map", href: "/home" },
   { label: "Chat", href: "/chat" }
 ];
 
@@ -34,11 +34,7 @@ const SideBar = props => {
   /* Renderer */
   return (
     <Container className={ className }>
-        {<br>
-          
-        </br>
-        }
-        SideBar
+        
       <SideBarNav items={ items } />
     </Container>
   );
