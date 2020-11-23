@@ -1,16 +1,20 @@
 const express = require('express');
 const socket = require('socket.io');
 const http = require('http');
-const cors = require('cors');
+//const cors = require('cors');
 
-const port = 3002
-
-const router = require('./router');
+const port = process.env.PORT || 3002;
 const app = express();
-const server = http.createServer(app);
-const io = socket(server); // socket.io 를 사용하기 위한 io 객체 생성
+//app.use(cors());
+//const router = require('./router');
 
-app.use(cors());
+const options ={
+	cors:true,
+	origins:['http://localhost:3000'],
+}
+
+const server = http.createServer(app);
+const io = socket(server, options); // socket.io 를 사용하기 위한 io 객체 생성
 
 //먼저 로드 되는 함수가 먼저 실행. 코드 순서 중요.
 /*
@@ -34,39 +38,25 @@ app.get(): get요청에만 동작하는 미들웨어
 /*app.get('/sproutchat', function (req, res) {
     res.sendFile(__dirname + '/prev_page.html'); 
 }); // '/chat'으로 들어오는 요청 렌더링. html파일만 적용가능. 다른 파일은 코드 자체 출력.*/
-    
 
-io.on('connection', (socket) => {
+server.listen(port, () => {
+    console.log(`server open *:3002`);
+}); 
+
+io.on('connection', function(socket) {
 	console.log('connected in server');
-	socket.emit('connect');
-/*
-    socket.on('join', (item) => {
-		const msg = item.id + ' : ' + item.password;
-		console.log(msg);
-		io.emit('join complete', {id:item.id, password:item.password});
-	});*/
-	socket.on('server',(id)=>{console.log('get server');});
-	socket.on('login', ({id,password}, callback) => {
+
+	socket.on('server',(userid)=>{
+		console.log('get server');
+		console.log(userid);
+	});
+
+	socket.on('login', (data, cb) => {
 		console.log('hi server')
-		socket.emit('login',({id,password},callback))
+		socket.emit('login',data,cb)
 	})
 	socket.on('disconnect', function () {
 		console.log('user disconnected: ', socket.id);
 	});
 });
-/*
-io.on('connection', (socket) => {
-	socket.on('send message', (item) => {
-		const msg = item.name + ' : ' + item.message;
-		console.log(msg);
-		io.emit('receive message', {name:item.name, message:item.message});
-	});
-    socket.on('disconnect', function () {
-		console.log('user disconnected: ', socket.id);
-	});
-});*/
-//app.use(router);
 
-server.listen(3002, () => {
-    console.log(`server open *:3002`);
-}); 

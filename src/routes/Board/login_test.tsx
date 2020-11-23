@@ -1,16 +1,22 @@
 import React, { FC, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
-import  io  from 'socket.io-client'
-//import socketIOClient from "socket.io-client";
+import  { io }  from 'socket.io-client'
 
 type FormData = {
   id: string
   pw: string
 }
+const NAVER_LOGIN_SCRIPT_URL =
+  'https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js'
 
-enum SocketMessage {
-  LOGIN_USER = 'login:user'
-}
+  function appendScript(src: string) {
+    const script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.async = true
+    script.src = src
+  
+    document.head.appendChild(script)
+  }
 
 function loginCheck(data: FormData) {
   // TODO: Impl
@@ -21,7 +27,7 @@ const LoginForm: FC<{
   handleLogin: (id: string, pw: string) => void
 }> = (props) => {
   const { handleLogin } = props
-  const { register, handleSubmit, errors } = useForm<FormData>()
+  const { register, handleSubmit } = useForm<FormData>()
   const onSubmit = handleSubmit(({ id, pw }) => {
     console.log(id, pw) //찍힘
     if (!id || !pw) {
@@ -60,12 +66,7 @@ const LoginForm: FC<{
 }
 
 const LoginTest: FC = (props) => {
-   //const socket = useRef(io()).current;
-  const socket = io.connect('http://localhost:3002');
-  /*const socket = socketIOClient('/',{
-    transports:['websocket'],
-    path:'/socket',
-  });*/
+  const socket = useRef(io("http://localhost:3002")).current
 
   const handleLogin = (id: string, pw: string) => {
     console.log('handleLogin');//나옴
@@ -86,6 +87,10 @@ const LoginTest: FC = (props) => {
     )
   }
 
+  useEffect(()=>{
+    appendScript(NAVER_LOGIN_SCRIPT_URL)
+  },[])
+
   useEffect(() => {
     socket.on('connect', () => {
       console.log('connected')
@@ -96,7 +101,7 @@ const LoginTest: FC = (props) => {
     socket.on('event', (data: unknown) => {
       console.log(data)
     })
-    socket.on('login', (data: FormData, cb: Function) => {
+    socket.on('login', (data: FormData, cb?: Function) => {
       console.log('hi client')
       if (loginCheck(data)) {
         alert(`로그인에 성공했습니다: ${data.id}`)
@@ -105,9 +110,10 @@ const LoginTest: FC = (props) => {
       }
     })
   }, [socket])
+
   return (
     <div className="App">
-      <LoginForm handleLogin={handleLogin} />
+      <LoginForm handleLogin={handleLogin}/>
     </div>
   )
 }

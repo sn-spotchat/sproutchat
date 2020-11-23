@@ -13,13 +13,14 @@ import Chatting from './chat/chatting';
 import Join from './routes/Board/login_test';
 //import Join from './routes/Board/test';
 //import Join from './routes/Board/join';
+import Test from './test';
 
 function App() {
   return (
     <Router>
       <Switch>
-
         <Redirect exact from="/sproutchat" to="/home" />
+      
         <RouteWithLayout
           path="/home"
           layout={ MainLayout }

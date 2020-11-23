@@ -1,17 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 /* Styled */
 import styled from 'styled-components';
 import Naverlogin from '../../components/naverlogin';
-//import NaverLogin from 'react-naver-login';
-//import Naverlogin from '../../components/node_login';
 
-//import SproutIcon from '../../components/icon.png';
 /* Styled Components */
 const Container = styled.div`
 `;
-//var str = '#access_token';
 
 /* Main Component */
 const Login = props => {
@@ -27,6 +23,7 @@ const Login = props => {
     }
   }*/
   /* Renderer */
+
   return (
     <Container className={ className }>
       <form>
@@ -39,7 +36,6 @@ const Login = props => {
         <Naverlogin/>
     </Container>
   );
-
 }
 
 /* Main Component Settings */
