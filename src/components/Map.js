@@ -38,6 +38,7 @@ class Map extends Component {
         if(store.name.indexOf(this.state.place) !== -1){
           if(list.length <= 5){
             list.push(store.name); // 검색어가 포함된 가게 최대 5개 추가
+            store.animation = 1;
           }
         }
       })
