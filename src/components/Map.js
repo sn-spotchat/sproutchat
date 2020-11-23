@@ -38,8 +38,9 @@ class Map extends Component {
     if(isFound === false){
       this.state.stores.forEach((store) => {
         if(store.name.indexOf(this.state.place) !== -1){
-          if(list.length <= 5){
-            list.push(store.name); // 검색어가 포함된 가게 최대 5개 추가
+          if(list.length < 5){
+            list.push('\'' + store.name + '\' '); // 검색어가 포함된 가게 최대 5개 추가
+            store.animation = 1; // 마커 통통~
           }
         }
       })
@@ -52,12 +53,27 @@ class Map extends Component {
 
   /*마커 클릭 시 채팅방으로 이동*/
   goToChat = (id) =>{
+    window.history.pushState(this.state.center, "", "/home");
     this.props.history.push("/product")
     console.log("chat " + id)//
   }
 
-  /* DB에 저장된 stores 정보 받아오기*/
+  getGPS = () => {
+    /* geolocation: 사용자 위치 가져오기 */
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.setState({center: {lat: position.coords.latitude, lng: position.coords.longitude}});
+      console.log("Latitude is :", this.state.center.lat);
+      console.log("Longitude is :", this.state.center.lng);
+    });
+  }
+
   componentDidMount() {
+    /* 뒤로가기 누르면 이전의 지도 중심 유지 */
+    window.onpopstate =  (event) => {
+      this.setState({center: {lat: event.state.lat, lng: event.state.lng}});
+    }
+
+    /* DB에 저장된 stores 정보 받아오기*/
     firestore.collection("stores").get().then((docs) => {
       docs.forEach((doc) => {
         this.setState({
@@ -82,6 +98,7 @@ class Map extends Component {
         <input type="submit" value="search" onClick={this.handleChange}/>
         </form>
 
+        <button onClick={this.getGPS}> 현재 위치정보 사용 </button>
         <div>{this.state.recomList /*검색어가 포함된 가게 이름 출력*/}</div>
 
         <RenderAfterNavermapsLoaded
