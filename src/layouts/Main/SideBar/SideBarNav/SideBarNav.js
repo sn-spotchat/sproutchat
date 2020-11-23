@@ -12,7 +12,7 @@ import SideBarNavItem from './SideBarNavItem';
 /* Styled Components */
 const List = styled.ul`
   height: 100%;
-  background-color: rgb(238,233,196);
+  background-color: #D9CA9C;
   margin-top: 100px;
 `;
 

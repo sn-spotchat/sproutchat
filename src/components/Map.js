@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { firestore } from './firebase';
 import sproutIcon from './icon.png'
+import searchIcon from './search.png'
 import { RenderAfterNavermapsLoaded, NaverMap, Marker } from 'react-naver-maps'; // 패키지 불러오기
 import {withRouter} from 'react-router-dom';
+import "./Map.css"
 
 class Map extends Component {
   state = {
@@ -26,7 +28,7 @@ class Map extends Component {
 
     this.state.stores.forEach((store) => {
       store.animation = 0;
-      if(store.name === this.state.place){
+      if(store.name == this.state.place){
         const navermaps = window.naver.maps;
         this.setState(() => ({ center : new navermaps.LatLng(store.latitude, store.longitude)})); // 지도 중심 이동
         store.animation = 1; // 마커 통통 뛴다!
@@ -35,31 +37,22 @@ class Map extends Component {
     });
 
     /*검색 실패하면 검색어가 포함된 가게 추천*/
-    if(isFound === false){
+    if(isFound === false && this.state.place){
       this.state.stores.forEach((store) => {
         if(store.name.indexOf(this.state.place) !== -1){
-          if(list.length < 5){
+          if(list.length <= 5){
             list.push('\'' + store.name + '\' '); // 검색어가 포함된 가게 최대 5개 추가
             store.animation = 1; // 마커 통통~
           }
         }
       })
-
-      this.setState({recomList: list});
+      if(list.length == 0){
+        list.push('검색 결과가 없습니다.');
+      }
     }
+    
+    this.setState({recomList: list});
 
-    /*검색 실패하면 검색어가 포함된 가게 추천*/
-    if(isFound === false){
-      this.state.stores.forEach((store) => {
-        if(store.name.indexOf(this.state.place) !== -1){
-          if(list.length <= 5){
-            list.push(store.name); // 검색어가 포함된 가게 최대 5개 추가
-            store.animation = 1;
-          }
-        }
-      })
-      this.setState({recomList: list});
-    }
     e.preventDefault();
   }
 
@@ -99,21 +92,25 @@ class Map extends Component {
     const { stores, center } = this.state;
 
     return ( 
-      <view>
-        <form onSubmit={this.handleSubmit}>
-        <input 
-          className="input_search" 
-          type="text" 
-          id="search"
-          placeholder="search..."
-        />
-        <input type="submit" value="search" onClick={this.handleChange}/>
+      <view >
+        <div className="search_form">
+          <form onSubmit={this.handleSubmit}>
+            <input 
+            className="input" 
+            type="text" 
+            id="search"
+            placeholder="search..."
+            />
+            <input className="search_btn" src={searchIcon} height="25" width="25" type="image" onClick={this.handleChange}/>
+          </form>
+        </div>
         
-        </form>
+        <div className="gps_container">
+          <button className="btn" onClick={this.getGPS}>현재 위치정보 사용</button>
+        </div>
 
-        <button onClick={this.getGPS}> 현재 위치정보 사용 </button>
-        <div>{this.state.recomList /*검색어가 포함된 가게 이름 출력*/}</div>
-
+        <div className="recom">{this.state.recomList /*검색어가 포함된 가게 이름 출력*/}</div>
+     
         <RenderAfterNavermapsLoaded
         ncpClientId={'8tdwhciu8m'} // 자신의 네이버 계정에서 발급받은 Client ID
         error={<p>Maps Load Error</p>}
@@ -135,9 +132,9 @@ class Map extends Component {
                 animation={row.animation}
                 icon={{
                   url:  sproutIcon,
-                  size:{width:90, height:60},
-                  scaledSize:{width:90,height:60},
-                  anchor: {x:90, y:75}
+                  size:{width:60, height:40},
+                  scaledSize:{width:60,height:40},
+                  anchor: {x:30, y:40}
                 }}
                 title={row.name}
                 onClick={() => this.goToChat(row.id)}
