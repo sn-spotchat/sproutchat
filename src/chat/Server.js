@@ -23,7 +23,11 @@ io.on('connection', function (socket) {
     console.log('server connection')
 
     socket.on('login' , (data, cb) => {
-        socket.emit('login', data, cb);    
+        socket.emit('login', data, cb);
+        socket.emit('get_user',data,cb); 
+        //서버에서 저장을 해놓고 클라이언트에서 받으면 각 id에 따른 채팅방을 열어줌   
     })
-
+    socket.on('join' , (data, cb) => {
+        socket.emit('join', data, cb);    
+    })
 });

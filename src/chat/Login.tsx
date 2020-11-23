@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef, useState} from 'react'
-import {BrowserRouter as Router, Redirect, Route } from 'react-router-dom'
+import {BrowserRouter as Router, Redirect, Route,useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { io } from 'socket.io-client'
 import './styles.css'
@@ -24,18 +24,6 @@ function appendScript(src: string) {
 function loginCheck(data: FormData) {
   // TODO: Impl
   return true
-}
-
-const loginSuccess = () => {
-  
-  return(
-    <Router>
-      {/*<Route exact path= "/chat" component = {Join} />*/}
-      <Redirect from="/chat" to= "/join"/>
-    
-    </Router>
-  )
-  
 }
 
 const LoginForm: FC<{
@@ -70,16 +58,10 @@ const LoginForm: FC<{
 
   })
   
-
   return (
-    
     <body>
-    
       <form onSubmit={onSubmit}>
-
-
             <h1>NEW LOGIN</h1>
-
             <p>
               <input
                 ref={register}
@@ -103,12 +85,11 @@ const LoginForm: FC<{
             </p>
           </form>
     </body>
-    
   )
 }
 
 const NewLogin: FC = (props) => {
-  
+  const history = useHistory();
   const socket = useRef(io('http://localhost:3005')).current
   
   const user = (username: string ) => {
@@ -154,9 +135,7 @@ const NewLogin: FC = (props) => {
       console.log('hi')
       if (loginCheck(data)) {
         alert(`로그인에 성공했습니다\n${data.id}님 환영합니다.`)
-
-        //화면 전환
-        loginSuccess();
+        history.push('/home')
       } else {
         alert('등록된 회원이 없습니다')
       }
@@ -165,7 +144,6 @@ const NewLogin: FC = (props) => {
 
   return (
     <div className="NewLogin">
-     
       <LoginForm handleLogin={handleLogin} user={user}/>
     </div>
   )
