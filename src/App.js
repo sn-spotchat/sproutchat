@@ -8,7 +8,8 @@ import MainLayout from './layouts/Main';
 import Home from './routes/Home';
 import Login from './routes/Board/login';
 import NewLogin from './chat/Login';
-import Join from './routes/Board/join';
+//import Join from './routes/Board/join';
+import Join from './chat/Join';
 
 function App() {
   return (
@@ -24,7 +25,7 @@ function App() {
         <RouteWithLayout
           path="/login"
           layout={ MainLayout }
-          component={ Login }
+          component={ NewLogin }
         />
         <RouteWithLayout
           path="/join"
