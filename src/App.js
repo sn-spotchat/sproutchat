@@ -10,7 +10,7 @@ import Login from './routes/Board/login';
 import Product from './routes/Product';
 import NotFoundPage from './routes/NotFoundPage';
 import Chatting from './chat/chatting';
-import Join from './chat/login_test';
+import Join from './chat/Login';
 
 function App() {
   return (
