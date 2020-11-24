@@ -30,7 +30,7 @@ class Map extends Component {
       store.animation = 0;
       if(store.name == this.state.place){
         const navermaps = window.naver.maps;
-        this.setState(() => ({ center : new navermaps.LatLng(store.latitude, store.longitude)})); // 지도 중심 이동
+        this.setState(() => ({ center : { lat: store.latitude, lng: store.longitude}})); // 지도 중심 이동
         store.animation = 1; // 마커 통통 뛴다!
         isFound = true;
       }
