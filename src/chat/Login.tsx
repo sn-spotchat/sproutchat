@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef, useState} from 'react'
-import {BrowserRouter as Router, Redirect, Route,useHistory } from 'react-router-dom'
+import {BrowserRouter as Router, Redirect, Route, useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { io } from 'socket.io-client'
 import './styles.css'
@@ -24,6 +24,16 @@ function appendScript(src: string) {
 function loginCheck(data: FormData) {
   // TODO: Impl
   return true
+}
+
+const loginSuccess = () => {
+  console.log('loginSuccess')
+  return(
+    <Router>
+      
+    </Router>
+  )
+
 }
 
 const LoginForm: FC<{
@@ -84,7 +94,7 @@ const LoginForm: FC<{
               <input className="btn" type="submit" value="로그인" />
             </p>
           </form>
-    </body>
+    </body>   
   )
 }
 
@@ -136,6 +146,8 @@ const NewLogin: FC = (props) => {
       if (loginCheck(data)) {
         alert(`로그인에 성공했습니다\n${data.id}님 환영합니다.`)
         history.push('/home')
+        //화면 전환
+        loginSuccess();
       } else {
         alert('등록된 회원이 없습니다')
       }
@@ -144,6 +156,7 @@ const NewLogin: FC = (props) => {
 
   return (
     <div className="NewLogin">
+     
       <LoginForm handleLogin={handleLogin} user={user}/>
     </div>
   )
