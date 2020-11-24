@@ -27,32 +27,42 @@ const ChatForm: FC<{
 
   return (
     <body> 
-      <span id="nav-header">
-        <big>SPROUT CHAT</big>
-      </span>
-      <span id="logoutBtn">
-        로그아웃
-      </span>
+      <nav>
+        
+        <span id="logoutBtn">
+          로그아웃
+        </span>
+      </nav>
+      
+      <div id="contentCover">
+        <div id="roomWrap">
+            <div id="roomList">
+                <div id="roomHeader">채팅 방 목록</div>
+                <div id="roomSelect">
+                    <div className="roomEl active" data-id="1">Chat 1</div>
+                    <div className="roomEl" data-id="2">Chat 2</div>
+                    <div className="roomEl" data-id="3">Chat 3</div>
+                    <div className="roomEl" data-id="4">Chat 4</div>
+                </div>
+            </div>
+        </div>
+        <div id="chatWrap">
+          <div>Please enter the room</div>
+          <div id="chatLog"></div>
 
-      <div>
-          <div id="roomList">
-              <div id="roomHeader">채팅 방 목록</div>
-              <div id="roomSelect">
-                  <div data-id="1">Chat 1</div>
-                  <div data-id="2">Chat 2</div>
-                  <div data-id="3">Chat 3</div>
-                  <div data-id="4">Chat 4</div>
-              </div>
-          </div>
+          <form onSubmit={onSubmit} id="chatForm">
+            <input type="text" autoComplete="off" id="message" placeholder="메시지를 입력하세요"/>
+            <input type="submit" value="보내기"/>
+          </form>
+        </div>
+        <div id="memberWrap">
+            <div id="memberList">
+                <div id="memberHeader">참여자</div>
+                <div id="memberSelect"></div>
+                    
+            </div>
+        </div>   
       </div>
-      <div>
-        <div>Please enter the room</div>
-        <form onSubmit={onSubmit}>
-          <input type="text" autoComplete="off" id="message" placeholder="메시지를 입력하세요"/>
-          <input type="submit" value="보내기"/>
-        </form>
-      </div>
-         
     </body>
   )
 }

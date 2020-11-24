@@ -30,7 +30,7 @@ const loginSuccess = () => {
   console.log('loginSuccess')
   return(
     <Router>
-      
+
     </Router>
   )
 
@@ -145,7 +145,7 @@ const NewLogin: FC = (props) => {
       console.log('hi')
       if (loginCheck(data)) {
         alert(`로그인에 성공했습니다\n${data.id}님 환영합니다.`)
-        history.push('/home')
+        history.push('/chat')
         //화면 전환
         loginSuccess();
       } else {

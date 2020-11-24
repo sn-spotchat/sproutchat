@@ -6,9 +6,9 @@ import RouteWithLayout from './layouts/RouteWithLayout';
 import MainLayout from './layouts/Main';
 
 import Home from './routes/Home';
-import Login from './routes/Board/login';
+//import Login from './routes/Board/login';
 import NewLogin from './chat/Login';
-//import Join from './routes/Board/join';
+import NewChat from './chat/Chatting';
 import Join from './chat/Join';
 
 function App() {
@@ -32,10 +32,11 @@ function App() {
           layout={ MainLayout }
           component={ Join }
         />
+        
         <RouteWithLayout
           path="/chat" 
           layout={ MainLayout }
-          component={ NewLogin }
+          component={ NewChat }
         />
       </Switch>
     </Router>
