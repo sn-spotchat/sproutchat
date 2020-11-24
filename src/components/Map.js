@@ -113,7 +113,7 @@ class Map extends Component {
             </form>
           </div>
 
-          <button className="btn" onClick={this.getGPS}>현재 위치정보 사용</button>
+          <button className="gps" onClick={this.getGPS}>현재 위치정보 사용</button>
         </div>
 
         <div className="bottom">
