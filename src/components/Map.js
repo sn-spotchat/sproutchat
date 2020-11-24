@@ -4,7 +4,6 @@ import sproutIcon from './icon.png'
 import searchIcon from './search.png'
 import { RenderAfterNavermapsLoaded, NaverMap, Marker } from 'react-naver-maps'; // 패키지 불러오기
 import {withRouter} from 'react-router-dom';
-import "./Map.css"
 
 class Map extends Component {
   state = {
@@ -92,25 +91,35 @@ class Map extends Component {
     const { stores, center } = this.state;
 
     return ( 
-      <view >
-        <div className="search_form">
-          <form onSubmit={this.handleSubmit}>
-            <input 
-            className="input" 
-            type="text" 
-            id="search"
-            placeholder="search..."
-            />
-            <input className="search_btn" src={searchIcon} height="25" width="25" type="image" onClick={this.handleChange}/>
-          </form>
-        </div>
-        
-        <div className="gps_container">
-          <button className="btn" onClick={this.getGPS}>현재 위치정보 사용</button>
+      <view>
+        <div className="top">
+          <div className="search_container">
+            <form onSubmit={this.handleSubmit}>
+              <input 
+                className="input" 
+                type="text" 
+                id="search"
+                placeholder="search..."
+              />
+              
+              <input 
+                className="search_btn" 
+                src={searchIcon}
+                height="25" 
+                width="25" 
+                type="image" 
+                onClick={this.handleChange}
+              />
+            </form>
+          </div>
+
+          <button className="gps" onClick={this.getGPS}>현재 위치정보 사용</button>
         </div>
 
-        <div className="recom">{this.state.recomList /*검색어가 포함된 가게 이름 출력*/}</div>
-     
+        <div className="bottom">
+          {this.state.recomList /*검색어가 포함된 가게 이름 출력*/}
+        </div>
+
         <RenderAfterNavermapsLoaded
         ncpClientId={'8tdwhciu8m'} // 자신의 네이버 계정에서 발급받은 Client ID
         error={<p>Maps Load Error</p>}
