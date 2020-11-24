@@ -10,6 +10,7 @@ import Login from './routes/Board/login';
 import NewLogin from './chat/Login';
 //import Join from './routes/Board/join';
 import Join from './chat/Join';
+import Product from './routes/Product';
 
 function App() {
   return (
@@ -33,9 +34,9 @@ function App() {
           component={ Join }
         />
         <RouteWithLayout
-          path="/chat" 
+          path="/product" 
           layout={ MainLayout }
-          component={ NewLogin }
+          component={ Product }
         />
       </Switch>
     </Router>
