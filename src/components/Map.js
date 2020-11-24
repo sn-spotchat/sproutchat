@@ -92,34 +92,34 @@ class Map extends Component {
 
     return ( 
       <view>
-        <div className="color">
-        <div className="search_form">
-          <form onSubmit={this.handleSubmit}>
-            <input 
-              className="input" 
-              type="text" 
-              id="search"
-              placeholder="search..."
-            />
-            <input 
-              className="search_btn" 
-              src={searchIcon}
-              height="25" 
-              width="25" 
-              type="image" 
-              onClick={this.handleChange}
-            />
-          </form>
-        </div>
+        <div className="top">
+          <div className="search_container">
+            <form onSubmit={this.handleSubmit}>
+              <input 
+                className="input" 
+                type="text" 
+                id="search"
+                placeholder="search..."
+              />
+              
+              <input 
+                className="search_btn" 
+                src={searchIcon}
+                height="25" 
+                width="25" 
+                type="image" 
+                onClick={this.handleChange}
+              />
+            </form>
+          </div>
 
-        <div className="gps_container">
           <button className="btn" onClick={this.getGPS}>현재 위치정보 사용</button>
         </div>
 
-        <div>
+        <div className="bottom">
           {this.state.recomList /*검색어가 포함된 가게 이름 출력*/}
         </div>
-        </div>
+
         <RenderAfterNavermapsLoaded
         ncpClientId={'8tdwhciu8m'} // 자신의 네이버 계정에서 발급받은 Client ID
         error={<p>Maps Load Error</p>}
