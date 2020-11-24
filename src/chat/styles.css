@@ -12,8 +12,8 @@
 .btn {
   background: #fff;
   padding: 7px 40px;
-  border: 1px solid RGB(0, 126, 243);
-  color: RGB(0, 126, 243);
+  border: 1px solid rgb(92, 190, 72);
+  color: rgb(16, 63, 34);
   font-size: 17px;
 }
 
@@ -48,31 +48,6 @@
 }
 
 
-#menuList {
-  float: left;
-  width: 200px;
-  border: 1px solid rgb(92, 190, 72);
-  border-radius: 5px;
-  margin: 20px;
-}
-
-#menuHeader {
-  background-color: rgb(92, 190, 72);
-  color: #fff;
-  height: 40px;
-  font-size: 18px;
-  line-height: 40px;
-  text-align: center;
-  border-radius: 5px;
-}
-
-.menuBtn {
-  text-align: center;
-  border-bottom: 1px solid #f0f0f0;
-  padding: 10px 0px;
-}
-
-
 nav{
   width: 100%;
   min-width: 1280px;
@@ -86,7 +61,6 @@ nav{
   align-items: center;
   font-size: 17px;
 }
-
 
 #roomWrap {
   width: 200px;
@@ -121,6 +95,7 @@ nav{
 
 #chatWrap {
   display: flex;
+  flex-direction: column;
   text-align: center;
   width: 600px;
   border: 1px solid #ddd;
