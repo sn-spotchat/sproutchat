@@ -31,8 +31,8 @@ const JoinForm: FC<{
             flag = 1;
           }
         })
+        if(flag == 0) {  handleLogin(id, pw) }
       })
-    if(flag == 0) {handleLogin(id, pw)}
   })
   
   return (
@@ -59,7 +59,6 @@ const JoinForm: FC<{
             </p>
             <p>
             <input className="btn" type="submit" value="회원가입" />
-           
             </p>
           </form>
     </div>
@@ -77,11 +76,11 @@ const Join: FC = (props) => {
         id: id,
         pw: pw
       })
+      console.log('handlelogin')
       socket.emit(
         'join',
         { id, pw },
         (res: any) => {
-          alert('emit')
           if (res.result) {
             alert(res.data)
             // socketId = socket.id
@@ -93,7 +92,7 @@ const Join: FC = (props) => {
         }
       );
   }
-
+/*
   const inputDB=(id:string, pw: string)=>{
     var flag = 0;
     firestore.collection("users")
@@ -106,7 +105,6 @@ const Join: FC = (props) => {
           }
         })
       })
-
     if(flag == 0){
       firestore
       .collection("users")
@@ -115,7 +113,7 @@ const Join: FC = (props) => {
         pw: pw
       })
     }
-  }
+  }*/
 
   useEffect(() => {
     socket.on('connect', () => {
