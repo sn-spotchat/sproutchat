@@ -16,6 +16,7 @@ const ListItem = styled.button`
   width: 150px;
   background-color: #white;
   cursor: pointer;
+  outline-style: none;
   border: 3px solid #63b66a;
   border-radius: 0.8rem;
   font-size: 1rem;
@@ -36,11 +37,9 @@ const SideBarNavItem = props => {
   /* Renderer */
   return (
     <ListItem className={ className }>
-      <div>
       <NavLink to={ href }>
         { label }
       </NavLink>
-      </div>
     </ListItem>
   );
 }
