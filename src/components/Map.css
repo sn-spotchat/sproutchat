@@ -37,14 +37,27 @@
     }
   }
 
-  .location_btn {
+ .gps {
+
     color: white;
     background: #59a85f;
     padding: 0.5rem;
     border: none;
     border-radius: 0.8rem;
+    margin: 3px;
     font-size: 0.8rem;
     outline-style: none;
+    cursor: pointer;
+  }
+
+  .search_container{
+    justify-content: space-around;
+    background-color: #59a85f;
+    padding: 0.3rem;
+    height: auto;
+    width: 210px;
+    border-radius: 0.8rem;
+    margin: 3px;
   }
 
   .input{
@@ -55,34 +68,22 @@
     outline-style: none;
   }
 
-  .search_form{
-    float: left;
-    display: flex;
-    justify-content: left;
-    background-color: #59a85f;
-    padding: 0.35rem;
-    height: auto;
-    width: 210px;
-    border-radius: 0.8rem;
-    margin: 3px;
-  }
-
-  .gps_container{
-    float: right;
-    background-color: #59a85f;
-    padding: 0.3rem;
-    height: auto;
-    width: auto;
-    border-radius: 0.8rem;
-    margin:3px;
-  }
-
   .search_btn{
-    position: absolute;
-    margin-left: 5px;
-    margin-top: 3px;
+    float: right;
+    margin: 3px;
+    outline-style: none;
   }
 
-  .recom{
-    position: relative;
+  .top{
+    display: flex;
+    justify-content: space-between;
+    background-color: #f0e2ba;
+    padding: 2px 5px;
+  }
+
+  .bottom{
+    display: flex;
+    padding-left: 10px;
+    background-color: #f0e2ba;
+    font-size: 1rem;
   }
