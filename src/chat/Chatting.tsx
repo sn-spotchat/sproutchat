@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useRef } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { io } from 'socket.io-client'
 import './styles.css'
@@ -13,8 +14,8 @@ const ChatForm: FC<{
 }> = (props) => {
   
   const { handleChat } = props
-  const { register, handleSubmit } = useForm<FormData>()
-
+  const { handleSubmit } = useForm<FormData>()
+  const history = useHistory();
   const onSubmit = handleSubmit(({ id, pw }) => {
     
     console.log(id, pw)
@@ -22,32 +23,49 @@ const ChatForm: FC<{
       alert('check validation')
       return false
     }
-
+    handleChat(id,pw);
   })
 
   return (
     <body> 
       <nav>
-        
-        <span id="logoutBtn">
+        <div id="logoutHeader">
+        <span id="logoutBtn" onClick={() => {history.push('/home')}}>
           로그아웃
         </span>
+        </div>
       </nav>
       
       <div id="contentCover">
         <div id="roomWrap">
-            <div id="roomList">
-                <div id="roomHeader">채팅 방 목록</div>
-                <div id="roomSelect">
-                    <div className="roomEl active" data-id="1">Chat 1</div>
-                    <div className="roomEl" data-id="2">Chat 2</div>
-                    <div className="roomEl" data-id="3">Chat 3</div>
-                    <div className="roomEl" data-id="4">Chat 4</div>
+          <div id="roomList">
+            <div id="roomHeader">채팅 방 목록</div>
+            <div id="roomSelect">
+              <div className="roomName">
+                <div className="roomEl active" data-id="1">Chat 1</div>
+                <div id="out">나가기</div>
+              </div>
+              <div className="roomName">
+                <div className="roomEl" data-id="2">Chat 2</div>
+                <div id="out">나가기</div>
+              </div>
+              <div className="roomName">
+                <div className="roomEl" data-id="3">Chat 3</div>
+                <div id="out">나가기</div>
                 </div>
+              <div className="roomName">
+                <div className="roomEl" data-id="4">Chat 4</div>
+                <div id="out">나가기</div>
+              </div>
             </div>
+          </div>
         </div>
         <div id="chatWrap">
-          <div>Please enter the room</div>
+          <div>
+            <big>
+              Please enter the room
+            </big>
+          </div>
           <div id="chatLog"></div>
 
           <form onSubmit={onSubmit} id="chatForm">

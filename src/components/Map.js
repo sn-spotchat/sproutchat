@@ -27,9 +27,11 @@ class Map extends Component {
 
     this.state.stores.forEach((store) => {
       store.animation = 0;
-      if(store.name == this.state.place){
-        const navermaps = window.naver.maps;
-        this.setState(() => ({ center : {lat: store.latitude, lng: store.longitude}})); // 지도 중심 이동
+
+      if(store.name === this.state.place){
+        //const navermaps = window.naver.maps;
+        this.setState(() => ({ center : { lat: store.latitude, lng: store.longitude}})); // 지도 중심 이동
+
         store.animation = 1; // 마커 통통 뛴다!
         isFound = true;
       }
@@ -45,7 +47,7 @@ class Map extends Component {
           }
         }
       })
-      if(list.length == 0){
+      if(list.length === 0){
         list.push('검색 결과가 없습니다.');
       }
     }
@@ -58,7 +60,7 @@ class Map extends Component {
   /*마커 클릭 시 채팅방으로 이동*/
   goToChat = (id) =>{
     window.history.pushState(this.state.center, "", "/home");
-    this.props.history.push("/product")
+    this.props.history.push("/chat")
     console.log("chat " + id)//
   }
 
