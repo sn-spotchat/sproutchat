@@ -1,8 +1,8 @@
 .App {
-    font-family: sans-serif;
-    text-align: center;
+  font-family: sans-serif;
+  text-align: center;
 }
-  
+
 #contentWrap {
   width: 100%;
   min-width: 1280px;
@@ -10,48 +10,70 @@
 }
 
 .btn {
+  border-radius: 0.8rem;
   background: #fff;
+  width: 15%;
   padding: 7px 40px;
   border: 1px solid rgb(92, 190, 72);
   color: rgb(16, 63, 34);
   font-size: 17px;
+  margin-top: 5%;
+  cursor: pointer;
 }
 
+#joinpagebtn {
+  width: 15%;
+  height: 10%;
+  margin-top: 10%;
+}
 
-#joinForm {
+#loginpagebtn {
+  width: 15%;
+  height: 10%;
+  margin-top: 10%;
+}
+
+.JoinPage {
+  display: flex;
+  flex-direction: column;
+}
+
+.LoginPage {
+  display: flex;
+  flex-direction: column;
+}
+
+#JoinForm {
   float: left;
   /*display: none;*/
-  width: 400px;
+  
   text-align: center;
-  margin: 20px; 
+  margin: 10%; 
 }
 
 
 #LoginForm {
   float: left;
-  width: 400px;
+  
   text-align: center;
-  margin: 20px; 
+  margin: 10%; 
 }
 
-
-.LoginForm {
-  float: left;
-  width: 400px;
-  text-align: center;
-  margin: 20px; 
+#logoutHeader {
+  background-color: rgb(235, 231, 187);
 }
-
 
 #logoutBtn{
+  width: 10%;
   cursor: pointer;
+  text-align: center;
 }
 
 
 nav{
   width: 100%;
   min-width: 1280px;
-  height: 50px;
+  height: 65px;
   
   color: rgb(16, 63, 34);
   padding: 0px 20px;
@@ -64,13 +86,13 @@ nav{
 
 #roomWrap {
   width: 200px;
-  height: 300px;
 }
 
 #roomList {
   border: 1px solid rgb(92, 190, 72);
   border-radius: 5px;
 }
+
 
 #roomHeader {
   background-color: rgb(92, 190, 72);
@@ -82,10 +104,23 @@ nav{
   border-radius: 5px;
 }
 
+#out {
+  background-color: rgb(235, 231, 187);
+  text-align: center;
+  border-bottom: 1px solid #f0f0f0;
+  width: 30%;
+  cursor: pointer;
+}
+
+.roomName {
+  display: flex;
+  flex-direction: row;
+}
+
 .roomEl {
   text-align: center;
   border-bottom: 1px solid #f0f0f0;
-  padding: 10px 0px;
+  width: 70%;
   cursor: pointer;
 }
 
@@ -112,11 +147,10 @@ nav{
 }
 
 #chatLog {
-  height: 500px;
+  height: 550px;
   overflow-y: auto;
   padding: 10px;
 }
-
 
 .myMsg {
   text-align: right;
@@ -178,9 +212,11 @@ nav{
 
 #memberWrap{
   width: 200px;
+  padding-right: 50px
 }
 
 #memberList {
+  text-align: center;
   border: 1px solid #aaaaaa;
   border-radius: 5px;
 }
@@ -190,7 +226,6 @@ nav{
   height: 40px;
   font-size: 18px;
   line-height: 40px;
-  padding-left: 15px;
   border-bottom: 1px solid #f0f0f0;
   font-weight: 600;
 }
