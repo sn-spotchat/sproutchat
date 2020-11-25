@@ -1,10 +1,11 @@
 import React, { FC, useEffect, useRef, useState} from 'react'
-import {BrowserRouter as Router, Redirect, Route, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { io } from 'socket.io-client'
 import './styles.css'
 import { firestore } from '../components/firebase';
 import Join from '../routes/Board/join';
+import {items} from '../layouts/Main/SideBar/SideBar.js'
 
 type FormData = {
   id: string
@@ -28,7 +29,7 @@ const LoginForm: FC<{
 }> = (props) => {
   const { handleLogin } = props
   const { register, handleSubmit } = useForm<FormData>()
-
+  const history = useHistory();
   const onSubmit = handleSubmit(({ id, pw }) => {   
     console.log(id, pw)
     if (!id || !pw) {
@@ -37,34 +38,46 @@ const LoginForm: FC<{
     }
     handleLogin(id, pw)
   })
-  
+
   return (
-    <body>
-      <form onSubmit={onSubmit}>
-            <h1>NEW LOGIN</h1>
-            <p>
-              <input
-                ref={register}
-                type="text"
-                name="id"
-                placeholder="id"
-                autoComplete="off"
-              />
-            </p>
-            <p>
-              <input
-                ref={register}
-                type="password"
-                name="pw"
-                placeholder="password"
-                autoComplete="off"
-              />
-            </p>
-            <p>
-              <input className="btn" type="submit" value="로그인" />
-            </p>
-          </form>
-    </body>   
+    <div className="LoginPage">
+
+      <form onSubmit={onSubmit} id="LoginForm">
+        <div>
+          <h1>NEW LOGIN</h1>
+          <p>
+            <input
+              ref={register}
+              type="text"
+              name="id"
+              placeholder="id"
+              autoComplete="off"
+            />
+          </p>
+          <p>
+            <input
+              ref={register}
+              type="password"
+              name="pw"
+              placeholder="password"
+              autoComplete="off"
+            />
+          </p>
+          <p>
+            <input className="btn" type="submit" value="로그인" />
+          </p>
+        </div>
+            
+        <button className="btn" id="joinpagebtn" onClick={() => {history.push('/join')}}>
+          회원가입
+          <br></br>
+          하러가기
+        </button> 
+      </form>
+
+       
+    </div>
+          
   )
 }
 
@@ -72,11 +85,6 @@ const NewLogin: FC = (props) => {
   const history = useHistory();
   const socket = useRef(io('http://localhost:3005')).current
   
-  const user = (username: string ) => {
-    console.log(username)
-  }
-  
-  /* send login data to server */
   const handleLogin = (id: string, pw: string) => {
     socket.emit(
       'login',
@@ -84,24 +92,6 @@ const NewLogin: FC = (props) => {
     );
   }
 
-  /* send user id to server 
-  const sendUser = (id: string) => {
-    console.log("send " + id)
-    socket.emit(
-      'userInfo',
-      { id },
-      (res: any) => {
-        alert('emit')
-        if (res.result) {
-          alert(res.data)
-        } else {
-          alert('fail')
-          console.info(res)
-        }
-      }
-    )
-  }
-*/
   /* 등록된 회원인지 조회, db에 있을 시 로그인 */
   const loginCheck = (data: FormData) => {
     var flag = 0;
@@ -113,7 +103,13 @@ const NewLogin: FC = (props) => {
             flag = 1
             alert(`로그인에 성공했습니다\n${data.id}님 환영합니다.`)
             socket.emit('userInfo', data.id);
-            history.push('/chat')
+            items.map((item) => {
+              if(item.label == "Login"){
+                item.label = "My Page"
+                item.href = "/mypage"
+              }
+            })
+            history.push('/mypage') //화면 전환
           }
         })
         if(flag==0) {  alert('아이디 또는 비밀번호를 확인해주세요') }
@@ -131,8 +127,9 @@ const NewLogin: FC = (props) => {
     socket.on('disconnect', () => {
       console.log('disconnected')
     })
-    socket.on('event', (data: unknown) => {
-      console.log(data)
+    socket.on('joinpage', (data: any) => {
+      console.log('on')
+      history.push('/join')
     })
     socket.on('login', (data: FormData, cb?: Function) => {
       loginCheck(data)
@@ -140,6 +137,7 @@ const NewLogin: FC = (props) => {
     socket.on('userInfo', (data: String) => {
       console.log("here" + data)
     })
+
   }, [socket])
 
   return (

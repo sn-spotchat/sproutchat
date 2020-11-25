@@ -1,8 +1,9 @@
-import React, { FC, useEffect, useRef, useState} from 'react'
-import {BrowserRouter as Router, Redirect, Route , Link, useHistory} from 'react-router-dom'
+import React, { FC, useEffect, useRef } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { io } from 'socket.io-client'
 import './styles.css'
+
 import { firestore } from '../components/firebase';
 
 type FormData = {
@@ -11,9 +12,10 @@ type FormData = {
 }
 
 const JoinForm: FC<{
-  handleLogin: (id: string, pw: string) => void
+  handleJoin: (id: string, pw: string) => void
 }> = (props) => {
-  const { handleLogin } = props
+  const { handleJoin } = props
+  const history = useHistory();
   const { register, handleSubmit } = useForm<FormData>()
 
   const onSubmit = handleSubmit(({ id, pw }) => {
@@ -21,6 +23,7 @@ const JoinForm: FC<{
       alert('check validation')
       return false
     }
+
     var flag = 0;
     firestore.collection("users")
       .get()
@@ -31,13 +34,15 @@ const JoinForm: FC<{
             flag = 1;
           }
         })
-        if(flag == 0) {  handleLogin(id, pw) }
+        if(flag == 0) {  handleJoin(id, pw) }
       })
   })
-  
+
   return (
-    <div>
-      <form onSubmit={onSubmit}>
+    <div className="JoinPage">
+      <form onSubmit={onSubmit} id="JoinForm">
+          <div>
+
             <h1>NEW JOIN</h1>
             <p>
               <input
@@ -60,7 +65,16 @@ const JoinForm: FC<{
             <p>
             <input className="btn" type="submit" value="회원가입" />
             </p>
-          </form>
+          </div>
+
+          <button className="btn" id="loginpagebtn" onClick={() => {history.push('/login')}}>
+          로그인
+          <br></br>
+          하러가기
+          </button> 
+        </form>
+
+       
     </div>
   )
 }
@@ -69,7 +83,8 @@ const Join: FC = (props) => {
   const history = useHistory();
   const socket = useRef(io('http://localhost:3005')).current
 
-  const handleLogin = (id: string, pw: string) => {
+
+  const handleJoin = (id: string, pw: string) => {
       firestore
       .collection("users")
       .add({
@@ -92,28 +107,6 @@ const Join: FC = (props) => {
         }
       );
   }
-/*
-  const inputDB=(id:string, pw: string)=>{
-    var flag = 0;
-    firestore.collection("users")
-      .get()
-      .then((docs) => {
-        docs.forEach((doc)=>{
-         if(doc.data().id === id){
-            alert('존재하는 id 입니다.')
-            flag = 1;
-          }
-        })
-      })
-    if(flag == 0){
-      firestore
-      .collection("users")
-      .add({
-        id: id,
-        pw: pw
-      })
-    }
-  }*/
 
   useEffect(() => {
     socket.on('connect', () => {
@@ -121,6 +114,10 @@ const Join: FC = (props) => {
     })
     socket.on('disconnect', () => {
       console.log('disconnected')
+    })
+    socket.on('loginpage', (data: any) => {
+      console.log('on')
+      history.push('/login')
     })
 
     socket.on('join', (data: FormData, cb?: Function) => {
@@ -132,7 +129,7 @@ const Join: FC = (props) => {
 
   return (
     <div className="Join">
-      <JoinForm handleLogin={handleLogin}/>
+      <JoinForm handleJoin={handleJoin}/>
     </div>
   )
 }

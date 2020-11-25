@@ -5,6 +5,7 @@ import searchIcon from './search.png'
 import { RenderAfterNavermapsLoaded, NaverMap, Marker } from 'react-naver-maps'; // 패키지 불러오기
 import {withRouter} from 'react-router-dom';
 import { io } from 'socket.io-client';
+import './Map.css';
 
 class Map extends Component {
   state = {

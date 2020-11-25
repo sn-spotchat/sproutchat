@@ -38,8 +38,9 @@
   }
 
   .gps {
+
     color: white;
-    background: #59a85f;
+    background: #63b66a;
     padding: 0.5rem;
     border: none;
     border-radius: 0.8rem;
@@ -51,7 +52,7 @@
 
   .search_container{
     justify-content: space-around;
-    background-color: #59a85f;
+    background-color: #63b66a;
     padding: 0.3rem;
     height: auto;
     width: 210px;

@@ -33,4 +33,13 @@ io.on('connection', function (socket) {
     socket.on('userInfo', (data) => {
         socket.emit('userInfo', data);
     })
+    socket.on('joinpage', (data) => {
+        socket.emit('joinpage', data);
+    })
+    socket.on('loginpage', (data) => {
+        socket.emit('loginpage', data);
+    })
+    socket.on('room', (data) => {
+        socket.emit('room', data);
+    })
 });

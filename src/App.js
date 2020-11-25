@@ -10,7 +10,7 @@ import Home from './routes/Home';
 import NewLogin from './chat/Login';
 import NewChat from './chat/Chatting';
 import Join from './chat/Join';
-import Product from './routes/Product';
+import MyPage from './chat/MyPage'
 
 function App() {
   return (
@@ -39,6 +39,13 @@ function App() {
           layout={ MainLayout }
           component={ NewChat }
         />
+
+        <RouteWithLayout
+          path="/mypage" 
+          layout={ MainLayout }
+          component={ MyPage }
+        />
+
       </Switch>
     </Router>
   );
