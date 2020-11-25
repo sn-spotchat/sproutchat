@@ -59,7 +59,7 @@ class Map extends Component {
   /*마커 클릭 시 채팅방으로 이동*/
   goToChat = (id) =>{
     window.history.pushState(this.state.center, "", "/home");
-    this.props.history.push("/product")
+    this.props.history.push("/chat")
     console.log("chat " + id)//
   }
 

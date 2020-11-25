@@ -22,7 +22,7 @@ const ChatForm: FC<{
       alert('check validation')
       return false
     }
-
+    handleChat(id,pw);
   })
 
   return (
@@ -47,7 +47,11 @@ const ChatForm: FC<{
             </div>
         </div>
         <div id="chatWrap">
-          <div>Please enter the room</div>
+          <div>
+            <big>
+              Please enter the room
+            </big>
+          </div>
           <div id="chatLog"></div>
 
           <form onSubmit={onSubmit} id="chatForm">

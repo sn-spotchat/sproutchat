@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef, useState} from 'react'
-import {BrowserRouter as Router, Redirect, Route , Link, useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { io } from 'socket.io-client'
 import './styles.css'
@@ -26,8 +26,11 @@ const JoinForm: FC<{
   })
   
   return (
-    <div>
-      <form onSubmit={onSubmit}>
+    <div className="JoinPage">
+      <form onSubmit={onSubmit} id="JoinForm">
+          <div>
+
+          
             <h1>NEW JOIN</h1>
             <p>
               <input
@@ -51,7 +54,12 @@ const JoinForm: FC<{
             <input className="btn" type="submit" value="회원가입" />
            
             </p>
-          </form>
+          </div>
+        </form>
+        <form>
+          <input className="btn" type="submit" value="로그인 하러 가기" />
+        </form>
+        
     </div>
   )
 }

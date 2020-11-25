@@ -30,4 +30,7 @@ io.on('connection', function (socket) {
     socket.on('join' , (data, cb) => {
         socket.emit('join', data, cb);    
     })
+    socket.on('joinpage', (data) => {
+        socket.emit('joinpage', data);
+    })
 });

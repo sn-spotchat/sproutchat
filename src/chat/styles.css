@@ -2,7 +2,7 @@
     font-family: sans-serif;
     text-align: center;
 }
-  
+
 #contentWrap {
   width: 100%;
   min-width: 1280px;
@@ -17,13 +17,22 @@
   font-size: 17px;
 }
 
+.JoinPage {
+  display: flex;
+  flex-direction: column;
+}
 
-#joinForm {
+.LoginPage {
+  display: flex;
+  flex-direction: column;
+}
+
+#JoinForm {
   float: left;
   /*display: none;*/
   width: 400px;
   text-align: center;
-  margin: 20px; 
+  margin: 100px; 
 }
 
 
@@ -31,15 +40,7 @@
   float: left;
   width: 400px;
   text-align: center;
-  margin: 20px; 
-}
-
-
-.LoginForm {
-  float: left;
-  width: 400px;
-  text-align: center;
-  margin: 20px; 
+  margin: 100px; 
 }
 
 
@@ -51,7 +52,7 @@
 nav{
   width: 100%;
   min-width: 1280px;
-  height: 50px;
+  height: 65px;
   
   color: rgb(16, 63, 34);
   padding: 0px 20px;
@@ -64,7 +65,7 @@ nav{
 
 #roomWrap {
   width: 200px;
-  height: 300px;
+  
 }
 
 #roomList {
@@ -112,11 +113,10 @@ nav{
 }
 
 #chatLog {
-  height: 500px;
+  height: 550px;
   overflow-y: auto;
   padding: 10px;
 }
-
 
 .myMsg {
   text-align: right;
@@ -178,6 +178,7 @@ nav{
 
 #memberWrap{
   width: 200px;
+  padding-right: 50px
 }
 
 #memberList {
