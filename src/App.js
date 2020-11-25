@@ -10,7 +10,6 @@ import Home from './routes/Home';
 import NewLogin from './chat/Login';
 import NewChat from './chat/Chatting';
 import Join from './chat/Join';
-import Product from './routes/Product';
 
 function App() {
   return (
@@ -35,10 +34,11 @@ function App() {
         />
         
         <RouteWithLayout
-          path="/product" 
+          path="/chat" 
           layout={ MainLayout }
           component={ NewChat }
         />
+
       </Switch>
     </Router>
   );

@@ -152,11 +152,11 @@ const NewLogin: FC = (props) => {
         alert('등록된 회원이 없습니다')
       }
     })
+
   }, [socket])
 
   return (
     <div className="NewLogin">
-     
       <LoginForm handleLogin={handleLogin} user={user}/>
     </div>
   )
