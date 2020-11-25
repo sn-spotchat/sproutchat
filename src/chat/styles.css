@@ -59,6 +59,9 @@
   margin: 10%; 
 }
 
+#logoutHeader {
+  background-color: rgb(235, 231, 187);
+}
 
 #logoutBtn{
   width: 10%;
@@ -90,6 +93,7 @@ nav{
   border-radius: 5px;
 }
 
+
 #roomHeader {
   background-color: rgb(92, 190, 72);
   color: #fff;
@@ -100,10 +104,23 @@ nav{
   border-radius: 5px;
 }
 
+#out {
+  background-color: rgb(235, 231, 187);
+  text-align: center;
+  border-bottom: 1px solid #f0f0f0;
+  width: 30%;
+  cursor: pointer;
+}
+
+.roomName {
+  display: flex;
+  flex-direction: row;
+}
+
 .roomEl {
   text-align: center;
   border-bottom: 1px solid #f0f0f0;
-  padding: 10px 0px;
+  width: 70%;
   cursor: pointer;
 }
 

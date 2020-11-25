@@ -29,7 +29,7 @@ const ChatForm: FC<{
   return (
     <body> 
       <nav>
-        <div>
+        <div id="logoutHeader">
         <span id="logoutBtn" onClick={() => {history.push('/home')}}>
           로그아웃
         </span>
@@ -38,15 +38,27 @@ const ChatForm: FC<{
       
       <div id="contentCover">
         <div id="roomWrap">
-            <div id="roomList">
-                <div id="roomHeader">채팅 방 목록</div>
-                <div id="roomSelect">
-                    <div className="roomEl active" data-id="1">Chat 1</div>
-                    <div className="roomEl" data-id="2">Chat 2</div>
-                    <div className="roomEl" data-id="3">Chat 3</div>
-                    <div className="roomEl" data-id="4">Chat 4</div>
+          <div id="roomList">
+            <div id="roomHeader">채팅 방 목록</div>
+            <div id="roomSelect">
+              <div className="roomName">
+                <div className="roomEl active" data-id="1">Chat 1</div>
+                <div id="out">나가기</div>
+              </div>
+              <div className="roomName">
+                <div className="roomEl" data-id="2">Chat 2</div>
+                <div id="out">나가기</div>
+              </div>
+              <div className="roomName">
+                <div className="roomEl" data-id="3">Chat 3</div>
+                <div id="out">나가기</div>
                 </div>
+              <div className="roomName">
+                <div className="roomEl" data-id="4">Chat 4</div>
+                <div id="out">나가기</div>
+              </div>
             </div>
+          </div>
         </div>
         <div id="chatWrap">
           <div>
