@@ -26,16 +26,16 @@ class Map extends Component {
   handleSubmit = (e) => {
     var isFound = false; // 검색 성공하면 true, 실패하면 false
     const list = [];
-    const socket = io("http://localhost:3005/");
+    const socket = io.connect("http://localhost:3005/");
     socket.emit('userInfo' , this.state.place);
     socket.on('userInfo' , (data) => {
       this.setState({userID: data})
-      console.log("i am " + data)
+      console.log("i am " + this.userID)
     })
 
     this.state.stores.forEach((store) => {
       store.animation = 0;
-      if(store.name == this.state.place){
+      if(store.name === this.state.place){
         this.setState(() => ({ center : {lat: store.latitude, lng: store.longitude}})); // 지도 중심 이동
         store.animation = 1; // 마커 통통 뛴다!
         isFound = true;
@@ -52,7 +52,7 @@ class Map extends Component {
           }
         }
       })
-      if(list.length == 0){
+      if(list.length === 0){
         list.push('검색 결과가 없습니다.');
       }
     }
@@ -87,7 +87,7 @@ class Map extends Component {
   }
 
   componentDidMount() {
-    const socket = io("http://localhost:3005/");
+    const socket = io.connect("http://localhost:3005/");
     socket.on('userInfo' , (data) => {
       this.setState({userID: data})
       console.log("i am " + data)
