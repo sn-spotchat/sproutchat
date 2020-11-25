@@ -2,12 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SproutIcon from '../../../components/icon.png';
 import title from '../../../components/title.png';
+import {withRouter} from 'react-router-dom';
 
 /* Styled */
 import styled from 'styled-components';
 
 /* Sub Components */
 import SideBarNav from './SideBarNav';
+import SideBarNavItem from './SideBarNav/SideBarNavItem';
 
 /* Styled Components */
 const Container = styled.div`
@@ -19,9 +21,9 @@ const Container = styled.div`
 `;
 
 /* Constant Variables */
-const items = [
-  { label: "Login & Join", href: "/login" },
-  
+export const items = [
+  { label: "Login", href: "/login" },
+  //{ label: "Join", href: "/join" },
   { label: "Map", href: "/home" },
   { label: "Chat", href: "/chat" }
 ];
@@ -32,7 +34,7 @@ const SideBar = props => {
   const {
     className,
   } = props;
-  
+
   /* Renderer */
   return (
     <Container className={ className }>
@@ -49,7 +51,7 @@ const SideBar = props => {
             </p>
           </form>
         </div>
-      <SideBarNav items={ items } />
+      <SideBarNav items={ items }/>
     </Container>
   );
 }
@@ -60,4 +62,4 @@ SideBar.propTypes = {
 }
 
 /* Exports */
-export default SideBar;
+export default withRouter(SideBar);

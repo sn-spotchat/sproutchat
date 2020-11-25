@@ -3,6 +3,8 @@ import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { io } from 'socket.io-client'
 import './styles.css'
+import Join from '../routes/Board/join';
+import {items} from '../layouts/Main/SideBar/SideBar.js'
 
 type FormData = {
   id: string
@@ -142,8 +144,17 @@ const NewLogin: FC = (props) => {
       console.log('hi')
       if (loginCheck(data)) {
         alert(`로그인에 성공했습니다\n${data.id}님 환영합니다.`)
-        history.push('/chat')//화면 전환
-        
+
+        items.map((item) => {
+          if(item.label == "Login"){
+            item.label = "My Page"
+            item.href = "/mypage"
+          }
+        })
+
+        history.push('/mypage') //화면 전환
+        loginSuccess();
+
       } else {
         alert('등록된 회원이 없습니다')
       }
@@ -153,8 +164,7 @@ const NewLogin: FC = (props) => {
 
   return (
     <div className="NewLogin">
-     
-      <LoginForm handleLogin={handleLogin}/>
+      <LoginForm handleLogin={handleLogin} user={user}/>
     </div>
   )
 }

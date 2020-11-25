@@ -10,10 +10,11 @@ import styled from 'styled-components';
 import SideBarNavItem from './SideBarNavItem';
 
 /* Styled Components */
-const List = styled.ul`
+const List = styled.div`
+  display: table-cell;
+  vertical-align: middle;
   height: 100%;
   background-color: #D9CA9C;
-  margin-top: 100px;
 `;
 
 /* Main Compoent */
