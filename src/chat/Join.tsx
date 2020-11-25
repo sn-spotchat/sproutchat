@@ -1,10 +1,8 @@
-import React, { FC, useEffect, useRef, useState} from 'react'
+import React, { FC, useEffect, useRef } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { io } from 'socket.io-client'
 import './styles.css'
-import Login from './Login'
-import { isPropertySignature } from 'typescript'
 
 type FormData = {
   id: string
@@ -12,9 +10,10 @@ type FormData = {
 }
 
 const JoinForm: FC<{
-  handleLogin: (id: string, pw: string) => void
+  handleJoin: (id: string, pw: string) => void
 }> = (props) => {
-  const { handleLogin } = props
+  const { handleJoin } = props
+  const history = useHistory();
   const { register, handleSubmit } = useForm<FormData>()
 
   const onSubmit = handleSubmit(({ id, pw }) => {
@@ -22,15 +21,14 @@ const JoinForm: FC<{
       alert('check validation')
       return false
     }
-    handleLogin(id, pw)
+    handleJoin(id, pw)
   })
-  
+
   return (
     <div className="JoinPage">
       <form onSubmit={onSubmit} id="JoinForm">
           <div>
 
-          
             <h1>NEW JOIN</h1>
             <p>
               <input
@@ -55,11 +53,15 @@ const JoinForm: FC<{
            
             </p>
           </div>
+
+          <button className="btn" id="loginpagebtn" onClick={() => {history.push('/login')}}>
+          로그인
+          <br></br>
+          하러가기
+          </button> 
         </form>
-        <form>
-          <input className="btn" type="submit" value="로그인 하러 가기" />
-        </form>
-        
+
+       
     </div>
   )
 }
@@ -68,7 +70,7 @@ const Join: FC = (props) => {
   const history = useHistory();
   const socket = useRef(io('http://localhost:3005')).current
 
-  const handleLogin = (id: string, pw: string) => {
+  const handleJoin = (id: string, pw: string) => {
     socket.emit(
       'join',
       { id, pw },
@@ -93,6 +95,10 @@ const Join: FC = (props) => {
     socket.on('disconnect', () => {
       console.log('disconnected')
     })
+    socket.on('loginpage', (data: any) => {
+      console.log('on')
+      history.push('/login')
+    })
 
     socket.on('join', (data: FormData, cb?: Function) => {
         alert(`회원가입에 성공했습니다\n${data.id}님 환영합니다.`)
@@ -104,7 +110,7 @@ const Join: FC = (props) => {
 
   return (
     <div className="Join">
-      <JoinForm handleLogin={handleLogin}/>
+      <JoinForm handleJoin={handleJoin}/>
     </div>
   )
 }

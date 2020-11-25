@@ -28,8 +28,8 @@ class Map extends Component {
 
     this.state.stores.forEach((store) => {
       store.animation = 0;
-      if(store.name == this.state.place){
-        const navermaps = window.naver.maps;
+      if(store.name === this.state.place){
+        //const navermaps = window.naver.maps;
         this.setState(() => ({ center : { lat: store.latitude, lng: store.longitude}})); // 지도 중심 이동
         store.animation = 1; // 마커 통통 뛴다!
         isFound = true;
@@ -46,7 +46,7 @@ class Map extends Component {
           }
         }
       })
-      if(list.length == 0){
+      if(list.length === 0){
         list.push('검색 결과가 없습니다.');
       }
     }
@@ -106,7 +106,7 @@ class Map extends Component {
         </div>
         
         <div className="gps_container">
-          <button className="btn" onClick={this.getGPS}>현재 위치정보 사용</button>
+          <button className="location_btn" onClick={this.getGPS}>현재 위치정보 사용</button>
         </div>
 
         <div className="recom">{this.state.recomList /*검색어가 포함된 가게 이름 출력*/}</div>

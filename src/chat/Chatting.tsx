@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useRef } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { io } from 'socket.io-client'
 import './styles.css'
@@ -13,8 +14,8 @@ const ChatForm: FC<{
 }> = (props) => {
   
   const { handleChat } = props
-  const { register, handleSubmit } = useForm<FormData>()
-
+  const { handleSubmit } = useForm<FormData>()
+  const history = useHistory();
   const onSubmit = handleSubmit(({ id, pw }) => {
     
     console.log(id, pw)
@@ -28,10 +29,11 @@ const ChatForm: FC<{
   return (
     <body> 
       <nav>
-        
-        <span id="logoutBtn">
+        <div>
+        <span id="logoutBtn" onClick={() => {history.push('/home')}}>
           로그아웃
         </span>
+        </div>
       </nav>
       
       <div id="contentCover">

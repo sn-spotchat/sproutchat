@@ -1,9 +1,8 @@
 import React, { FC, useEffect, useRef, useState} from 'react'
-import {BrowserRouter as Router, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { io } from 'socket.io-client'
 import './styles.css'
-import Join from './Join';
 
 type FormData = {
   id: string
@@ -27,14 +26,11 @@ function loginCheck(data: FormData) {
 }
 
 const LoginForm: FC<{
-  handleJoin: (data: any) => void
   handleLogin: (id: string, pw: string) => void
-  
 }> = (props) => {
   const { handleLogin } = props
-  const { handleJoin } = props
   const { register, handleSubmit } = useForm<FormData>()
-  
+  const history = useHistory();
   const [userstate, setState] = useState({
     state : ''
   });
@@ -54,70 +50,57 @@ const LoginForm: FC<{
         state: String(data.username)
       });    
     });
-    
+    console.log(userstate.state)
     
     handleLogin(id, pw)
 
   })
 
-  const handleJoinSubmit = ((data: any) => {
-    handleJoin(data)
-  })
-  
   return (
     <div className="LoginPage">
 
       <form onSubmit={onSubmit} id="LoginForm">
-          <div>
-            <h1>NEW LOGIN</h1>
-              <p>
-                <input
-                  ref={register}
-                  type="text"
-                  name="id"
-                  placeholder="id"
-                  autoComplete="off"
-                />
-              </p>
-              <p>
-                <input
-                  ref={register}
-                  type="password"
-                  name="pw"
-                  placeholder="password"
-                  autoComplete="off"
-                />
-              </p>
-              <p>
-                <input className="btn" type="submit" value="로그인" />
-              </p>
-          </div>
+        <div>
+          <h1>NEW LOGIN</h1>
+          <p>
+            <input
+              ref={register}
+              type="text"
+              name="id"
+              placeholder="id"
+              autoComplete="off"
+            />
+          </p>
+          <p>
+            <input
+              ref={register}
+              type="password"
+              name="pw"
+              placeholder="password"
+              autoComplete="off"
+            />
+          </p>
+          <p>
+            <input className="btn" type="submit" value="로그인" />
+          </p>
+        </div>
             
-          </form>
-          <form onSubmit = { handleJoinSubmit }>
-            <p>
-              <input className="btn" type="submit" value="회원가입 하러 가기" />
-            </p>
-            
-          </form>
+        <button className="btn" id="joinpagebtn" onClick={() => {history.push('/join')}}>
+          회원가입
+          <br></br>
+          하러가기
+        </button> 
+      </form>
+
+       
+    </div>
           
-    </div>   
   )
 }
 
 const NewLogin: FC = (props) => {
   const history = useHistory();
   const socket = useRef(io('http://localhost:3005')).current
-  
-  const handleJoin = (data: any) => {
-
-    socket.emit(
-      'joinpage', 
-      () => {
-        console.log('emit')
-    }
-    );
-  }
   
   const handleLogin = (id: string, pw: string) => {
     
@@ -163,7 +146,6 @@ const NewLogin: FC = (props) => {
         
       } else {
         alert('등록된 회원이 없습니다')
-        history.push('/join')
       }
     })
 
@@ -172,7 +154,7 @@ const NewLogin: FC = (props) => {
   return (
     <div className="NewLogin">
      
-      <LoginForm handleLogin={handleLogin}  handleJoin={handleJoin}/>
+      <LoginForm handleLogin={handleLogin}/>
     </div>
   )
 }

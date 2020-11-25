@@ -6,8 +6,8 @@ import PropTypes from 'prop-types';
 import styled, { createGlobalStyle } from 'styled-components';
 
 /* Sub Components */
-import Header from './Header';
-import Footer from './Footer';
+//import Header from './Header';
+//import Footer from './Footer';
 import SideBar from './SideBar';
 import Section from './Section';
 

@@ -1,6 +1,6 @@
 .App {
-    font-family: sans-serif;
-    text-align: center;
+  font-family: sans-serif;
+  text-align: center;
 }
 
 #contentWrap {
@@ -10,11 +10,27 @@
 }
 
 .btn {
+  border-radius: 0.8rem;
   background: #fff;
+  width: 15%;
   padding: 7px 40px;
   border: 1px solid rgb(92, 190, 72);
   color: rgb(16, 63, 34);
   font-size: 17px;
+  margin-top: 5%;
+  cursor: pointer;
+}
+
+#joinpagebtn {
+  width: 15%;
+  height: 10%;
+  margin-top: 10%;
+}
+
+#loginpagebtn {
+  width: 15%;
+  height: 10%;
+  margin-top: 10%;
 }
 
 .JoinPage {
@@ -30,22 +46,24 @@
 #JoinForm {
   float: left;
   /*display: none;*/
-  width: 400px;
+  
   text-align: center;
-  margin: 100px; 
+  margin: 10%; 
 }
 
 
 #LoginForm {
   float: left;
-  width: 400px;
+  
   text-align: center;
-  margin: 100px; 
+  margin: 10%; 
 }
 
 
 #logoutBtn{
+  width: 10%;
   cursor: pointer;
+  text-align: center;
 }
 
 
@@ -65,7 +83,6 @@ nav{
 
 #roomWrap {
   width: 200px;
-  
 }
 
 #roomList {
@@ -182,6 +199,7 @@ nav{
 }
 
 #memberList {
+  text-align: center;
   border: 1px solid #aaaaaa;
   border-radius: 5px;
 }
@@ -191,7 +209,6 @@ nav{
   height: 40px;
   font-size: 18px;
   line-height: 40px;
-  padding-left: 15px;
   border-bottom: 1px solid #f0f0f0;
   font-weight: 600;
 }
