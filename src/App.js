@@ -35,7 +35,7 @@ function App() {
         />
         
         <RouteWithLayout
-          path="/product" 
+          path="/chat" 
           layout={ MainLayout }
           component={ NewChat }
         />

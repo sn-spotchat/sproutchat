@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Redirect, Route, useHistory } from 'react-route
 import { useForm } from 'react-hook-form'
 import { io } from 'socket.io-client'
 import './styles.css'
+import { firestore } from '../components/firebase';
 import Join from '../routes/Board/join';
 
 type FormData = {
@@ -11,6 +12,7 @@ type FormData = {
 }
 
 const NAVER_LOGIN_SCRIPT_URL = 'https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js'
+
 
 function appendScript(src: string) {
   const script = document.createElement('script')
@@ -21,51 +23,19 @@ function appendScript(src: string) {
   document.head.appendChild(script)
 }
 
-function loginCheck(data: FormData) {
-  // TODO: Impl
-  return true
-}
-
-const loginSuccess = () => {
-  console.log('loginSuccess')
-  return(
-    <Router>
-
-    </Router>
-  )
-
-}
-
 const LoginForm: FC<{
   handleLogin: (id: string, pw: string) => void
-  user: ( username: string) => void
 }> = (props) => {
   const { handleLogin } = props
-  const { user } = props
   const { register, handleSubmit } = useForm<FormData>()
-  const [userstate, setState] = useState({
-    state : ''
-  });
 
-  const onSubmit = handleSubmit(({ id, pw }) => {
-    
+  const onSubmit = handleSubmit(({ id, pw }) => {   
     console.log(id, pw)
     if (!id || !pw) {
       alert('check validation')
       return false
     }
-
-    fetch('http://localhost:3005/api')
-    .then(res=>res.json())
-    .then((data) => {
-      setState({
-        state: String(data.username)
-      });    
-    });
-    
-    user(String(userstate.state));
     handleLogin(id, pw)
-
   })
   
   return (
@@ -106,24 +76,48 @@ const NewLogin: FC = (props) => {
     console.log(username)
   }
   
+  /* send login data to server */
   const handleLogin = (id: string, pw: string) => {
-    
     socket.emit(
       'login',
-      { id, pw },
+      { id, pw }
+    );
+  }
+
+  /* send user id to server 
+  const sendUser = (id: string) => {
+    console.log("send " + id)
+    socket.emit(
+      'userInfo',
+      { id },
       (res: any) => {
         alert('emit')
         if (res.result) {
           alert(res.data)
-          // socketId = socket.id
-          // roomId = 1
         } else {
-          alert('fail to login')
+          alert('fail')
           console.info(res)
         }
       }
-    );
-
+    )
+  }
+*/
+  /* 등록된 회원인지 조회, db에 있을 시 로그인 */
+  const loginCheck = (data: FormData) => {
+    var flag = 0;
+    firestore.collection("users")
+      .where("id", "==", data.id).get()
+      .then((docs) => {
+        docs.forEach((doc) => {
+          if(doc.data().pw == data.pw){
+            flag = 1
+            alert(`로그인에 성공했습니다\n${data.id}님 환영합니다.`)
+            socket.emit('userInfo', data.id);
+            history.push('/chat')
+          }
+        })
+        if(flag==0) {  alert('아이디 또는 비밀번호를 확인해주세요') }
+      })
   }
 
   useEffect(() => {
@@ -140,24 +134,17 @@ const NewLogin: FC = (props) => {
     socket.on('event', (data: unknown) => {
       console.log(data)
     })
-    
     socket.on('login', (data: FormData, cb?: Function) => {
-      console.log('hi')
-      if (loginCheck(data)) {
-        alert(`로그인에 성공했습니다\n${data.id}님 환영합니다.`)
-        history.push('/chat')
-        //화면 전환
-        loginSuccess();
-      } else {
-        alert('등록된 회원이 없습니다')
-      }
+      loginCheck(data)
+    })
+    socket.on('userInfo', (data: String) => {
+      console.log("here" + data)
     })
   }, [socket])
 
   return (
     <div className="NewLogin">
-     
-      <LoginForm handleLogin={handleLogin} user={user}/>
+      <LoginForm handleLogin={handleLogin}/>
     </div>
   )
 }

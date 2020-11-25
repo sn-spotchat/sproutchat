@@ -4,9 +4,11 @@ import sproutIcon from './icon.png'
 import searchIcon from './search.png'
 import { RenderAfterNavermapsLoaded, NaverMap, Marker } from 'react-naver-maps'; // 패키지 불러오기
 import {withRouter} from 'react-router-dom';
+import { io } from 'socket.io-client';
 
 class Map extends Component {
   state = {
+    userID: '',
     center : {lat: 37.551046251096544, lng: 126.94103448409076},
     stores: [],
     place: '',
@@ -24,11 +26,16 @@ class Map extends Component {
   handleSubmit = (e) => {
     var isFound = false; // 검색 성공하면 true, 실패하면 false
     const list = [];
+    const socket = io("http://localhost:3005/");
+    socket.emit('userInfo' , this.state.place);
+    socket.on('userInfo' , (data) => {
+      this.setState({userID: data})
+      console.log("i am " + data)
+    })
 
     this.state.stores.forEach((store) => {
       store.animation = 0;
       if(store.name == this.state.place){
-        const navermaps = window.naver.maps;
         this.setState(() => ({ center : {lat: store.latitude, lng: store.longitude}})); // 지도 중심 이동
         store.animation = 1; // 마커 통통 뛴다!
         isFound = true;
@@ -57,8 +64,16 @@ class Map extends Component {
 
   /*마커 클릭 시 채팅방으로 이동*/
   goToChat = (id) =>{
+    console.log(this.state.userID)
+    firestore.collection("users")
+    .where("id", "==", this.state.userID).get()
+    .then((docs) => {
+      docs.forEach((doc) => {
+        console.log(doc.data().id)
+      })
+    })
     window.history.pushState(this.state.center, "", "/home");
-    this.props.history.push("/product")
+    this.props.history.push("/chat")
     console.log("chat " + id)//
   }
 
@@ -72,6 +87,13 @@ class Map extends Component {
   }
 
   componentDidMount() {
+    const socket = io("http://localhost:3005/");
+    socket.on('userInfo' , (data) => {
+      this.setState({userID: data})
+      console.log("i am " + data)
+    })
+    console.log("im " + this.state.userID)
+
     /* 뒤로가기 누르면 이전의 지도 중심 유지 */
     window.onpopstate =  (event) => {
       this.setState({center: {lat: event.state.lat, lng: event.state.lng}});
@@ -85,6 +107,13 @@ class Map extends Component {
         });
       });
     });
+    
+    /* 서버에서 로그인 정보 받아오기 
+    socket.on('login' , (data, cb) => {
+      this.setState({userID: data.id})
+      console.log("i am " + data.id)
+    })
+    */
   }
 
   render() {

@@ -30,4 +30,7 @@ io.on('connection', function (socket) {
     socket.on('join' , (data, cb) => {
         socket.emit('join', data, cb);    
     })
+    socket.on('userInfo', (data) => {
+        socket.emit('userInfo', data);
+    })
 });
