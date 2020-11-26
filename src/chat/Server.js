@@ -3,6 +3,7 @@ var express = require('express'),
     app = express(),
     server = require('http').createServer(app);
 
+let userId = '';
 //const cors=require('cors');
 //app.use(cors());
 
@@ -31,8 +32,9 @@ io.on('connection', function (socket) {
         socket.emit('join', data, cb);    
     })
     socket.on('userInfo', (data) => {
-        socket.emit('userInfo', data);
+        userId = data;
     })
+    io.emit('getUserId', userId);
     socket.on('joinpage', (data) => {
         socket.emit('joinpage', data);
     })
