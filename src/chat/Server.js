@@ -31,7 +31,6 @@ io.on('connection', function (socket) {
         socket.emit('join', data, cb);    
     })
     socket.on('userInfo', (data) => {
-        console.log("id: " + data)
         userId = data; // 위에서 let userID = ''로 만든 userId에 id 저장
     })
     io.emit('getUserId', userId); // server가 connect될 때마다 userId를 전체 클라이언트에 보내줌
