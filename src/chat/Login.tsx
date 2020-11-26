@@ -12,6 +12,9 @@ type FormData = {
   pw: string
 }
 
+var socketId = "";
+
+
 const NAVER_LOGIN_SCRIPT_URL = 'https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js'
 
 
@@ -34,6 +37,7 @@ const LoginForm: FC<{
     console.log(id, pw)
     if (!id || !pw) {
       alert('check validation')
+      
       return false
     }
     handleLogin(id, pw)
@@ -87,8 +91,10 @@ const NewLogin: FC = (props) => {
   const handleLogin = (id: string, pw: string) => {
     socket.emit(
       'login',
-      { id, pw }
-    );
+      { id, pw }, (res: any
+    ) => {
+      socketId = socket.id;
+    })
   }
 
   /* 등록된 회원인지 조회, db에 있을 시 로그인 */

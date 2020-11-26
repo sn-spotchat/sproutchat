@@ -4,33 +4,50 @@ import { useForm } from 'react-hook-form'
 import { io } from 'socket.io-client'
 import './styles.css'
 
+import $ from 'jquery';
+
+
 type FormData = {
   id: string
   pw: string
 }
 
+type ChatData = {
+  msg: string
+}
+
+var socketId = "";
+var roomId = 0;
+
+var $chatLog = $('#chatLog');
+var $memberSelect = $('#memberSelect');
+var $chatWrap = $('#chatWrap');
+
 const ChatForm: FC<{
-  handleChat: (id: string, pw: string) => void
+  handleChat: (msg: string) => void
 }> = (props) => {
   
   const { handleChat } = props
-  const { handleSubmit } = useForm<FormData>()
+  const { register, handleSubmit } = useForm<ChatData>()
   const history = useHistory();
-  const onSubmit = handleSubmit(({ id, pw }) => {
+  const onSubmit = handleSubmit(({ msg }) => {
     
-    console.log(id, pw)
-    if (!id || !pw) {
+    console.log(msg)
+    if (!msg) {
       alert('check validation')
       return false
     }
-    handleChat(id,pw);
+
+    handleChat(msg);
   })
+
 
   const handleLogout = () => {
     // const socket = io("http://localhost:3005/");
     // socket.emit('userInfo', '')
     history.push('/home')
   }
+
 
   return (
     <body> 
@@ -66,16 +83,14 @@ const ChatForm: FC<{
             </div>
           </div>
         </div>
-        <div id="chatWrap">
-          <div>
-            <big>
-              Please enter the room
-            </big>
-          </div>
-          <div id="chatLog"></div>
+        <div id="chatWrap">  
+          <div id="chatHeader">Please enter the room</div>      
+          <div id="chatLog">
 
+
+          </div>
           <form onSubmit={onSubmit} id="chatForm">
-            <input type="text" autoComplete="off" id="message" placeholder="메시지를 입력하세요"/>
+            <input ref={ register } type="text" autoComplete="off" name="msg" id="message" placeholder="메시지를 입력하세요"/>
             <input type="submit" value="보내기"/>
           </form>
         </div>
@@ -94,20 +109,15 @@ const ChatForm: FC<{
 const NewChat: FC = (props) => {
   const socket = useRef(io('http://localhost:3005')).current
 
-  const handleChat = (id: string, pw: string) => {
+  const handleChat = (msg: string) => {
+
+    console.log('handleChat')
     socket.emit(
-      'room',
-      { id, pw },
+      'new message',
+      { msg },
       (res: any) => {
-        alert('emit')
-        if (res.result) {
-          alert(res.data)
-          // socketId = socket.id
-          // roomId = 1
-        } else {
-          alert('fail to login')
-          console.info(res)
-        }
+        
+        console.log('emit')
       }
     );
   }
@@ -116,6 +126,45 @@ const NewChat: FC = (props) => {
     socket.on('room', (data: FormData, cb?: Function) => {
       console.log('room')
     })
+
+
+    socket.on('userlist', (data: any) => {
+      let html = "";
+      data.forEach((el: { socketId: string; name: any }) => {
+          if (el.socketId === socketId) {
+              html += `<div class="memberEl">${el.name} (me)</div>`
+          } else {
+              html += `<div class="memberEl">${el.name}</div>`
+          }
+      });
+      $memberSelect.html(html);
+    });
+
+    
+    socket.on('lefted room', (data: string) => {
+      $chatLog.append(`<div class="notice"><strong>${data}</strong> lefted the room</div>`)
+    });
+
+    socket.on('joined room', (data: string) => {
+        $chatLog.append(`<div class="notice"><strong>${data}</strong> joined the room</div>`)
+    });
+
+    
+    socket.on('new message',  (data: any) => {
+      $chatWrap.show();
+      console.log(data)
+
+      $chatLog.append(`<div class="myMsg msgEl"><span class="msg">${data.msg}</span></div>`)
+      /*
+      if (data.socketId === socketId) {
+        $chatLog.append(`<div class="myMsg msgEl"><span class="msg">${data.msg}</span></div>`)
+      }else {
+        $chatLog.append(`<div class="anotherMsg msgEl"><span class="anotherName">${data.name}</span><span class="msg">${data.msg}</span></div>`)
+      }
+      */
+      //$chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
+    });
+
   }, [socket])
 
   return (
