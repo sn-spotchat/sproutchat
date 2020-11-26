@@ -6,6 +6,7 @@ import './styles.css'
 import { firestore } from '../components/firebase';
 import Join from '../routes/Board/join';
 import {items} from '../layouts/Main/SideBar/SideBar.js'
+import Naverlogin from '../components/naverlogin'
 
 type FormData = {
   id: string
@@ -144,6 +145,7 @@ const NewLogin: FC = (props) => {
   return (
     <div className="NewLogin">
       <LoginForm handleLogin={handleLogin}/>
+      <p><Naverlogin/></p>
     </div>
   )
 }
