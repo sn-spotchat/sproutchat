@@ -12,7 +12,7 @@
 .btn {
   border-radius: 0.8rem;
   background: #fff;
-  width: 15%;
+  width: auto;
   padding: 7px 40px;
   border: 1px solid rgb(92, 190, 72);
   color: rgb(16, 63, 34);
@@ -22,13 +22,13 @@
 }
 
 #joinpagebtn {
-  width: 15%;
+  width: auto;
   height: 10%;
   margin-top: 10%;
 }
 
 #loginpagebtn {
-  width: 15%;
+  width: auto;
   height: 10%;
   margin-top: 10%;
 }

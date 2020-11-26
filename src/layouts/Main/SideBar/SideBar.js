@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SproutIcon from '../../../components/icon.png';
 import title from '../../../components/title.png';
-import {withRouter} from 'react-router-dom';
+
 
 /* Styled */
 import styled from 'styled-components';
@@ -23,7 +23,6 @@ const Container = styled.div`
 /* Constant Variables */
 export const items = [
   { label: "Login", href: "/login" },
-  //{ label: "Join", href: "/join" },
   { label: "Map", href: "/home" },
   { label: "Chat", href: "/chat" }
 ];
@@ -62,4 +61,4 @@ SideBar.propTypes = {
 }
 
 /* Exports */
-export default withRouter(SideBar);
+export default SideBar;

@@ -78,7 +78,6 @@ const LoginForm: FC<{
           하러가기
         </button> 
       </form>
-
        
     </div>
           
@@ -118,7 +117,7 @@ const NewLogin: FC = (props) => {
             history.push('/mypage') //화면 전환
           }
         })
-        if(flag==0) {  alert('아이디 또는 비밀번호를 확인해주세요') }
+        if(flag==0) { alert('아이디 또는 비밀번호를 확인해주세요') }
       })
   }
 
@@ -140,10 +139,6 @@ const NewLogin: FC = (props) => {
     socket.on('login', (data: FormData, cb?: Function) => {
       loginCheck(data)
     })
-    socket.on('userInfo', (data: String) => {
-      console.log("here" + data)
-    })
-
   }, [socket])
 
   return (
