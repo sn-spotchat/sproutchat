@@ -3,6 +3,7 @@ var express = require('express'),
     app = express(),
     server = require('http').createServer(app);
 
+let userId = '';
 //const cors=require('cors');
 //app.use(cors());
 
@@ -21,7 +22,6 @@ server.listen(port, () => {
 
 io.on('connection', function (socket) {
     console.log('server connection')
-
     socket.on('login' , (data, cb) => {
         socket.emit('login', data, cb);
         socket.emit('get_user',data,cb); 
@@ -31,8 +31,11 @@ io.on('connection', function (socket) {
         socket.emit('join', data, cb);    
     })
     socket.on('userInfo', (data) => {
-        socket.emit('userInfo', data);
+        console.log("id: " + data)
+        userId = data; // 위에서 let userID = ''로 만든 userId에 id 저장
     })
+    io.emit('getUserId', userId); // server가 connect될 때마다 userId를 전체 클라이언트에 보내줌
+    console.log('userId is : ' + userId)
     socket.on('joinpage', (data) => {
         socket.emit('joinpage', data);
     })

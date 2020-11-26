@@ -134,10 +134,6 @@ const NewLogin: FC = (props) => {
     socket.on('login', (data: FormData, cb?: Function) => {
       loginCheck(data)
     })
-    socket.on('userInfo', (data: String) => {
-      console.log("here" + data)
-    })
-
   }, [socket])
 
   return (
