@@ -26,11 +26,17 @@ const ChatForm: FC<{
     handleChat(id,pw);
   })
 
+  const handleLogout = () => {
+    // const socket = io("http://localhost:3005/");
+    // socket.emit('userInfo', '')
+    history.push('/home')
+  }
+
   return (
     <body> 
       <nav>
         <div id="logoutHeader">
-        <span id="logoutBtn" onClick={() => {history.push('/home')}}>
+        <span id="logoutBtn" onClick={handleLogout}>
           로그아웃
         </span>
         </div>

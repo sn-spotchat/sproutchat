@@ -6,6 +6,8 @@ import { RenderAfterNavermapsLoaded, NaverMap, Marker } from 'react-naver-maps';
 import {withRouter} from 'react-router-dom';
 import { io } from 'socket.io-client';
 import './Map.css';
+import firebase from 'firebase';
+import 'firebase/firestore';
 
 class Map extends Component {
   state = {
@@ -27,12 +29,6 @@ class Map extends Component {
   handleSubmit = (e) => {
     var isFound = false; // 검색 성공하면 true, 실패하면 false
     const list = [];
-    const socket = io.connect("http://localhost:3005/");
-    socket.emit('userInfo' , this.state.place);
-    socket.on('userInfo' , (data) => {
-      this.setState({userID: data})
-      console.log("i am " + this.userID)
-    })
 
     this.state.stores.forEach((store) => {
       store.animation = 0;
@@ -69,8 +65,11 @@ class Map extends Component {
     firestore.collection("users")
     .where("id", "==", this.state.userID).get()
     .then((docs) => {
-      docs.forEach((doc) => {
-        console.log(doc.data().id)
+      docs.forEach((doc) => {     
+        console.log("My name is " + this.state.userID)
+        firestore.collection("users").doc(doc.id).update({
+          list: firebase.firestore.FieldValue.arrayUnion(id)
+        })
       })
     })
     window.history.pushState(this.state.center, "", "/home");
@@ -88,12 +87,10 @@ class Map extends Component {
   }
 
   componentDidMount() {
-    const socket = io.connect("http://localhost:3005/");
-    socket.on('userInfo' , (data) => {
+    const socket = io("http://localhost:3005/");
+    socket.on('getUserId' , (data) => {
       this.setState({userID: data})
-      console.log("i am " + data)
     })
-    console.log("im " + this.state.userID)
 
     /* 뒤로가기 누르면 이전의 지도 중심 유지 */
     window.onpopstate =  (event) => {
@@ -108,15 +105,8 @@ class Map extends Component {
         });
       });
     });
-    
-    /* 서버에서 로그인 정보 받아오기 
-    socket.on('login' , (data, cb) => {
-      this.setState({userID: data.id})
-      console.log("i am " + data.id)
-    })
-    */
   }
-
+  
   render() {
     const { stores, center } = this.state;
 
