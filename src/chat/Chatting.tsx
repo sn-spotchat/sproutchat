@@ -132,9 +132,9 @@ const NewChat: FC = (props) => {
       let html = "";
       data.forEach((el: { socketId: string; name: any }) => {
           if (el.socketId === socketId) {
-              html += `<div class="memberEl">${el.name} (me)</div>`
+              html += `<div className="memberEl">${el.name} (me)</div>`
           } else {
-              html += `<div class="memberEl">${el.name}</div>`
+              html += `<div className="memberEl">${el.name}</div>`
           }
       });
       $memberSelect.html(html);
@@ -142,11 +142,11 @@ const NewChat: FC = (props) => {
 
     
     socket.on('lefted room', (data: string) => {
-      $chatLog.append(`<div class="notice"><strong>${data}</strong> lefted the room</div>`)
+      $chatLog.append(`<div className="notice"><strong>${data}</strong> lefted the room</div>`)
     });
 
     socket.on('joined room', (data: string) => {
-        $chatLog.append(`<div class="notice"><strong>${data}</strong> joined the room</div>`)
+        $chatLog.append(`<div className="notice"><strong>${data}</strong> joined the room</div>`)
     });
 
     
@@ -154,12 +154,12 @@ const NewChat: FC = (props) => {
       $chatWrap.show();
       console.log(data)
 
-      $chatLog.append(`<div class="myMsg msgEl"><div class="msg">${data.msg}</div></div>`)
+      $chatLog.append(`<div className="myMsg msgEl"><div className="msg">${data.msg}</div></div>`)
       /*
       if (data.socketId === socketId) {
-        $chatLog.append(`<div class="myMsg msgEl"><span class="msg">${data.msg}</span></div>`)
+        $chatLog.append(`<div className="myMsg msgEl"><span className="msg">${data.msg}</span></div>`)
       }else {
-        $chatLog.append(`<div class="anotherMsg msgEl"><span class="anotherName">${data.name}</span><span class="msg">${data.msg}</span></div>`)
+        $chatLog.append(`<div className="anotherMsg msgEl"><span className="anotherName">${data.name}</span><span className="msg">${data.msg}</span></div>`)
       }
       */
       //$chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);

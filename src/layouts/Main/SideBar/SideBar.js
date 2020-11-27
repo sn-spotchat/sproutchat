@@ -23,7 +23,7 @@ const Container = styled.div`
 
 /* Constant Variables */
 export const items = [
-  { label: "", href: "" },
+  { label: "Login", href: "/login" },
   { label: "Map", href: "/home" },
   { label: "Chat", href: "/chat" }
 ];
