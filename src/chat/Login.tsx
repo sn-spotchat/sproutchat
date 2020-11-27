@@ -15,7 +15,7 @@ type FormData = {
 
 var socketId = "";
 
-
+/*
 const NAVER_LOGIN_SCRIPT_URL = 'https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js'
 
 
@@ -26,7 +26,7 @@ function appendScript(src: string) {
   script.src = src
 
   document.head.appendChild(script)
-}
+}*/
 
 const LoginForm: FC<{
   handleLogin: (id: string, pw: string) => void
@@ -34,6 +34,7 @@ const LoginForm: FC<{
   const { handleLogin } = props
   const { register, handleSubmit } = useForm<FormData>()
   const history = useHistory();
+
   const onSubmit = handleSubmit(({ id, pw }) => {   
     console.log(id, pw)
     if (!id || !pw) {
@@ -46,7 +47,6 @@ const LoginForm: FC<{
 
   return (
     <div className="LoginPage">
-
       <form onSubmit={onSubmit} id="LoginForm">
         <div>
           <h1>NEW LOGIN</h1>
@@ -71,6 +71,7 @@ const LoginForm: FC<{
           <p>
             <input className="btn" type="submit" value="로그인" />
           </p>
+          <Naverlogin/>
         </div>
             
         <button className="btn" id="joinpagebtn" onClick={() => {history.push('/join')}}>
@@ -107,7 +108,7 @@ const NewLogin: FC = (props) => {
         docs.forEach((doc) => {
           if(doc.data().pw == data.pw){
             flag = 1
-            alert(`로그인에 성공했습니다\n${data.id}님 환영합니다.`)
+          //  alert(`로그인에 성공했습니다\n${data.id}님 환영합니다.`)
             socket.emit('userInfo', data.id);
             items.map((item) => {
               if(item.label == "Login"){
@@ -122,9 +123,9 @@ const NewLogin: FC = (props) => {
       })
   }
 
-  useEffect(() => {
+ /* useEffect(() => {
     appendScript(NAVER_LOGIN_SCRIPT_URL)
-  }, [])
+  }, [])*/
 
   useEffect(() => {
     socket.on('connect', () => {
@@ -140,12 +141,15 @@ const NewLogin: FC = (props) => {
     socket.on('login', (data: FormData, cb?: Function) => {
       loginCheck(data)
     })
+    socket.on('naverlogin', (data: FormData) => {
+      loginCheck(data)
+      console.log(data)
+    })
   }, [socket])
 
   return (
     <div className="NewLogin">
       <LoginForm handleLogin={handleLogin}/>
-      <p><Naverlogin/></p>
     </div>
   )
 }
