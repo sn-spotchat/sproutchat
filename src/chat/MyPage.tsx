@@ -17,7 +17,7 @@ const MyPage: FC = (props) => {
                     item.href = "/login"
                 }
             })
-            socket.emit('userInfo',"")
+            socket.emit('userInfo', '');
             history.push('/home');
         }
     }

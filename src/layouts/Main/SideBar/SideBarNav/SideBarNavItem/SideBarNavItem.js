@@ -14,6 +14,7 @@ const ListItem = styled.button`
   margin: 10px 25px;
   padding: 7px;
   width: 150px;
+  height: 45px;
   background-color: #white;
   cursor: pointer;
   outline-style: none;

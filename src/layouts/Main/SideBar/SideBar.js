@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import SproutIcon from '../../../components/icon.png';
 import title from '../../../components/title.png';
+import { io } from 'socket.io-client'
 
 
 /* Styled */
@@ -22,7 +23,7 @@ const Container = styled.div`
 
 /* Constant Variables */
 export const items = [
-  { label: "Login", href: "/login" },
+  { label: "", href: "" },
   { label: "Map", href: "/home" },
   { label: "Chat", href: "/chat" }
 ];
@@ -33,6 +34,26 @@ const SideBar = props => {
   const {
     className,
   } = props;
+
+  const [id, setId] = useState('');
+
+  const socket = useRef(io('http://localhost:3005')).current
+  
+  useEffect(() => {
+    console.log("Sidebar")
+    socket.on('getUserId', (data) => {
+        console.log("sidebar id: " + data)
+        if(data !== ""){
+          items[0].label = "My Page"
+          items[0].href = "/mypage"
+        }
+        else{
+          items[0].label = "Login"
+          items[0].href = "/login"
+        }
+        setId(data);
+    })
+  }, [socket])
 
   /* Renderer */
   return (
