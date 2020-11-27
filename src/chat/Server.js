@@ -24,6 +24,11 @@ var onlineUsers = {};
 
 io.sockets.on('connection', function (socket) {
     console.log('server connection')
+
+    socket.on('naverlogin', (data)=>{
+        socket.broadcast.emit('naverlogin',data)
+    })
+
     socket.on('login' , (data, cb) => {
         socket.emit('login', data, cb);
         socket.emit('get_user',data,cb); 

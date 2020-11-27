@@ -2,7 +2,11 @@
 import React, {Component} from 'react';
 //import ReactDOM from "react-dom";
 //import callback from "./chat.html"
-import {BrowserRouter, Route} from 'react-router-dom';
+import {BrowserRouter, Route, useHistory} from 'react-router-dom';
+import { io } from 'socket.io-client'
+import { firestore } from '../components/firebase';
+
+const socket = io('http://localhost:3005')
 
 const naverlogin = ()=>{
     return (
@@ -18,6 +22,7 @@ var client_id = '8HkITidEmr1tQaw5jtAL'
 var redirectURI = encodeURI("http://localhost:3000/login/chat")
 
 class NaverLogin extends Component{
+
     componentDidMount() {
         var naver_id_login = new window.naver_id_login(client_id, redirectURI)
         var state = naver_id_login.getUniqState()
@@ -33,8 +38,8 @@ class NaverLogin extends Component{
 }
 class Success extends Component {
     state = {
-      
-      myname: ''
+      id:'',
+      pw: ''
     }
     constructor(props) {
       super(props)
@@ -45,18 +50,40 @@ class Success extends Component {
      var naver_id_login = new window.naver_id_login('8HkITidEmr1tQaw5jtAL', "http://localhost:3000/login/chat")
      
       this.setState({
-        myname: naver_id_login.getProfileData('name')
+        id: naver_id_login.getProfileData('email'),
+        pw: naver_id_login.getProfileData('id')
       })
-      alert(naver_id_login.getProfileData('name')) 
+
+      var flag = 0;
+
+      firestore.collection("users")
+      .get()
+      .then((docs) => {
+        docs.forEach((doc)=>{
+         if(doc.data().id === this.state.id){
+            flag = 1;
+          }
+        })
+        if(flag == 0) {  
+          firestore
+          .collection("users")
+          .add({
+            id: this.state.id,
+            pw: this.state.pw
+          })
+        }
+      })
+      socket.emit('naverlogin',{id: this.state.id, pw: this.state.pw})
     }
+
     componentDidMount() {
       var naver_id_login = new window.naver_id_login('8HkITidEmr1tQaw5jtAL', "http://localhost:3000/login/chat")
-      alert(naver_id_login.oauthParams.access_token) /*잘 나옴 (1) */
       naver_id_login.get_naver_userprofile("naverSignInCallback()")
     }
+
     render() {
       return (
-        <div>환영합니다 {this.state.myname}님</div>
+        <div>loading...</div>
       )
     }
 }
