@@ -39,6 +39,7 @@ const ChatForm: FC<{
     }
 
     handleChat(msg);
+    
   })
 
   const [roomList, setRoomList] = useState([]);
@@ -101,10 +102,10 @@ const ChatForm: FC<{
           <div id="roomList">
             <div id="roomHeader">채팅 방 목록</div>
 
-            <div id="roomSelect">
+            <span id="roomSelect">
               {roomList}
 
-            </div>
+            </span>
           </div>
         </div>
         <div id="chatWrap">  
@@ -134,6 +135,7 @@ const NewChat: FC = (props) => {
   const socket = useRef(io('http://localhost:3005')).current
 
   const handleChat = (msg: string) => {
+    let m = $("#message");
     console.log('handleChat')
     socket.emit(
       'new message',
@@ -142,6 +144,7 @@ const NewChat: FC = (props) => {
         console.log('emit')
       }
     );
+    m.val("");
   }
 
   const handleRoom = (roomId : string) => {
