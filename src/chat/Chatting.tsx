@@ -1,8 +1,10 @@
-import React, { FC, useEffect, useRef } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { io } from 'socket.io-client'
+import { firestore } from '../components/firebase';
 import './styles.css'
+import {items} from '../layouts/Main/SideBar/SideBar.js'
 
 import $ from 'jquery';
 
@@ -23,7 +25,7 @@ const ChatForm: FC<{
   handleChat: (msg: string) => void
   handleRoom: (roomId: string) => void
 }> = (props) => {
-  
+  const socket = useRef(io('http://localhost:3005')).current
   const { handleChat } = props
   const { handleRoom } = props
   const { register, handleSubmit } = useForm<ChatData>()
@@ -39,49 +41,69 @@ const ChatForm: FC<{
     handleChat(msg);
   })
 
+  const [roomList, setRoomList] = useState([]);
+  let tempList = []
+  let userId = ''
 
   const handleLogout = () => {
-    // const socket = io("http://localhost:3005/");
-    // socket.emit('userInfo', '')
-    history.push('/home')
+    if(window.confirm("로그아웃 하시겠습니까?") === true){
+      items.map((item)=>{
+          if(item.label == "My Page"){
+              item.label = "Login"
+              item.href = "/login"
+          }
+      })
+      userId = ''
+      socket.emit('userInfo', '');
+      history.push('/home');
+    }
   }
+
 
   const roomSelect = () => {
     handleRoom('1');
   }
 
 
+
+  useEffect(()=>{
+    socket.on('getUserId', (data: string) => {
+      if(userId === ''){
+          console.log("My page: " + data)
+          userId = data
+          firestore.collection("users")
+          .where("id", "==", data).get()
+          .then((docs) => {
+              docs.forEach((doc) => {
+                  tempList = doc.data().list.map((el: number) => (
+                      <div className="roomName">
+                          <div className="roomEl active" data-id={el}>Chat {el}</div>
+                          <div id="out">나가기</div>
+                      </div>
+                  ))
+                  setRoomList(tempList)
+              })   
+          })
+      }
+    })
+  })
+
   return (
     <body> 
       <nav>
-        <div id="logoutHeader">
-        <span id="logoutBtn" onClick={handleLogout}>
-          로그아웃
-        </span>
-        </div>
+        <button className="btn" onClick={() => {handleLogout()}}>
+          Logout
+        </button>
       </nav>
       
       <div id="contentCover">
         <div id="roomWrap">
           <div id="roomList">
             <div id="roomHeader">채팅 방 목록</div>
-            <div id="roomSelect" >
-              <div className="roomName">
-                <span className="roomEl active" data-id="1" onClick={roomSelect}>Chat 1</span>
-                <div id="out">나가기</div>
-              </div>
-              <div className="roomName">
-                <div className="roomEl" data-id="2">Chat 2</div>
-                <div id="out">나가기</div>
-              </div>
-              <div className="roomName">
-                <div className="roomEl" data-id="3">Chat 3</div>
-                <div id="out">나가기</div>
-                </div>
-              <div className="roomName">
-                <div className="roomEl" data-id="4">Chat 4</div>
-                <div id="out">나가기</div>
-              </div>
+
+            <div id="roomSelect">
+              {roomList}
+
             </div>
           </div>
         </div>
@@ -112,13 +134,11 @@ const NewChat: FC = (props) => {
   const socket = useRef(io('http://localhost:3005')).current
 
   const handleChat = (msg: string) => {
-
     console.log('handleChat')
     socket.emit(
       'new message',
       { msg },
       (res: any) => {
-        
         console.log('emit')
       }
     );
@@ -140,7 +160,6 @@ const NewChat: FC = (props) => {
       console.log('room')
     })
 
-
     socket.on('userlist', (data: any) => {
       let html = "";
       data.forEach((el: { socketId: string; name: any }) => {
@@ -153,7 +172,6 @@ const NewChat: FC = (props) => {
       $memberSelect.html(html);
     });
 
-    
     socket.on('lefted room', (data: string) => {
       $chatLog.append(`<div class="notice"><strong>${data}</strong> lefted the room</div>`)
     });
@@ -162,7 +180,6 @@ const NewChat: FC = (props) => {
         $chatLog.append(`<div class="notice"><strong>${data}</strong> joined the room</div>`)
     });
 
-    
     socket.on('new message',  (data: any) => {
       $chatWrap.show();
       console.log(data)
@@ -182,8 +199,9 @@ const NewChat: FC = (props) => {
 
   return (
     <div className="NewChat">
-     
+
       <ChatForm handleChat={handleChat} handleRoom = {handleRoom}/>
+
     </div>
   )
 }
