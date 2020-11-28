@@ -30,7 +30,6 @@ class NaverLogin extends Component{
         naver_id_login.setDomain("http://localhost:3000/login/chat")
         naver_id_login.setState(state)
         naver_id_login.init_naver_id_login()
-        
     }
     render(){
         return <div id="naver_id_login"></div>
@@ -72,8 +71,8 @@ class Success extends Component {
             pw: this.state.pw
           })
         }
-      })
-      socket.emit('naverlogin',{id: this.state.id, pw: this.state.pw})
+        socket.emit('naverlogin',{id: this.state.id, pw: this.state.pw})
+      }) 
     }
 
     componentDidMount() {
@@ -83,7 +82,7 @@ class Success extends Component {
 
     render() {
       return (
-        <div>loading...</div>
+        <div id="naver_id_login"></div>
       )
     }
 }

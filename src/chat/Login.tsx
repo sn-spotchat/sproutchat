@@ -108,7 +108,7 @@ const NewLogin: FC = (props) => {
         docs.forEach((doc) => {
           if(doc.data().pw == data.pw){
             flag = 1
-          //  alert(`로그인에 성공했습니다\n${data.id}님 환영합니다.`)
+            //alert(`로그인에 성공했습니다\n${data.id}님 환영합니다.`)
             socket.emit('userInfo', data.id);
             items.map((item) => {
               if(item.label == "Login"){
