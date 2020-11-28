@@ -6,6 +6,10 @@ import { firestore } from '../components/firebase';
 import './styles.css'
 import {items} from '../layouts/Main/SideBar/SideBar.js'
 
+type storeData = {
+    id: number
+    name: string
+}
 
 const MyPage: FC = (props) => {
     const history = useHistory();
@@ -38,9 +42,9 @@ const MyPage: FC = (props) => {
                 .where("id", "==", data).get()
                 .then((docs) => {
                   docs.forEach((doc) => {
-                    tempList = doc.data().list.map((el: number) => (
+                    tempList = doc.data().list.map((el: storeData) => (
                       <div className="roomName">
-                          <div className="roomEl active" data-id={el}>Chat {el}</div>
+                          <div className="roomEl active" data-id={el.id}>{el.name}</div>
                           <div id="out">나가기</div>
                       </div>
                     ))

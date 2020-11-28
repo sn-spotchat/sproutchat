@@ -60,7 +60,7 @@ class Map extends Component {
   }
 
   /*마커 클릭 시 채팅방으로 이동*/
-  goToChat = (id) =>{
+  goToChat = (id, name) =>{
     console.log(this.state.userID)
     firestore.collection("users")
     .where("id", "==", this.state.userID).get()
@@ -68,7 +68,7 @@ class Map extends Component {
       docs.forEach((doc) => {     
         console.log("My name is " + this.state.userID)
         firestore.collection("users").doc(doc.id).update({
-          list: firebase.firestore.FieldValue.arrayUnion(id)
+          list: firebase.firestore.FieldValue.arrayUnion({id: id, name: name})
         })
       })
     })
@@ -166,7 +166,7 @@ class Map extends Component {
                   anchor: {x:30, y:40}
                 }}
                 title={row.name}
-                onClick={() => this.goToChat(row.id)}
+                onClick={() => this.goToChat(row.id, row.name)}
               />)
             )}  
           </NaverMap>

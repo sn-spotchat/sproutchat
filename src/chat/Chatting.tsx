@@ -18,6 +18,11 @@ type ChatData = {
   msg: string
 }
 
+type storeData = {
+  id: number
+  name: string
+}
+
 var socketId = "";
 var roomId = 0;
 
@@ -70,9 +75,9 @@ const ChatForm: FC<{
         .where("id", "==", data).get()
         .then((docs) => {
           docs.forEach((doc) => {
-            tempList = doc.data().list.map((el: number) => (
+            tempList = doc.data().list.map((el: storeData) => (
               <div className="roomName">
-                  <div className="roomEl active" data-id={el}>Chat {el}</div>
+                  <div className="roomEl active" data-id={el.id}>{el.name}</div>
                   <div id="out">나가기</div>
               </div>
             ))
@@ -87,9 +92,9 @@ const ChatForm: FC<{
         .where("id", "==", data).get()
         .then((docs) => {
           docs.forEach((doc) => {
-            tempList = doc.data().list.map((el: number) => (
+            tempList = doc.data().list.map((el: storeData) => (
               <div className="roomName">
-                  <div className="roomEl active" data-id={el}>Chat {el}</div>
+                  <div className="roomEl active" data-id={el.id}>{el.name}</div>
                   <div id="out">나가기</div>
               </div>
             ))
