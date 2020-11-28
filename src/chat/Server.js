@@ -60,13 +60,27 @@ io.sockets.on('connection', function (socket) {
         socket.emit('new message', data);
     })
 
-    socket.on('join room', function (data) {
+    socket.on('join room', (data) =>{
+        let id = getUserBySocketId(socket.id);
+        let nextRoomId = data.roomId;
+        //socket.leave('room' + prevRoomId);
+        socket.join('room' + nextRoomId);
+        socket.join('room' + nextRoomId);
+        //onlineUsers[id].roomId = data.roomId;
+        console.log('join room 1')
+        //socket.emit('join room', data);
+    })
+
+
+    /*
+    socket.on('join room',(data) => {
         let id = getUserBySocketId(socket.id);
         let prevRoomId = onlineUsers[id].roomId;
         let nextRoomId = data.roomId;
         socket.leave('room' + prevRoomId);
         socket.join('room' + nextRoomId);
         onlineUsers[id].roomId = data.roomId;
+        console.log(prevRoomId + ' ' + nextRoomId + ' ' + id)
         updateUserList(prevRoomId, nextRoomId, id);
     });
     
@@ -98,24 +112,12 @@ io.sockets.on('connection', function (socket) {
             console.log("next"+ next);
         }
     }
-
+    */
 
     function getUserBySocketId(id) {
         return Object.keys(onlineUsers).find(key => onlineUsers[key].socketId === id);
     }
 
-    function updateUserList(prev, next, id) {
-        if (prev !== 0) {
-            io.sockets.in('room' + prev).emit("userlist", getUsersByRoomId(prev));
-            io.sockets.in('room' + prev).emit("lefted room", id);
-            console.log("prev"+ prev);
-        }
-        if (next !== 0) {
-            io.sockets.in('room' + next).emit("userlist", getUsersByRoomId(next));
-            io.sockets.in('room' + next).emit("joined room", id);
-            console.log("next"+ next);
-        }
-    }
 
     function getUsersByRoomId(roomId) {
         let userstemp = [];
@@ -129,4 +131,5 @@ io.sockets.on('connection', function (socket) {
         });
         return userstemp;
     }
+    
 });
