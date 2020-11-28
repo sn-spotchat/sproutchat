@@ -109,7 +109,7 @@ const NewLogin: FC = (props) => {
           if(doc.data().pw == data.pw){
             flag = 1
             //alert(`로그인에 성공했습니다\n${data.id}님 환영합니다.`)
-            socket.emit('userInfo', data.id);
+            socket.emit('userInfo', doc.id);
             items.map((item) => {
               if(item.label == "Login"){
                 item.label = "My Page"

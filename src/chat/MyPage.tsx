@@ -39,27 +39,27 @@ const MyPage: FC = (props) => {
     useEffect(() => {
         var $chatLog = $('#chatLog');
         let $roomSelect = $("#roomSelect");
-        console.log("Mypage")
+        //console.log("Mypage")
         socket.on('getUserId', (data: string) => {
-            if(userId === ''){
-                console.log("My page: " + data)
-                userId = data
-                firestore.collection("users")
-                .where("id", "==", data).get()
-                .then((docs) => {
-                    docs.forEach((doc) => {
-                        tempList = doc.data().list.map((el: storeData) => (
-                            <div className="roomName">
-                                <div className="roomEl active" data-id={el.name}> {el.name}</div>
-                                <div id="out">나가기</div>
-                            </div>
-                        ))
-                        setRoomList(tempList)
-                    })   
-                })
+            
+            if(data !== '') {
+                //console.log(userId)
+                if(userId === ''){
+                    firestore.collection("users")
+                    .doc(data).onSnapshot((doc) => {
+                    userId = doc.get('id')
+                    //console.log('mypage: ' + userId)
+                    tempList = doc.get('list').map((el: storeData) => (
+                        <div className="roomName">
+                            <div className="roomEl active" data-id={el.name}> {el.name}</div>
+                            <div id="out">나가기</div>
+                        </div>
+                    ))
+                    setRoomList(tempList)
+                }) 
+                }                 
             }
         })  
-
 
         $roomSelect.on("click", "div", function () {
             history.push('/chat');
@@ -67,6 +67,7 @@ const MyPage: FC = (props) => {
             //console.log(roomId)
             } else {
             roomId = $(this).data('id')
+            //console.log(userId)
             socket.emit('joined room', userId);
             socket.emit('join room', {roomId});
             }
@@ -74,12 +75,14 @@ const MyPage: FC = (props) => {
             $(this).parents().children().removeClass("active");
             $(this).addClass("active");
             */
-            $chatLog.html("");
+            
             $('#chatHeader').html(`${roomId}`);
-    
+            $chatLog.html("");
             //db에서 내용 불러오기
     
         });
+
+
     }, [socket])
 
     return(

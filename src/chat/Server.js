@@ -68,7 +68,7 @@ io.sockets.on('connection', function (socket) {
         socket.join('room' + nextRoomId);
         //onlineUsers[id].roomId = data.roomId;
         console.log('join room 1')
-        //socket.emit('join room', data);
+        socket.emit('join room', data);
     })
 
 

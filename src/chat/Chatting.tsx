@@ -39,7 +39,7 @@ const ChatForm: FC<{
   const history = useHistory();
   const onSubmit = handleSubmit(({ msg }) => {
     
-    console.log(msg)
+    //console.log(msg)
     if (!msg) {
       alert('check validation')
       return false
@@ -71,14 +71,14 @@ const ChatForm: FC<{
   useEffect(()=>{
     socket.on('getUserId', (data: string) => {
       if(limit < 5){
-          console.log("My page: " + data)
-          userId = data
+          //console.log("My page: " + data)
+          
           limit += 1;
           firestore.collection("users")
-          .where("id", "==", data).get()
-          .then((docs) => {
-              docs.forEach((doc) => {
-                  tempList = doc.data().list.map((el: storeData) => (
+          .doc(data).onSnapshot((doc) => {
+              //console.log(doc.get("list"))
+              userId = doc.get('id')
+              tempList = doc.get("list").map((el: storeData) => (
                       <div className="roomName">
                           <div className="roomEl active" data-id={el.name}>{el.name}</div>
                           <button id="out">나가기</button>
@@ -86,9 +86,9 @@ const ChatForm: FC<{
                   ))
                   setRoomList(tempList)
               })   
-          })
-      }
-    })
+          }
+      })
+    
   }, [socket])
 
   return (
@@ -138,7 +138,7 @@ const NewChat: FC = (props) => {
 
   const handleChat = (msg: string) => {
     let m = $("#message");
-    console.log('handleChat')
+    //console.log('handleChat')
     socket.emit(
       'new message',
       { msg },
