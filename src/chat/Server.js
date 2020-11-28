@@ -104,18 +104,6 @@ io.sockets.on('connection', function (socket) {
         return Object.keys(onlineUsers).find(key => onlineUsers[key].socketId === id);
     }
 
-    function updateUserList(prev, next, id) {
-        if (prev !== 0) {
-            io.sockets.in('room' + prev).emit("userlist", getUsersByRoomId(prev));
-            io.sockets.in('room' + prev).emit("lefted room", id);
-            console.log("prev"+ prev);
-        }
-        if (next !== 0) {
-            io.sockets.in('room' + next).emit("userlist", getUsersByRoomId(next));
-            io.sockets.in('room' + next).emit("joined room", id);
-            console.log("next"+ next);
-        }
-    }
 
     function getUsersByRoomId(roomId) {
         let userstemp = [];

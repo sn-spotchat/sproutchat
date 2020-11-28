@@ -19,7 +19,8 @@ type ChatData = {
 }
 
 var socketId = "";
-
+var roomId = "";
+var userId = "";
 
 const ChatForm: FC<{
   handleChat: (msg: string) => void
@@ -44,7 +45,7 @@ const ChatForm: FC<{
 
   const [roomList, setRoomList] = useState([]);
   let tempList = []
-  let userId = ''
+  //
 
   const handleLogout = () => {
     if(window.confirm("로그아웃 하시겠습니까?") === true){
@@ -66,7 +67,6 @@ const ChatForm: FC<{
   }
 
 
-
   useEffect(()=>{
     socket.on('getUserId', (data: string) => {
       if(userId === ''){
@@ -79,7 +79,7 @@ const ChatForm: FC<{
                   tempList = doc.data().list.map((el: number) => (
                       <div className="roomName">
                           <div className="roomEl active" data-id={el}>Chat {el}</div>
-                          <div id="out">나가기</div>
+                          <button id="out">나가기</button>
                       </div>
                   ))
                   setRoomList(tempList)
@@ -87,7 +87,7 @@ const ChatForm: FC<{
           })
       }
     })
-  })
+  }, [socket])
 
   return (
     <body> 
@@ -148,16 +148,14 @@ const NewChat: FC = (props) => {
   }
 
   const handleRoom = (roomId : string) => {
-    socket.emit(
-      'joined room', 
-      {roomId}, 
-    );
+    
   }
 
   useEffect(() => {
     var $chatLog = $('#chatLog');
     var $memberSelect = $('#memberSelect');
     var $chatWrap = $('#chatWrap');
+    var $roomSelect = $('#roomSelect');
 
     socket.on('room', (data: FormData, cb?: Function) => {
       console.log('room')
@@ -196,6 +194,24 @@ const NewChat: FC = (props) => {
       }
       */
       $chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
+    });
+
+    $roomSelect.on("click", "div", function () {
+      if(roomId == ''){
+        roomId = $(this).data('id');
+      } else if(roomId !== $(this).data('id')) {
+        console.log(roomId)
+      } 
+      //$(this).parents().children().removeClass("active");
+      //$(this).addClass("active");
+      console.log($(this).data().id);
+      $('#chatHeader').html(`${roomId}`);
+      console.log(userId)
+      socket.emit('joined room', userId);
+      socket.emit('join room', {
+        roomId
+      });
+    
     });
 
   }, [socket])
