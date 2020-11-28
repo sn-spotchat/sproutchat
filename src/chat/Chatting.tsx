@@ -19,15 +19,17 @@ type ChatData = {
 }
 
 var socketId = "";
+var roomId = 0;
 
+var $chatLog = $('#chatLog');
+var $memberSelect = $('#memberSelect');
+var $chatWrap = $('#chatWrap');
 
 const ChatForm: FC<{
   handleChat: (msg: string) => void
-  handleRoom: (roomId: string) => void
 }> = (props) => {
   const socket = useRef(io('http://localhost:3005')).current
   const { handleChat } = props
-  const { handleRoom } = props
   const { register, handleSubmit } = useForm<ChatData>()
   const history = useHistory();
   const onSubmit = handleSubmit(({ msg }) => {
@@ -44,6 +46,7 @@ const ChatForm: FC<{
   const [roomList, setRoomList] = useState([]);
   let tempList = []
   let userId = ''
+  var limit = 0
 
   const handleLogout = () => {
     if(window.confirm("로그아웃 하시겠습니까?") === true){
@@ -53,40 +56,49 @@ const ChatForm: FC<{
               item.href = "/login"
           }
       })
-      userId = ''
       socket.emit('userInfo', '');
       history.push('/home');
     }
   }
 
-
-  const roomSelect = () => {
-    handleRoom('1');
-  }
-
-
-
   useEffect(()=>{
     socket.on('getUserId', (data: string) => {
       if(userId === ''){
-          console.log("My page: " + data)
-          userId = data
-          firestore.collection("users")
-          .where("id", "==", data).get()
-          .then((docs) => {
-              docs.forEach((doc) => {
-                  tempList = doc.data().list.map((el: number) => (
-                      <div className="roomName">
-                          <div className="roomEl active" data-id={el}>Chat {el}</div>
-                          <div id="out">나가기</div>
-                      </div>
-                  ))
-                  setRoomList(tempList)
-              })   
-          })
+        console.log("Chatting")
+        userId = data
+        firestore.collection("users")
+        .where("id", "==", data).get()
+        .then((docs) => {
+          docs.forEach((doc) => {
+            tempList = doc.data().list.map((el: number) => (
+              <div className="roomName">
+                  <div className="roomEl active" data-id={el}>Chat {el}</div>
+                  <div id="out">나가기</div>
+              </div>
+            ))
+            setRoomList(tempList)
+          })   
+        })
+      }
+      else if(limit < 2 && history.location.state === "지도에서 왔수다"){
+        limit += 1
+        console.log("지도에서 왔어요")
+        firestore.collection("users")
+        .where("id", "==", data).get()
+        .then((docs) => {
+          docs.forEach((doc) => {
+            tempList = doc.data().list.map((el: number) => (
+              <div className="roomName">
+                  <div className="roomEl active" data-id={el}>Chat {el}</div>
+                  <div id="out">나가기</div>
+              </div>
+            ))
+            setRoomList(tempList)
+          })   
+        })
       }
     })
-  })
+  }, [socket])
 
   return (
     <body> 
@@ -100,18 +112,16 @@ const ChatForm: FC<{
         <div id="roomWrap">
           <div id="roomList">
             <div id="roomHeader">채팅 방 목록</div>
-
             <div id="roomSelect">
               {roomList}
-
             </div>
           </div>
         </div>
         <div id="chatWrap">  
           <div id="chatHeader">Please enter the room</div>      
-          <div id="chatLog" >
-            <div className="anotherMsg msgEl"><span className="anotherName">운영자</span><span className="msg">환영합니다</span></div>
-            <div className="myMsg msgEl"><div className="msg">안녕하세요</div></div>
+          <div id="chatLog">
+
+
           </div>
           <form onSubmit={onSubmit} id="chatForm">
             <input ref={ register } type="text" autoComplete="off" name="msg" id="message" placeholder="메시지를 입력하세요"/>
@@ -144,18 +154,7 @@ const NewChat: FC = (props) => {
     );
   }
 
-  const handleRoom = (roomId : string) => {
-    socket.emit(
-      'joined room', 
-      {roomId}, 
-    );
-  }
-
   useEffect(() => {
-    var $chatLog = $('#chatLog');
-    var $memberSelect = $('#memberSelect');
-    var $chatWrap = $('#chatWrap');
-
     socket.on('room', (data: FormData, cb?: Function) => {
       console.log('room')
     })
@@ -192,16 +191,14 @@ const NewChat: FC = (props) => {
         $chatLog.append(`<div class="anotherMsg msgEl"><span class="anotherName">${data.name}</span><span class="msg">${data.msg}</span></div>`)
       }
       */
-      $chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
+      //$chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
     });
 
   }, [socket])
 
   return (
     <div className="NewChat">
-
-      <ChatForm handleChat={handleChat} handleRoom = {handleRoom}/>
-
+      <ChatForm handleChat={handleChat}/>
     </div>
   )
 }

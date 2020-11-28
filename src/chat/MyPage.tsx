@@ -23,30 +23,29 @@ const MyPage: FC = (props) => {
                     item.href = "/login"
                 }
             })
-            userId = ''
+            
             socket.emit('userInfo', '');
             history.push('/home');
         }
     }
 
     useEffect(() => {
-        console.log("Mypage")
         socket.on('getUserId', (data: string) => {
             if(userId === ''){
-                console.log("My page: " + data)
+                console.log("Mypage")
                 userId = data
                 firestore.collection("users")
                 .where("id", "==", data).get()
                 .then((docs) => {
-                    docs.forEach((doc) => {
-                        tempList = doc.data().list.map((el: number) => (
-                            <div className="roomName">
-                                <div className="roomEl active" data-id={el}>Chat {el}</div>
-                                <div id="out">나가기</div>
-                            </div>
-                        ))
-                        setRoomList(tempList)
-                    })   
+                  docs.forEach((doc) => {
+                    tempList = doc.data().list.map((el: number) => (
+                      <div className="roomName">
+                          <div className="roomEl active" data-id={el}>Chat {el}</div>
+                          <div id="out">나가기</div>
+                      </div>
+                    ))
+                    setRoomList(tempList)
+                  })   
                 })
             }
         })  

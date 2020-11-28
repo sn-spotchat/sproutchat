@@ -73,7 +73,7 @@ class Map extends Component {
       })
     })
     window.history.pushState(this.state.center, "", "/home");
-    this.props.history.push("/chat")
+    this.props.history.push("/chat", "지도에서 왔수다")
     console.log("chat " + id)//
   }
 
