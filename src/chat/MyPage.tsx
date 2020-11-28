@@ -12,7 +12,7 @@ const MyPage: FC = (props) => {
     const socket = useRef(io('http://localhost:3005')).current
 
     const [roomList, setRoomList] = useState([]);
-    let list = []
+    let tempList = []
     let userId = ''
 
     const handleLogout = () =>{
@@ -38,8 +38,14 @@ const MyPage: FC = (props) => {
                 firestore.collection("users")
                 .where("id", "==", data).get()
                 .then((docs) => {
-                    docs.forEach((doc) => {     
-                        setRoomList(doc.data().list)
+                    docs.forEach((doc) => {
+                        tempList = doc.data().list.map((el: number) => (
+                            <div className="roomName">
+                                <div className="roomEl active" data-id={el}>Chat {el}</div>
+                                <div id="out">나가기</div>
+                            </div>
+                        ))
+                        setRoomList(tempList)
                     })   
                 })
             }
@@ -48,30 +54,18 @@ const MyPage: FC = (props) => {
 
     return(
         <body> 
-            <button className="btn" onClick={() => {handleLogout()}}>
+            <nav>
+                <button className="btn" onClick={() => {handleLogout()}}>
                     Logout
-            </button>
+                </button>
+            </nav>
       
         <div id="contentCover">
             <div id="roomWrap">
             <div id="roomList">
                 <div id="roomHeader">채팅 방 목록</div>
                 <div id="roomSelect">
-                    <div className="roomName">
-                        <div className="roomEl active" data-id="1">Chat 1</div>
-                        <div id="out">나가기</div>
-                    </div>
-                    <div className="roomName">
-                        <div className="roomEl active" data-id={roomList[0]}>Chat {roomList[0]}</div>
-                        <div id="out">나가기</div>
-                    </div>
-                    <div>{roomList}</div>
-                    {roomList.forEach((el) => {
-                        <div className="roomName">
-                            <div className="roomEl active" data-id={el}>Chat {el}</div>
-                            <div id="out">나가기</div>
-                        </div>
-                    })}
+                    {roomList}
                 </div>
             </div>
             </div>
