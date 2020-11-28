@@ -23,7 +23,7 @@ const Container = styled.div`
 
 /* Constant Variables */
 export const items = [
-  { label: "", href: "" },
+  { label: "Login", href: "/login" },
   { label: "Map", href: "/home" },
   { label: "Chat", href: "/chat" }
 ];
@@ -42,7 +42,6 @@ const SideBar = props => {
   useEffect(() => {
     console.log("Sidebar")
     socket.on('getUserId', (data) => {
-        console.log("sidebar id: " + data)
         if(data !== ""){
           items[0].label = "My Page"
           items[0].href = "/mypage"
