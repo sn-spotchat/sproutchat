@@ -62,12 +62,13 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('join room', (data) =>{
         let id = getUserBySocketId(socket.id);
-        console.log(id);
         let nextRoomId = data.roomId;
+        //socket.leave('room' + prevRoomId);
+        socket.join('room' + nextRoomId);
         socket.join('room' + nextRoomId);
         //onlineUsers[id].roomId = data.roomId;
-        console.log('join room 1' + socket.id + ' ' + nextRoomId)
-        socket.emit('join room', data);
+        console.log('join room 1')
+        //socket.emit('join room', data);
     })
 
 

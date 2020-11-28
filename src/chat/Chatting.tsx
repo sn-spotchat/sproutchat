@@ -17,6 +17,12 @@ type FormData = {
 type ChatData = {
   msg: string
 }
+
+type storeData = {
+  id: number
+  name: string
+}
+
 var onlineUsers = {};
 var socketId = "";
 var roomId = "";
@@ -46,6 +52,7 @@ const ChatForm: FC<{
   const [roomList, setRoomList] = useState([]);
   let tempList = []
   //
+  var limit = 0
 
   const handleLogout = () => {
     if(window.confirm("로그아웃 하시겠습니까?") === true){
@@ -63,16 +70,17 @@ const ChatForm: FC<{
 
   useEffect(()=>{
     socket.on('getUserId', (data: string) => {
-      if(userId === ''){
+      if(limit < 5){
           console.log("My page: " + data)
           userId = data
+          limit += 1;
           firestore.collection("users")
           .where("id", "==", data).get()
           .then((docs) => {
               docs.forEach((doc) => {
-                  tempList = doc.data().list.map((el: number) => (
+                  tempList = doc.data().list.map((el: storeData) => (
                       <div className="roomName">
-                          <div className="roomEl active" data-id={el}>Chat {el}</div>
+                          <div className="roomEl active" data-id={el.name}>{el.name}</div>
                           <button id="out">나가기</button>
                       </div>
                   ))
@@ -197,14 +205,18 @@ const NewChat: FC = (props) => {
       if(!$(this).data('id')) {
         //console.log(roomId)
       } else {
+        console.log($(this).data('id'));
         roomId = $(this).data('id')
         socket.emit('joined room', userId);
         socket.emit('join room', {roomId});
       }
+      /*
       $(this).parents().children().removeClass("active");
       $(this).addClass("active");
-    
-      $('#chatHeader').html(`Chat ${roomId}`);
+      */
+
+      $chatLog.html("");
+      $('#chatHeader').html(`${roomId}`);
 
       //db에서 내용 불러오기
 
