@@ -72,7 +72,9 @@ class Success extends Component {
           })
         }
         socket.emit('naverlogin',{id: this.state.id, pw: this.state.pw})
+
       }) 
+
     }
 
     componentDidMount() {

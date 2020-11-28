@@ -51,6 +51,11 @@ io.sockets.on('connection', function (socket) {
     socket.on('room', (data) => {
         socket.emit('room', data);
     })
+
+    socket.on('joined room', (data) => {
+        socket.emit('joined room', data);
+    });
+
     socket.on('new message', function (data) {
         socket.emit('new message', data);
     })

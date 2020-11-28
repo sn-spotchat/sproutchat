@@ -73,8 +73,7 @@ const JoinForm: FC<{
           하러가기
           </button> 
         </form>
-
-       
+ 
     </div>
   )
 }
