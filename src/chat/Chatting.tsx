@@ -17,17 +17,15 @@ type ChatData = {
 }
 
 var socketId = "";
-var roomId = 0;
 
-var $chatLog = $('#chatLog');
-var $memberSelect = $('#memberSelect');
-var $chatWrap = $('#chatWrap');
 
 const ChatForm: FC<{
   handleChat: (msg: string) => void
+  handleRoom: (roomId: string) => void
 }> = (props) => {
   
   const { handleChat } = props
+  const { handleRoom } = props
   const { register, handleSubmit } = useForm<ChatData>()
   const history = useHistory();
   const onSubmit = handleSubmit(({ msg }) => {
@@ -48,6 +46,10 @@ const ChatForm: FC<{
     history.push('/home')
   }
 
+  const roomSelect = () => {
+    handleRoom('1');
+  }
+
 
   return (
     <body> 
@@ -63,9 +65,9 @@ const ChatForm: FC<{
         <div id="roomWrap">
           <div id="roomList">
             <div id="roomHeader">채팅 방 목록</div>
-            <div id="roomSelect">
+            <div id="roomSelect" >
               <div className="roomName">
-                <div className="roomEl active" data-id="1">Chat 1</div>
+                <span className="roomEl active" data-id="1" onClick={roomSelect}>Chat 1</span>
                 <div id="out">나가기</div>
               </div>
               <div className="roomName">
@@ -85,9 +87,9 @@ const ChatForm: FC<{
         </div>
         <div id="chatWrap">  
           <div id="chatHeader">Please enter the room</div>      
-          <div id="chatLog">
-
-
+          <div id="chatLog" >
+            <div className="anotherMsg msgEl"><span className="anotherName">운영자</span><span className="msg">환영합니다</span></div>
+            <div className="myMsg msgEl"><div className="msg">안녕하세요</div></div>
           </div>
           <form onSubmit={onSubmit} id="chatForm">
             <input ref={ register } type="text" autoComplete="off" name="msg" id="message" placeholder="메시지를 입력하세요"/>
@@ -122,7 +124,18 @@ const NewChat: FC = (props) => {
     );
   }
 
+  const handleRoom = (roomId : string) => {
+    socket.emit(
+      'joined room', 
+      {roomId}, 
+    );
+  }
+
   useEffect(() => {
+    var $chatLog = $('#chatLog');
+    var $memberSelect = $('#memberSelect');
+    var $chatWrap = $('#chatWrap');
+
     socket.on('room', (data: FormData, cb?: Function) => {
       console.log('room')
     })
@@ -132,9 +145,9 @@ const NewChat: FC = (props) => {
       let html = "";
       data.forEach((el: { socketId: string; name: any }) => {
           if (el.socketId === socketId) {
-              html += `<div className="memberEl">${el.name} (me)</div>`
+              html += `<div class="memberEl">${el.name} (me)</div>`
           } else {
-              html += `<div className="memberEl">${el.name}</div>`
+              html += `<div class="memberEl">${el.name}</div>`
           }
       });
       $memberSelect.html(html);
@@ -142,11 +155,11 @@ const NewChat: FC = (props) => {
 
     
     socket.on('lefted room', (data: string) => {
-      $chatLog.append(`<div className="notice"><strong>${data}</strong> lefted the room</div>`)
+      $chatLog.append(`<div class="notice"><strong>${data}</strong> lefted the room</div>`)
     });
 
     socket.on('joined room', (data: string) => {
-        $chatLog.append(`<div className="notice"><strong>${data}</strong> joined the room</div>`)
+        $chatLog.append(`<div class="notice"><strong>${data}</strong> joined the room</div>`)
     });
 
     
@@ -154,15 +167,15 @@ const NewChat: FC = (props) => {
       $chatWrap.show();
       console.log(data)
 
-      $chatLog.append(`<div className="myMsg msgEl"><div className="msg">${data.msg}</div></div>`)
+      $chatLog.append(`<div class="myMsg msgEl"><div class="msg">${data.msg}</div></div>`)
       /*
       if (data.socketId === socketId) {
-        $chatLog.append(`<div className="myMsg msgEl"><span className="msg">${data.msg}</span></div>`)
+        $chatLog.append(`<div class="myMsg msgEl"><span class="msg">${data.msg}</span></div>`)
       }else {
-        $chatLog.append(`<div className="anotherMsg msgEl"><span className="anotherName">${data.name}</span><span className="msg">${data.msg}</span></div>`)
+        $chatLog.append(`<div class="anotherMsg msgEl"><span class="anotherName">${data.name}</span><span class="msg">${data.msg}</span></div>`)
       }
       */
-      //$chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
+      $chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
     });
 
   }, [socket])
@@ -170,7 +183,7 @@ const NewChat: FC = (props) => {
   return (
     <div className="NewChat">
      
-      <ChatForm handleChat={handleChat}/>
+      <ChatForm handleChat={handleChat} handleRoom = {handleRoom}/>
     </div>
   )
 }
