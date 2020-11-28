@@ -60,13 +60,26 @@ io.sockets.on('connection', function (socket) {
         socket.emit('new message', data);
     })
 
-    socket.on('join room', function (data) {
+    socket.on('join room', (data) =>{
+        let id = getUserBySocketId(socket.id);
+        console.log(id);
+        let nextRoomId = data.roomId;
+        socket.join('room' + nextRoomId);
+        //onlineUsers[id].roomId = data.roomId;
+        console.log('join room 1' + socket.id + ' ' + nextRoomId)
+        socket.emit('join room', data);
+    })
+
+
+    /*
+    socket.on('join room',(data) => {
         let id = getUserBySocketId(socket.id);
         let prevRoomId = onlineUsers[id].roomId;
         let nextRoomId = data.roomId;
         socket.leave('room' + prevRoomId);
         socket.join('room' + nextRoomId);
         onlineUsers[id].roomId = data.roomId;
+        console.log(prevRoomId + ' ' + nextRoomId + ' ' + id)
         updateUserList(prevRoomId, nextRoomId, id);
     });
     
@@ -98,7 +111,7 @@ io.sockets.on('connection', function (socket) {
             console.log("next"+ next);
         }
     }
-
+    */
 
     function getUserBySocketId(id) {
         return Object.keys(onlineUsers).find(key => onlineUsers[key].socketId === id);
@@ -117,4 +130,5 @@ io.sockets.on('connection', function (socket) {
         });
         return userstemp;
     }
+    
 });

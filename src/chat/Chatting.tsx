@@ -17,18 +17,18 @@ type FormData = {
 type ChatData = {
   msg: string
 }
-
+var onlineUsers = {};
 var socketId = "";
 var roomId = "";
 var userId = "";
 
 const ChatForm: FC<{
   handleChat: (msg: string) => void
-  handleRoom: (roomId: string) => void
+  
 }> = (props) => {
   const socket = useRef(io('http://localhost:3005')).current
   const { handleChat } = props
-  const { handleRoom } = props
+  
   const { register, handleSubmit } = useForm<ChatData>()
   const history = useHistory();
   const onSubmit = handleSubmit(({ msg }) => {
@@ -60,12 +60,6 @@ const ChatForm: FC<{
       history.push('/home');
     }
   }
-
-
-  const roomSelect = () => {
-    handleRoom('1');
-  }
-
 
   useEffect(()=>{
     socket.on('getUserId', (data: string) => {
@@ -112,7 +106,7 @@ const ChatForm: FC<{
           <div id="chatHeader">Please enter the room</div>      
           <div id="chatLog" >
             <div className="anotherMsg msgEl"><span className="anotherName">운영자</span><span className="msg">환영합니다</span></div>
-            <div className="myMsg msgEl"><div className="msg">안녕하세요</div></div>
+      
           </div>
           <form onSubmit={onSubmit} id="chatForm">
             <input ref={ register } type="text" autoComplete="off" name="msg" id="message" placeholder="메시지를 입력하세요"/>
@@ -147,16 +141,13 @@ const NewChat: FC = (props) => {
     m.val("");
   }
 
-  const handleRoom = (roomId : string) => {
-    
-  }
-
   useEffect(() => {
     var $chatLog = $('#chatLog');
     var $memberSelect = $('#memberSelect');
     var $chatWrap = $('#chatWrap');
     var $roomSelect = $('#roomSelect');
 
+    
     socket.on('room', (data: FormData, cb?: Function) => {
       console.log('room')
     })
@@ -196,22 +187,27 @@ const NewChat: FC = (props) => {
       $chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
     });
 
+    socket.on('join room', (data: any) => {
+      let nextRoomId = data.roomId;
+      console.log('join room 2')
+    });
+
     $roomSelect.on("click", "div", function () {
-      if(roomId == ''){
-        roomId = $(this).data('id');
-      } else if(roomId !== $(this).data('id')) {
-        console.log(roomId)
-      } 
-      //$(this).parents().children().removeClass("active");
-      //$(this).addClass("active");
-      console.log($(this).data().id);
-      $('#chatHeader').html(`${roomId}`);
-      console.log(userId)
-      socket.emit('joined room', userId);
-      socket.emit('join room', {
-        roomId
-      });
+      
+      if(!$(this).data('id')) {
+        //console.log(roomId)
+      } else {
+        roomId = $(this).data('id')
+        socket.emit('joined room', userId);
+        socket.emit('join room', {roomId});
+      }
+      $(this).parents().children().removeClass("active");
+      $(this).addClass("active");
     
+      $('#chatHeader').html(`Chat ${roomId}`);
+
+      //db에서 내용 불러오기
+
     });
 
   }, [socket])
@@ -219,7 +215,7 @@ const NewChat: FC = (props) => {
   return (
     <div className="NewChat">
 
-      <ChatForm handleChat={handleChat} handleRoom = {handleRoom}/>
+      <ChatForm handleChat={handleChat}/>
 
     </div>
   )
