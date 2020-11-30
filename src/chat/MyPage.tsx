@@ -6,6 +6,11 @@ import { firestore } from '../components/firebase';
 import './styles.css'
 import {items} from '../layouts/Main/SideBar/SideBar.js'
 
+type FormData = {
+    id: string
+    pw: string
+    list: []
+  }
 
 type storeData = {
     id: number
@@ -30,7 +35,6 @@ const MyPage: FC = (props) => {
                     item.href = "/login"
                 }
             })
-            userId = ''
             socket.emit('userInfo', '');
             history.push('/home');
         }
@@ -49,13 +53,15 @@ const MyPage: FC = (props) => {
                     .doc(data).onSnapshot((doc) => {
                     userId = doc.get('id')
                     //console.log('mypage: ' + userId)
-                    tempList = doc.get('list').map((el: storeData) => (
-                        <div className="roomName">
-                            <div className="roomEl active" data-id={el.name}> {el.name}</div>
-                            <div id="out">나가기</div>
-                        </div>
-                    ))
+                    if(doc.get("list")){
+                        tempList = doc.get('list').map((el: storeData) => (
+                            <div className="roomName">
+                                <div className="roomEl active" data-id={el.name}> {el.name}</div>
+                                <div id="out">나가기</div>
+                            </div>
+                        ))
                     setRoomList(tempList)
+                    }
                 }) 
                 }                 
             }

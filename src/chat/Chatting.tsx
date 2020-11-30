@@ -5,7 +5,8 @@ import { io } from 'socket.io-client'
 import { firestore } from '../components/firebase';
 import './styles.css'
 import {items} from '../layouts/Main/SideBar/SideBar.js'
-
+import firebase from 'firebase';
+import 'firebase/firestore';
 import $ from 'jquery';
 
 
@@ -70,7 +71,8 @@ const ChatForm: FC<{
 
   useEffect(()=>{
     socket.on('getUserId', (data: string) => {
-      if(limit < 5){
+      if(data !== ''){
+        if(limit < 5){
           //console.log("My page: " + data)
           
           limit += 1;
@@ -84,10 +86,11 @@ const ChatForm: FC<{
                           <button id="out">나가기</button>
                       </div>
                   ))
-                  setRoomList(tempList)
-              })   
-          }
-      })
+              setRoomList(tempList)
+          })   
+        }
+      }
+    })
     
   }, [socket])
 
@@ -138,15 +141,19 @@ const NewChat: FC = (props) => {
 
   const handleChat = (msg: string) => {
     let m = $("#message");
-    //console.log('handleChat')
-    socket.emit(
-      'new message',
-      { msg },
-      (res: any) => {
-        console.log('emit')
-      }
-    );
-    m.val("");
+    firestore.collection("messages").doc(roomId).update({
+      msgs: firebase.firestore.FieldValue.arrayUnion({message: msg, uid: userId, timestamp: Date.now()})
+    }).then(function() {
+      //console.log('handleChat')
+      socket.emit(
+        'new message',
+        { msg },
+        (res: any) => {
+          console.log('emit')
+        }
+      );
+      m.val("");
+    })
   }
 
   useEffect(() => {

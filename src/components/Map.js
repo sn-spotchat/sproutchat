@@ -62,14 +62,16 @@ class Map extends Component {
   /*마커 클릭 시 채팅방으로 이동*/
   goToChat = (id, name) =>{
     console.log(this.state.userID)
-    firestore.collection("users").doc(this.state.userID).onSnapshot((doc) => {
-      firestore.collection("users").doc(doc.id).update({
-        list: firebase.firestore.FieldValue.arrayUnion({id: id, name: name})
+    if(this.state.userID !== ''){
+      firestore.collection("users").doc(this.state.userID).onSnapshot((doc) => {
+        firestore.collection("users").doc(doc.id).update({
+          list: firebase.firestore.FieldValue.arrayUnion({id: id, name: name})
+        })
       })
-    })
-    window.history.pushState(this.state.center, "", "/home");
-    this.props.history.push("/chat")
-    console.log("chat " + id)//
+      window.history.pushState(this.state.center, "", "/home");
+      this.props.history.push("/chat")
+      console.log("chat " + id)//
+    }
   }
 
   getGPS = () => {
