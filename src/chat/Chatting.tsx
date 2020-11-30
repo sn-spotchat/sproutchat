@@ -141,19 +141,41 @@ const NewChat: FC = (props) => {
 
   const handleChat = (msg: string) => {
     let m = $("#message");
-    firestore.collection("messages").doc(roomId).update({
-      msgs: firebase.firestore.FieldValue.arrayUnion({message: msg, uid: userId, timestamp: Date.now()})
-    }).then(function() {
-      //console.log('handleChat')
-      socket.emit(
-        'new message',
-        { msg },
-        (res: any) => {
-          console.log('emit')
-        }
-      );
-      m.val("");
-    })
+    var docRef = firestore.collection("messages").doc(roomId);
+    docRef.get().then(function(doc) {
+      if (doc.exists) {
+        docRef.update({
+          msgs: firebase.firestore.FieldValue.arrayUnion({message: msg, uid: userId, timestamp: Date.now()})
+        }).then(function() {
+          //console.log('handleChat')
+          socket.emit(
+            'new message',
+            { msg },
+            (res: any) => {
+              console.log('emit')
+            }
+          );
+          m.val("");
+        })
+      } else {
+        console.log("hey...?")
+        docRef.set({
+          msgs: firebase.firestore.FieldValue.arrayUnion({message: msg, uid: userId, timestamp: Date.now()})
+        }).then(function() {
+          //console.log('handleChat')
+          socket.emit(
+            'new message',
+            { msg },
+            (res: any) => {
+              console.log('emit')
+            }
+          );
+          m.val("");
+        })
+      }
+    }).catch(function(error) {
+        console.log("Error getting document:", error);
+    });
   }
 
   useEffect(() => {
