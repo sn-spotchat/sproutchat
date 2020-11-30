@@ -30,6 +30,8 @@ type storeData = {
   name: string
 }
 
+var docId = "";
+var socketId = "";
 var roomId = "";
 var userId = "";
 
@@ -79,8 +81,22 @@ const ChatForm: FC<{
           }
       })
       userId = ''
+      docId = ''
       socket.emit('userInfo', '');
       history.push('/home');
+    }
+  }
+
+  const handleRoomOut = (id: number) => {
+    if(window.confirm("채팅방을 나가시겠습니까?") === true){
+      firestore.collection("users")
+      .doc(docId).onSnapshot((doc) => {
+        tempList = doc.get("list").filter((el: storeData) => el.id !== id)
+        firestore.collection("users").doc(docId).update({list: tempList})
+      }) 
+
+      $('#chatHeader').html(`Please enter the room`);
+      $('#chatLog').html("");
     }
   }
 
@@ -93,9 +109,9 @@ const ChatForm: FC<{
 
     socket.on('getUserId', (data: string) => {
       if(data !== ''){
+        docId = data
         if(limit < 5){
           //console.log("My page: " + data)
-          
           limit += 1;
           firestore.collection("users")
           .doc(data).onSnapshot((doc) => {
@@ -104,9 +120,8 @@ const ChatForm: FC<{
               tempList = doc.get("list").map((el: storeData) => (
                       <div className="roomName">
                           <div className="roomEl active" data-id={el.name}>{el.name}</div>
-                          <button id="out">나가기</button>
+                          <div id="out" onClick={() => handleRoomOut(el.id)}>나가기</div>
                       </div>
-
               ))
               setRoomList(tempList)
             })   
@@ -120,7 +135,7 @@ const ChatForm: FC<{
       memSet.clear()
       memSet.add(userId)
       if(!$(this).data('id')) {
-        //console.log(roomId)
+        console.log(roomId)
       } else {
         console.log($(this).data('id'));
         roomId = $(this).data('id')
@@ -132,7 +147,6 @@ const ChatForm: FC<{
       $('#chatHeader').html(`${roomId}`);
 
       //db에서 내용 불러오기
-      
       firestore.collection("messages")
       .doc(roomId).onSnapshot((doc) => {
         if(doc.exists){
@@ -141,8 +155,8 @@ const ChatForm: FC<{
               { userId == el.uid
                 &&
                 <div className="myMsg msgEl">
+                  <div className="timestamp"><strong>{el.timestamp}</strong></div>
                   <div className="msg">{el.message}</div>
-                  <div className="notice"><strong>{el.timestamp}</strong></div>
                 </div>
               }
               { userId != el.uid
@@ -151,7 +165,7 @@ const ChatForm: FC<{
                 <div className="anotherMsg msgEl">
                   <span className="anotherName">{el.uid}</span>
                   <span className="msg">{el.message}</span>
-                  <div className="notice"><strong>{el.timestamp}</strong></div>
+                  <div className="timestamp"><strong>{el.timestamp}</strong></div>
                 </div>
                 </div>
               }
@@ -202,18 +216,15 @@ const ChatForm: FC<{
         <div id="roomWrap">
           <div id="roomList">
             <div id="roomHeader">채팅 방 목록</div>
-
             <span id="roomSelect">
               {roomList}
-
             </span>
           </div>
         </div>
         <div id="chatWrap">  
           <div id="chatHeader">Please enter the room</div>      
-          <div id="chatLog" >
+          <div id="chatLog">
             {msgList}
-            
           </div>
           <form onSubmit={onSubmit} id="chatForm">
             <input ref={ register } type="text" autoComplete="off" name="msg" id="message" placeholder="메시지를 입력하세요"/>
@@ -222,11 +233,10 @@ const ChatForm: FC<{
         </div>
         <div id="memberWrap">
             <div id="memberList">
-                <div id="memberHeader">참여자</div>
-                <div id="memberSelect">
 
-                </div>
-                  {/*{memList}*/}
+              <div id="memberHeader">참여자</div>
+              <div id="memberSelect"></div>     
+
             </div>
         </div>   
       </div>
@@ -242,7 +252,8 @@ const NewChat: FC = (props) => {
     var docRef = firestore.collection("messages").doc(roomId);
     docRef.get().then(function(doc) {
       let now = new Date(Date.now())
-      let timeStamp = now.getFullYear() + "년 " + (now.getMonth()+1) + "월 " + now.getDate() + "일 " + now.getHours() + ":" + now.getMinutes()
+      let timeStamp = now.getFullYear() + "년 " + (now.getMonth()+1) + "월 " + now.getDate() + "일 " + (now.getHours() >= 10 ? now.getHours() : "0" + now.getHours()) + ":" + (now.getMinutes() >= 10 ? now.getMinutes() : "0" + now.getMinutes())
+
       if (doc.exists) {
         docRef.update({
           msgs: firebase.firestore.FieldValue.arrayUnion({message: msg, uid: userId, timestamp: timeStamp})

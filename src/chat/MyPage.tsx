@@ -18,6 +18,7 @@ type storeData = {
 }
 
 var roomId = '';
+var docId = '';
 
 const MyPage: FC = (props) => {
     const history = useHistory();
@@ -39,6 +40,17 @@ const MyPage: FC = (props) => {
             history.push('/home');
         }
     }
+    
+    /*
+    const handleRoomOut = (id: number) => {
+        if(window.confirm("채팅방을 나가시겠습니까?") === true){
+          firestore.collection("users")
+          .doc(docId).onSnapshot((doc) => {
+            tempList = doc.get("list").filter((el: storeData) => el.id !== id)
+            firestore.collection("users").doc(docId).update({list: tempList})
+          }) 
+        }
+    }*/
 
     useEffect(() => {
         var $chatLog = $('#chatLog');
@@ -57,7 +69,9 @@ const MyPage: FC = (props) => {
                         tempList = doc.get('list').map((el: storeData) => (
                             <div className="roomName">
                                 <div className="roomEl active" data-id={el.name}> {el.name}</div>
-                                <div id="out">나가기</div>
+                                {/*
+                                <div id="out" onClick={() => handleRoomOut(el.id)}>나가기</div>
+                                */}
                             </div>
                         ))
                     setRoomList(tempList)
