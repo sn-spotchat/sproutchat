@@ -10,6 +10,8 @@ import firebase from 'firebase';
 import 'firebase/firestore';
 
 class Map extends Component {
+
+  //socket = useRef(io('http://localhost:3005')).current
   state = {
     userID: '',
     center : {lat: 37.551046251096544, lng: 126.94103448409076},
@@ -71,6 +73,7 @@ class Map extends Component {
       window.history.pushState(this.state.center, "", "/home");
       this.props.history.push("/chat")
       console.log("chat " + id)//
+      //socket.emit('userlist', id);
     }
   }
 

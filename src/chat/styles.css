@@ -91,6 +91,8 @@ nav{
 #roomList {
   border: 1px solid rgb(92, 190, 72);
   border-radius: 5px;
+  overflow-y: auto;
+  border-radius: 5px;
 }
 
 
@@ -226,6 +228,8 @@ nav{
   text-align: center;
   border: 1px solid #aaaaaa;
   border-radius: 5px;
+  height: 600px;
+  overflow-y: auto;
 }
 
 #memberHeader {

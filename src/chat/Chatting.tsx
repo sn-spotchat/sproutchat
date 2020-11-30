@@ -30,11 +30,11 @@ type storeData = {
   name: string
 }
 
-var onlineUsers = {};
 var docId = "";
 var socketId = "";
 var roomId = "";
 var userId = "";
+
 
 const ChatForm: FC<{
   handleChat: (msg: string) => void
@@ -58,10 +58,18 @@ const ChatForm: FC<{
   })
 
   const [msgList, setmsgList] = useState([]);
-  let mList = []
+  let mList = [];
 
   const [roomList, setRoomList] = useState([]);
-  let tempList = []
+  let tempList = [];
+  
+  
+  //const [memList, setmemList] = useState([]);
+  //let mbList = [];
+  
+  var memSet = new Set<string>();
+  let uid = ""
+
   var limit = 0
 
   const handleLogout = () => {
@@ -95,6 +103,9 @@ const ChatForm: FC<{
   useEffect(()=>{
     var $chatLog = $('#chatLog');
     var $roomSelect = $('#roomSelect');
+    var $memberSelect = $("#memberSelect")
+
+    var flag = 0;
 
     socket.on('getUserId', (data: string) => {
       if(data !== ''){
@@ -119,7 +130,10 @@ const ChatForm: FC<{
     })
 
     $roomSelect.on("click", "div", function () {
-      
+      flag = 0;
+      $memberSelect.html("")
+      memSet.clear()
+      memSet.add(userId)
       if(!$(this).data('id')) {
         console.log(roomId)
       } else {
@@ -128,7 +142,7 @@ const ChatForm: FC<{
         socket.emit('joined room', userId);
         socket.emit('join room', {roomId});
       }
-      
+
       //$chatLog.html("");
       $('#chatHeader').html(`${roomId}`);
 
@@ -157,10 +171,36 @@ const ChatForm: FC<{
               }
             </div>
           ))
-          $chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
-          setmsgList(mList)
+
+        $chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
+        setmsgList(mList)
         }
-      })
+      })   
+      socket.emit('userlist', userId);      
+    });
+
+
+    socket.on('userlist', (data: string) => {
+      firestore.collection("messages")
+      .doc(roomId).onSnapshot((doc) => {
+
+        if(doc.exists){    
+          doc.get("msgs").map((el: LogData) => {
+            uid = el.uid
+            memSet.add(uid)
+          })
+
+          const List = Array.from(memSet);
+          console.log(List)
+          console.log(typeof(List[0]))
+          if(flag == 0){
+            for(var i = 0; i < List.length; i++){
+              $memberSelect.append(`<div class="memberEl">${List[i]}</div>`)
+            }  
+            flag = 1;
+          }
+        }
+      });
     });
   }, [socket])
 
@@ -193,8 +233,10 @@ const ChatForm: FC<{
         </div>
         <div id="memberWrap">
             <div id="memberList">
+
               <div id="memberHeader">참여자</div>
               <div id="memberSelect"></div>     
+
             </div>
         </div>   
       </div>
@@ -221,13 +263,13 @@ const NewChat: FC = (props) => {
             'new message',
             { msg },
             (res: any) => {
-              console.log('emit')
+              
             }
           );
           m.val("");
         })
       } else {
-        console.log("hey...?")
+        
         docRef.set({
           msgs: firebase.firestore.FieldValue.arrayUnion({message: msg, uid: userId, timestamp: timeStamp})
         }).then(function() {
@@ -236,7 +278,7 @@ const NewChat: FC = (props) => {
             'new message',
             { msg },
             (res: any) => {
-              console.log('emit')
+              
             }
           );
           m.val("");
@@ -247,24 +289,11 @@ const NewChat: FC = (props) => {
 
   useEffect(() => {
     var $chatLog = $('#chatLog');
-    var $memberSelect = $('#memberSelect');
     var $chatWrap = $('#chatWrap');
     
     socket.on('room', (data: FormData, cb?: Function) => {
       console.log('room')
     })
-
-    socket.on('userlist', (data: any) => {
-      let html = "";
-      data.forEach((el: { socketId: string; name: any }) => {
-          if (el.socketId === socketId) {
-              html += `<div class="memberEl">${el.name} (me)</div>`
-          } else {
-              html += `<div class="memberEl">${el.name}</div>`
-          }
-      });
-      $memberSelect.html(html);
-    });
 
     socket.on('lefted room', (data: string) => {
       $chatLog.append(`<div class="notice"><strong>${data}</strong> lefted the room</div>`)
@@ -278,13 +307,6 @@ const NewChat: FC = (props) => {
       $chatWrap.show();
       console.log(data)
 
-      /*
-      if (data.socketId === socketId) {
-        $chatLog.append(`<div class="myMsg msgEl"><span class="msg">${data.msg}</span></div>`)
-      }else {
-        $chatLog.append(`<div class="anotherMsg msgEl"><span class="anotherName">${data.name}</span><span class="msg">${data.msg}</span></div>`)
-      }
-      */
       $chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
     });
 
