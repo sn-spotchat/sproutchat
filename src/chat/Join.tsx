@@ -82,12 +82,12 @@ const Join: FC = (props) => {
   const history = useHistory();
   const socket = useRef(io('http://localhost:3005')).current
 
-
   const handleJoin = (id: string, pw: string) => {
       firestore
       .collection("users")
       .add({
         id: id,
+        list: [],
         pw: pw
       })
       console.log('handlelogin')
