@@ -242,7 +242,6 @@ const NewChat: FC = (props) => {
     docRef.get().then(function(doc) {
       let now = new Date(Date.now())
       let timeStamp = now.getFullYear() + "년 " + (now.getMonth()+1) + "월 " + now.getDate() + "일 " + now.getHours() + ":" + now.getMinutes()
-
       if (doc.exists) {
         docRef.update({
           msgs: firebase.firestore.FieldValue.arrayUnion({message: msg, uid: userId, timestamp: timeStamp})
