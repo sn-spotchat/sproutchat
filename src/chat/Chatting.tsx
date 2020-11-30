@@ -269,8 +269,6 @@ const NewChat: FC = (props) => {
       $chatWrap.show();
       console.log(data)
 
-     // $chatLog.append(`<div class="myMsg msgEl"><div class="msg">${data.msg}</div></div>`)
-      
       /*
       if (data.socketId === socketId) {
         $chatLog.append(`<div class="myMsg msgEl"><span class="msg">${data.msg}</span></div>`)
