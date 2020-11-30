@@ -71,6 +71,7 @@ io.sockets.on('connection', function (socket) {
         socket.emit('join room', data);
     })
     socket.on('userlist', (data) => {
+        console.log('emit')
         socket.emit('userlist', data);
     })
 
