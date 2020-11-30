@@ -5,7 +5,8 @@ import { io } from 'socket.io-client'
 import { firestore } from '../components/firebase';
 import './styles.css'
 import {items} from '../layouts/Main/SideBar/SideBar.js'
-
+import firebase from 'firebase';
+import 'firebase/firestore';
 import $ from 'jquery';
 
 
@@ -84,7 +85,8 @@ const ChatForm: FC<{
     var $roomSelect = $('#roomSelect');
 
     socket.on('getUserId', (data: string) => {
-      if(limit < 5){
+      if(data !== ''){
+        if(limit < 5){
           //console.log("My page: " + data)
           
           limit += 1;
@@ -97,6 +99,7 @@ const ChatForm: FC<{
                           <div className="roomEl active" data-id={el.name}>{el.name}</div>
                           <button id="out">나가기</button>
                       </div>
+
               ))
               setRoomList(tempList)
             })   
@@ -145,7 +148,7 @@ const ChatForm: FC<{
       })   
     
     });
-    
+
   }, [socket])
 
   return (
@@ -195,16 +198,41 @@ const NewChat: FC = (props) => {
 
   const handleChat = (msg: string) => {
     let m = $("#message");
-    //console.log('handleChat')
-    socket.emit(
-      'new message',
-      { msg },
-      (res: any) => {
-        console.log('emit')
+    var docRef = firestore.collection("messages").doc(roomId);
+    docRef.get().then(function(doc) {
+      if (doc.exists) {
+        docRef.update({
+          msgs: firebase.firestore.FieldValue.arrayUnion({message: msg, uid: userId, timestamp: Date.now()})
+        }).then(function() {
+          //console.log('handleChat')
+          socket.emit(
+            'new message',
+            { msg },
+            (res: any) => {
+              console.log('emit')
+            }
+          );
+          m.val("");
+        })
+      } else {
+        console.log("hey...?")
+        docRef.set({
+          msgs: firebase.firestore.FieldValue.arrayUnion({message: msg, uid: userId, timestamp: Date.now()})
+        }).then(function() {
+          //console.log('handleChat')
+          socket.emit(
+            'new message',
+            { msg },
+            (res: any) => {
+              console.log('emit')
+            }
+          );
+          m.val("");
+        })
       }
+
     );
-    
-    m.val("");
+   
   }
 
   useEffect(() => {
