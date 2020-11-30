@@ -55,7 +55,6 @@ const ChatForm: FC<{
     
   })
 
-
   const [msgList, setmsgList] = useState([]);
   let mList = [];
 
@@ -110,11 +109,10 @@ const ChatForm: FC<{
 
               ))
               setRoomList(tempList)
-            })
-          }   
+            })   
+        }
       }
     })
-
 
     $roomSelect.on("click", "div", function () {
       flag = 0;
@@ -141,7 +139,10 @@ const ChatForm: FC<{
             <div>
               { userId == el.uid
                 &&
-                <div className="myMsg msgEl"><div className="msg">{el.message}</div></div>
+                <div className="myMsg msgEl">
+                  <div className="msg">{el.message}</div>
+                  <div className="notice"><strong>{el.timestamp}</strong></div>
+                </div>
               }
               { userId != el.uid
                 &&
@@ -155,7 +156,7 @@ const ChatForm: FC<{
               }
             </div>
           ))
-        
+
         $chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
         setmsgList(mList)
         }
@@ -167,6 +168,7 @@ const ChatForm: FC<{
     socket.on('userlist', (data: string) => {
       firestore.collection("messages")
       .doc(roomId).onSnapshot((doc) => {
+
         if(doc.exists){    
           doc.get("msgs").map((el: LogData) => {
             uid = el.uid
@@ -182,12 +184,9 @@ const ChatForm: FC<{
             }  
             flag = 1;
           }
-
         }
       });
     });
-
-
   }, [socket])
 
   return (
@@ -241,9 +240,12 @@ const NewChat: FC = (props) => {
     let m = $("#message");
     var docRef = firestore.collection("messages").doc(roomId);
     docRef.get().then(function(doc) {
+      let now = new Date(Date.now())
+      let timeStamp = now.getFullYear() + "년 " + (now.getMonth()+1) + "월 " + now.getDate() + "일 " + now.getHours() + ":" + now.getMinutes()
+
       if (doc.exists) {
         docRef.update({
-          msgs: firebase.firestore.FieldValue.arrayUnion({message: msg, uid: userId, timestamp: Date.now()})
+          msgs: firebase.firestore.FieldValue.arrayUnion({message: msg, uid: userId, timestamp: timeStamp})
         }).then(function() {
           //console.log('handleChat')
           socket.emit(
@@ -258,7 +260,7 @@ const NewChat: FC = (props) => {
       } else {
         console.log("hey...?")
         docRef.set({
-          msgs: firebase.firestore.FieldValue.arrayUnion({message: msg, uid: userId, timestamp: Date.now()})
+          msgs: firebase.firestore.FieldValue.arrayUnion({message: msg, uid: userId, timestamp: timeStamp})
         }).then(function() {
           //console.log('handleChat')
           socket.emit(
@@ -271,8 +273,7 @@ const NewChat: FC = (props) => {
           m.val("");
         })
       }
-    }
-    );
+    });  
   }
 
   useEffect(() => {
@@ -309,9 +310,7 @@ const NewChat: FC = (props) => {
 
   return (
     <div className="NewChat">
-
       <ChatForm handleChat={handleChat}/>
-
     </div>
   )
 }
