@@ -128,8 +128,8 @@ const ChatForm: FC<{
               { userId == el.uid
                 &&
                 <div className="myMsg msgEl">
+                  <div className="timestamp"><strong>{el.timestamp}</strong></div>
                   <div className="msg">{el.message}</div>
-                  <div className="notice"><strong>{el.timestamp}</strong></div>
                 </div>
               }
               { userId != el.uid
@@ -138,12 +138,13 @@ const ChatForm: FC<{
                 <div className="anotherMsg msgEl">
                   <span className="anotherName">{el.uid}</span>
                   <span className="msg">{el.message}</span>
-                  <div className="notice"><strong>{el.timestamp}</strong></div>
+                  <div className="timestamp"><strong>{el.timestamp}</strong></div>
                 </div>
                 </div>
               }
             </div>
           ))
+          $chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
           setmsgList(mList)
         }
       })   
@@ -201,7 +202,7 @@ const NewChat: FC = (props) => {
     var docRef = firestore.collection("messages").doc(roomId);
     docRef.get().then(function(doc) {
       let now = new Date(Date.now())
-      let timeStamp = now.getFullYear() + "년 " + (now.getMonth()+1) + "월 " + now.getDate() + "일 " + now.getHours() + ":" + now.getMinutes()
+      let timeStamp = now.getFullYear() + "년 " + (now.getMonth()+1) + "월 " + now.getDate() + "일 " + now.getHours() + ":" + (now.getMinutes() >= 10 ? now.getMinutes() : "0" + now.getMinutes())
 
       if (doc.exists) {
         docRef.update({
