@@ -118,6 +118,7 @@ const ChatForm: FC<{
       flag = 0;
       $memberSelect.html("")
       memSet.clear()
+      memSet.add(userId)
       if(!$(this).data('id')) {
         //console.log(roomId)
       } else {
