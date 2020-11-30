@@ -162,16 +162,23 @@ nav{
 }
 
 .msg {
-  display: inline-block;
+  display: inline-flex;
   border-radius: 15px;
   padding: 7px 15px;
   margin-bottom: 10px;
   margin-top: 5px;
 }
 
+.timestamp {
+  display: inline-flex;
+  margin: 5px;
+  text-align: center;
+  color: gray;
+  font-size: 13px;
+}
+
 .anotherMsg > .msg {
   background-color: #f1f0f0;
-
 }
 
 .myMsg > .msg {
