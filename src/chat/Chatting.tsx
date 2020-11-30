@@ -33,6 +33,7 @@ type storeData = {
 var roomId = "";
 var userId = "";
 
+
 const ChatForm: FC<{
   handleChat: (msg: string) => void
   
@@ -60,8 +61,12 @@ const ChatForm: FC<{
   const [roomList, setRoomList] = useState([]);
   let tempList = [];
   
-  const [memList, setmemList] = useState([]);
-  let mbList = [];
+  
+  //const [memList, setmemList] = useState([]);
+  //let mbList = [];
+  
+  var memSet = new Set<string>();
+  let uid = ""
 
   var limit = 0
 
@@ -82,6 +87,9 @@ const ChatForm: FC<{
   useEffect(()=>{
     var $chatLog = $('#chatLog');
     var $roomSelect = $('#roomSelect');
+    var $memberSelect = $("#memberSelect")
+
+    var flag = 0;
 
     socket.on('getUserId', (data: string) => {
       if(data !== ''){
@@ -107,7 +115,9 @@ const ChatForm: FC<{
     })
 
     $roomSelect.on("click", "div", function () {
-      
+      flag = 0;
+      $memberSelect.html("")
+      memSet.clear()
       if(!$(this).data('id')) {
         //console.log(roomId)
       } else {
@@ -156,29 +166,27 @@ const ChatForm: FC<{
 
 
     socket.on('userlist', (data: string) => {
-
       firestore.collection("messages")
       .doc(roomId).onSnapshot((doc) => {
-        if(doc.exists){
-          mbList = doc.get("msgs").map((el: LogData) => (         
-            <div>
-              { data == el.uid
-                &&
-                <div className="memberEl">${el.uid} (me)</div>
-              }
-              { data != el.uid
-                &&
-                <div className="memberEl">${el.uid}</div>
-              }
-            </div>
-          ))
-        
-        setmemList(mbList)
+
+        if(doc.exists){    
+          doc.get("msgs").map((el: LogData) => {
+            uid = el.uid
+            memSet.add(uid)
+          })
+
+          const List = Array.from(memSet);
+          console.log(List)
+          console.log(typeof(List[0]))
+          if(flag == 0){
+            for(var i = 0; i < List.length; i++){
+              $memberSelect.append(`<div class="memberEl">${List[i]}</div>`)
+            }  
+            flag = 1;
+          }
         }
       });
-
     });
-
   }, [socket])
 
   return (
@@ -214,8 +222,10 @@ const ChatForm: FC<{
         <div id="memberWrap">
             <div id="memberList">
                 <div id="memberHeader">참여자</div>
-                <div id="memberSelect"></div>
-                  {memList}
+                <div id="memberSelect">
+
+                </div>
+                  {/*{memList}*/}
             </div>
         </div>   
       </div>
