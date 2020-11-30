@@ -252,13 +252,13 @@ const NewChat: FC = (props) => {
             'new message',
             { msg },
             (res: any) => {
-              console.log('emit')
+              
             }
           );
           m.val("");
         })
       } else {
-        console.log("hey...?")
+        
         docRef.set({
           msgs: firebase.firestore.FieldValue.arrayUnion({message: msg, uid: userId, timestamp: timeStamp})
         }).then(function() {
@@ -267,7 +267,7 @@ const NewChat: FC = (props) => {
             'new message',
             { msg },
             (res: any) => {
-              console.log('emit')
+              
             }
           );
           m.val("");
@@ -283,7 +283,6 @@ const NewChat: FC = (props) => {
     socket.on('room', (data: FormData, cb?: Function) => {
       console.log('room')
     })
-
 
     socket.on('lefted room', (data: string) => {
       $chatLog.append(`<div class="notice"><strong>${data}</strong> lefted the room</div>`)
