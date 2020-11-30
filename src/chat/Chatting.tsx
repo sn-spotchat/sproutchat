@@ -30,9 +30,6 @@ type storeData = {
   name: string
 }
 
-
-var onlineUsers = {};
-var socketId = "";
 var roomId = "";
 var userId = "";
 
@@ -59,11 +56,14 @@ const ChatForm: FC<{
 
 
   const [msgList, setmsgList] = useState([]);
-  let mList = []
+  let mList = [];
 
   const [roomList, setRoomList] = useState([]);
-  let tempList = []
-  //
+  let tempList = [];
+  
+  const [memList, setmemList] = useState([]);
+  let mbList = [];
+
   var limit = 0
 
   const handleLogout = () => {
@@ -120,34 +120,61 @@ const ChatForm: FC<{
       }
       
 
-      $chatLog.html("");
+      //$chatLog.html("");
       $('#chatHeader').html(`${roomId}`);
 
       //db에서 내용 불러오기
       
       firestore.collection("messages")
       .doc(roomId).onSnapshot((doc) => {
-        mList = doc.get("msgs").map((el: LogData) => (         
-          <div>
-            { userId == el.uid
-              &&
-              <div className="myMsg msgEl"><div className="msg">{el.message}</div></div>
-            }
-            { userId != el.uid
-              &&
-              <div>
-              <div className="anotherMsg msgEl">
-                <span className="anotherName">{el.uid}</span>
-                <span className="msg">{el.message}</span>
-                <div className="notice"><strong>{el.timestamp}</strong></div>
-              </div>
-              </div>
-            }
-          </div>
-        ))
+        if(doc.exists){
+          mList = doc.get("msgs").map((el: LogData) => (         
+            <div>
+              { userId == el.uid
+                &&
+                <div className="myMsg msgEl"><div className="msg">{el.message}</div></div>
+              }
+              { userId != el.uid
+                &&
+                <div>
+                <div className="anotherMsg msgEl">
+                  <span className="anotherName">{el.uid}</span>
+                  <span className="msg">{el.message}</span>
+                  <div className="notice"><strong>{el.timestamp}</strong></div>
+                </div>
+                </div>
+              }
+            </div>
+          ))
+        
+        $chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
         setmsgList(mList)
+        }
       })   
-    
+      socket.emit('userlist', userId);      
+    });
+
+
+    socket.on('userlist', (data: string) => {
+
+      firestore.collection("messages")
+      .doc(roomId).onSnapshot((doc) => {
+        
+          mbList = doc.get("msgs").map((el: LogData) => (         
+            <div>
+              { data == el.uid
+                &&
+                <div className="memberEl">${el.uid} (me)</div>
+              }
+              { data != el.uid
+                &&
+                <div className="memberEl">${el.uid}</div>
+              }
+            </div>
+          ))
+        
+        setmemList(mbList)
+      });
     });
 
   }, [socket])
@@ -186,7 +213,7 @@ const ChatForm: FC<{
             <div id="memberList">
                 <div id="memberHeader">참여자</div>
                 <div id="memberSelect"></div>
-                    
+                  {memList}
             </div>
         </div>   
       </div>
@@ -237,26 +264,12 @@ const NewChat: FC = (props) => {
 
   useEffect(() => {
     var $chatLog = $('#chatLog');
-    var $memberSelect = $('#memberSelect');
     var $chatWrap = $('#chatWrap');
-    
-
     
     socket.on('room', (data: FormData, cb?: Function) => {
       console.log('room')
     })
 
-    socket.on('userlist', (data: any) => {
-      let html = "";
-      data.forEach((el: { socketId: string; name: any }) => {
-          if (el.socketId === socketId) {
-              html += `<div class="memberEl">${el.name} (me)</div>`
-          } else {
-              html += `<div class="memberEl">${el.name}</div>`
-          }
-      });
-      $memberSelect.html(html);
-    });
 
     socket.on('lefted room', (data: string) => {
       $chatLog.append(`<div class="notice"><strong>${data}</strong> lefted the room</div>`)
@@ -270,13 +283,6 @@ const NewChat: FC = (props) => {
       $chatWrap.show();
       console.log(data)
 
-      /*
-      if (data.socketId === socketId) {
-        $chatLog.append(`<div class="myMsg msgEl"><span class="msg">${data.msg}</span></div>`)
-      }else {
-        $chatLog.append(`<div class="anotherMsg msgEl"><span class="anotherName">${data.name}</span><span class="msg">${data.msg}</span></div>`)
-      }
-      */
       $chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
     });
 

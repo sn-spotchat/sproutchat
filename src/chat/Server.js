@@ -70,7 +70,9 @@ io.sockets.on('connection', function (socket) {
         console.log('join room 1')
         socket.emit('join room', data);
     })
-
+    socket.on('userlist', (data) => {
+        socket.emit('userlist', data);
+    })
 
     /*
     socket.on('join room',(data) => {
