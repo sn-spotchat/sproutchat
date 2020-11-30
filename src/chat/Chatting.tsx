@@ -18,10 +18,17 @@ type ChatData = {
   msg: string
 }
 
+type LogData = {
+  timestamp: string
+  message: string
+  uid: string
+}
+
 type storeData = {
   id: number
   name: string
 }
+
 
 var onlineUsers = {};
 var socketId = "";
@@ -49,6 +56,10 @@ const ChatForm: FC<{
     
   })
 
+
+  const [msgList, setmsgList] = useState([]);
+  let mList = []
+
   const [roomList, setRoomList] = useState([]);
   let tempList = []
   //
@@ -69,6 +80,9 @@ const ChatForm: FC<{
   }
 
   useEffect(()=>{
+    var $chatLog = $('#chatLog');
+    var $roomSelect = $('#roomSelect');
+
     socket.on('getUserId', (data: string) => {
       if(limit < 5){
           //console.log("My page: " + data)
@@ -83,11 +97,54 @@ const ChatForm: FC<{
                           <div className="roomEl active" data-id={el.name}>{el.name}</div>
                           <button id="out">나가기</button>
                       </div>
-                  ))
-                  setRoomList(tempList)
-              })   
-          }
-      })
+              ))
+              setRoomList(tempList)
+            })   
+      }
+    })
+
+
+    $roomSelect.on("click", "div", function () {
+      
+      if(!$(this).data('id')) {
+        //console.log(roomId)
+      } else {
+        console.log($(this).data('id'));
+        roomId = $(this).data('id')
+        socket.emit('joined room', userId);
+        socket.emit('join room', {roomId});
+      }
+      
+
+      $chatLog.html("");
+      $('#chatHeader').html(`${roomId}`);
+
+      //db에서 내용 불러오기
+      
+      firestore.collection("messages")
+      .doc(roomId).onSnapshot((doc) => {
+        mList = doc.get("msgs").map((el: LogData) => (         
+          <div>
+            { userId == el.uid
+              &&
+              <div className="myMsg msgEl"><div className="msg">{el.message}</div></div>
+            }
+            { userId != el.uid
+              &&
+              <div>
+              <div className="anotherMsg msgEl">
+                <span className="anotherName">{el.uid}</span>
+                <span className="msg">{el.message}</span>
+                <div className="notice"><strong>{el.timestamp}</strong></div>
+              </div>
+              </div>
+            }
+          </div>
+        ))
+        setmsgList(mList)
+      })   
+    
+    });
     
   }, [socket])
 
@@ -113,8 +170,8 @@ const ChatForm: FC<{
         <div id="chatWrap">  
           <div id="chatHeader">Please enter the room</div>      
           <div id="chatLog" >
-            <div className="anotherMsg msgEl"><span className="anotherName">운영자</span><span className="msg">환영합니다</span></div>
-      
+            {msgList}
+            
           </div>
           <form onSubmit={onSubmit} id="chatForm">
             <input ref={ register } type="text" autoComplete="off" name="msg" id="message" placeholder="메시지를 입력하세요"/>
@@ -146,6 +203,7 @@ const NewChat: FC = (props) => {
         console.log('emit')
       }
     );
+    
     m.val("");
   }
 
@@ -153,7 +211,7 @@ const NewChat: FC = (props) => {
     var $chatLog = $('#chatLog');
     var $memberSelect = $('#memberSelect');
     var $chatWrap = $('#chatWrap');
-    var $roomSelect = $('#roomSelect');
+    
 
     
     socket.on('room', (data: FormData, cb?: Function) => {
@@ -177,7 +235,7 @@ const NewChat: FC = (props) => {
     });
 
     socket.on('joined room', (data: string) => {
-        $chatLog.append(`<div class="notice"><strong>${data}</strong> joined the room</div>`)
+      $chatLog.append(`<div class="notice"><strong>${data}</strong> joined the room</div>`)
     });
 
     socket.on('new message',  (data: any) => {
@@ -185,6 +243,7 @@ const NewChat: FC = (props) => {
       console.log(data)
 
       $chatLog.append(`<div class="myMsg msgEl"><div class="msg">${data.msg}</div></div>`)
+      
       /*
       if (data.socketId === socketId) {
         $chatLog.append(`<div class="myMsg msgEl"><span class="msg">${data.msg}</span></div>`)
@@ -200,27 +259,6 @@ const NewChat: FC = (props) => {
       console.log('join room 2')
     });
 
-    $roomSelect.on("click", "div", function () {
-      
-      if(!$(this).data('id')) {
-        //console.log(roomId)
-      } else {
-        console.log($(this).data('id'));
-        roomId = $(this).data('id')
-        socket.emit('joined room', userId);
-        socket.emit('join room', {roomId});
-      }
-      /*
-      $(this).parents().children().removeClass("active");
-      $(this).addClass("active");
-      */
-
-      $chatLog.html("");
-      $('#chatHeader').html(`${roomId}`);
-
-      //db에서 내용 불러오기
-
-    });
 
   }, [socket])
 
