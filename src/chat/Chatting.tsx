@@ -171,9 +171,8 @@ const ChatForm: FC<{
               }
             </div>
           ))
-
-        $chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
-        setmsgList(mList)
+          setmsgList(mList)
+          $chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
         }
       })   
       socket.emit('userlist', userId);      
@@ -195,7 +194,12 @@ const ChatForm: FC<{
           console.log(typeof(List[0]))
           if(flag == 0){
             for(var i = 0; i < List.length; i++){
-              $memberSelect.append(`<div class="memberEl">${List[i]}</div>`)
+              if(userId == List[i]){
+                $memberSelect.append(`<div class="memberEl">${List[i]}(me)</div>`)
+              }else{
+                $memberSelect.append(`<div class="memberEl">${List[i]}</div>`)
+              }
+              
             }  
             flag = 1;
           }
