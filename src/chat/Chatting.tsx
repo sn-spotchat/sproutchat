@@ -175,6 +175,10 @@ const ChatForm: FC<{
           setmsgList(mList)
           $chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
         }
+        else{
+          mList=[]
+          setmsgList([])
+        }
       })   
       socket.emit('userlist', userId);      
     });
