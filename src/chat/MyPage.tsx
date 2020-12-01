@@ -154,7 +154,7 @@ const MyPage: FC = (props) => {
       
         <div id="mycontentCover">
             <span id="mypage">
-                <big>환영합니다 회원님</big>
+            <big>환영합니다 {userId}회원님</big>
             </span>
             <div id="myroomWrap">
             <div id="roomList">

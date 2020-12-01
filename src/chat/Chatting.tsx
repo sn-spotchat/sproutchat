@@ -97,6 +97,7 @@ const ChatForm: FC<{
 
       $('#chatHeader').html(`Please enter the room`);
       $('#chatLog').html("");
+      memSet.clear();
     }
   }
 
@@ -232,7 +233,7 @@ const ChatForm: FC<{
           </div>
           <form onSubmit={onSubmit} id="chatForm">
             <input ref={ register } type="text" autoComplete="off" name="msg" id="message" placeholder="메시지를 입력하세요"/>
-            <input type="submit" value="보내기"/>
+            <input type="submit" id="send" value="보내기"/>
           </form>
         </div>
         <div id="memberWrap">
