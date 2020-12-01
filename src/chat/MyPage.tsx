@@ -10,8 +10,14 @@ type FormData = {
     id: string
     pw: string
     list: []
-  }
+}
 
+type LogData = {
+    timestamp: string
+    message: string
+    uid: string
+}
+  
 type storeData = {
     id: number
     name: string
@@ -23,6 +29,11 @@ var docId = '';
 const MyPage: FC = (props) => {
     const history = useHistory();
     const socket = useRef(io('http://localhost:3005')).current
+
+
+    const [msgList, setmsgList] = useState([]);
+    let mList = [];
+
 
     const [roomList, setRoomList] = useState([]);
     let tempList = []
@@ -68,7 +79,7 @@ const MyPage: FC = (props) => {
                     if(doc.get("list")){
                         tempList = doc.get('list').map((el: storeData) => (
                             <div className="roomName">
-                                <div className="roomEl active" data-id={el.name}> {el.name}</div>
+                                <div className="myroomEl active" data-id={el.name}> {el.name}</div>
                                 {/*
                                 <div id="out" onClick={() => handleRoomOut(el.id)}>나가기</div>
                                 */}
@@ -98,8 +109,36 @@ const MyPage: FC = (props) => {
             
             $('#chatHeader').html(`${roomId}`);
             $chatLog.html("");
+
             //db에서 내용 불러오기
-    
+            firestore.collection("messages")
+            .doc(roomId).onSnapshot((doc) => {
+              if(doc.exists){
+                mList = doc.get("msgs").map((el: LogData) => (         
+                  <div>
+                    { userId == el.uid
+                      &&
+                      <div className="myMsg msgEl">
+                        <div className="timestamp"><strong>{el.timestamp}</strong></div>
+                        <div className="msg">{el.message}</div>
+                      </div>
+                    }
+                    { userId != el.uid
+                      &&
+                      <div>
+                      <div className="anotherMsg msgEl">
+                        <span className="anotherName">{el.uid}</span>
+                        <span className="msg">{el.message}</span>
+                        <div className="timestamp"><strong>{el.timestamp}</strong></div>
+                      </div>
+                      </div>
+                    }
+                  </div>
+                ))
+                setmsgList(mList)
+                
+              }
+            }) 
         });
 
 
@@ -113,8 +152,11 @@ const MyPage: FC = (props) => {
                 </button>
             </nav>
       
-        <div id="contentCover">
-            <div id="roomWrap">
+        <div id="mycontentCover">
+            <span id="mypage">
+            <big>환영합니다 {userId}회원님</big>
+            </span>
+            <div id="myroomWrap">
             <div id="roomList">
                 <div id="roomHeader">채팅 방 목록</div>
                 <div id="roomSelect">

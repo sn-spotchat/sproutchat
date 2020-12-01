@@ -51,7 +51,6 @@
   margin: 10%; 
 }
 
-
 #LoginForm {
   float: left;
   
@@ -69,7 +68,6 @@
   text-align: center;
 }
 
-
 nav{
   width: 100%;
   min-width: 1280px;
@@ -84,8 +82,17 @@ nav{
   font-size: 17px;
 }
 
+#mypage {
+  text-align: left;
+}
+
 #roomWrap {
   width: 300px;
+}
+
+#myroomWrap {
+  width: 300px;
+  margin-right: 73%;
 }
 
 #roomList {
@@ -110,8 +117,9 @@ nav{
   background-color: rgb(235, 231, 187);
   text-align: center;
   border-bottom: 1px solid #f0f0f0;
-  width: 30%;
+  width: 25%;
   cursor: pointer;
+  padding: 10px 20px;
 }
 
 .roomName {
@@ -122,8 +130,17 @@ nav{
 .roomEl {
   text-align: center;
   border-bottom: 1px solid #f0f0f0;
-  width: 70%;
+  width: 75%;
+  padding: 10px 20px;
   cursor: pointer;
+}
+
+.myroomEl {
+  text-align: center;
+  border-bottom: 1px solid #f0f0f0;
+  width: 100%;
+  cursor: pointer;
+  padding: 10px 20px;
 }
 
 .roomEl:hover{
@@ -220,7 +237,7 @@ nav{
 }
 
 #memberWrap{
-  width: 200px;
+  width: 250px;
   padding-right: 50px
 }
 
@@ -247,9 +264,19 @@ nav{
   font-size: 14px;
 }
 
+#mycontentCover{
+  width: 1280px;
+  margin: 2%;
+  
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+}
+
 #contentCover{
   width: 1280px;
-  margin: 0 auto;
+  margin: auto;
   padding-top: 20px;
   display: flex;
   justify-content: space-around;
