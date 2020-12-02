@@ -130,7 +130,7 @@ nav{
 .roomEl {
   text-align: center;
   border-bottom: 1px solid #f0f0f0;
-  width: 75%;
+  width: 100%;
   padding: 10px 20px;
   cursor: pointer;
 }
