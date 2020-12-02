@@ -87,17 +87,20 @@ const ChatForm: FC<{
     }
   }
 
-  const handleRoomOut = (id: number) => {
+  const handleRoomOut = (id: string) => {
     if(window.confirm("채팅방을 나가시겠습니까?") === true){
       firestore.collection("users")
       .doc(docId).onSnapshot((doc) => {
-        tempList = doc.get("list").filter((el: storeData) => el.id !== id)
+        tempList = doc.get("list").filter((el: storeData) => el.name !== id)
         firestore.collection("users").doc(docId).update({list: tempList})
       }) 
 
       $('#chatHeader').html(`Please enter the room`);
       $('#chatLog').html("");
       memSet.clear();
+      $("#memberSelect").html("")
+      console.log('room out')
+      
     }
   }
 
@@ -121,11 +124,11 @@ const ChatForm: FC<{
               tempList = doc.get("list").map((el: storeData) => (
                       <div className="roomName">
                           <div className="roomEl active" data-id={el.name}>{el.name}</div>
-                          <div id="out" onClick={() => handleRoomOut(el.id)}>나가기</div>
+                          {/*<div id="out" onClick={() => handleRoomOut(el.id)}>나가기</div>*/}
                       </div>
               ))
               setRoomList(tempList)
-            })   
+          })   
         }
       }
     })
@@ -146,40 +149,43 @@ const ChatForm: FC<{
 
       //$chatLog.html("");
       $('#chatHeader').html(`${roomId}`);
+      //$('#chatHeader').append(`<button id="out" onClick={() => ${handleRoomOut(roomId)}}> X </button>`)
 
       //db에서 내용 불러오기
-      firestore.collection("messages")
-      .doc(roomId).onSnapshot((doc) => {
-        if(doc.exists){
-          mList = doc.get("msgs").map((el: LogData) => (         
-            <div>
-              { userId == el.uid
-                &&
-                <div className="myMsg msgEl">
-                  <div className="timestamp"><strong>{el.timestamp}</strong></div>
-                  <div className="msg">{el.message}</div>
-                </div>
-              }
-              { userId != el.uid
-                &&
-                <div>
-                <div className="anotherMsg msgEl">
-                  <span className="anotherName">{el.uid}</span>
-                  <span className="msg">{el.message}</span>
-                  <div className="timestamp"><strong>{el.timestamp}</strong></div>
-                </div>
-                </div>
-              }
-            </div>
-          ))
-          setmsgList(mList)
-          $chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
-        }
-        else{
-          mList=[]
-          setmsgList([])
-        }
-      })   
+      if(limit < 10){
+        firestore.collection("messages")
+        .doc(roomId).onSnapshot((doc) => {
+          if(doc.exists){
+            mList = doc.get("msgs").map((el: LogData) => (         
+              <div>
+                { userId == el.uid
+                  &&
+                  <div className="myMsg msgEl">
+                    <div className="timestamp"><strong>{el.timestamp}</strong></div>
+                    <div className="msg">{el.message}</div>
+                  </div>
+                }
+                { userId != el.uid
+                  &&
+                  <div>
+                  <div className="anotherMsg msgEl">
+                    <span className="anotherName">{el.uid}</span>
+                    <span className="msg">{el.message}</span>
+                    <div className="timestamp"><strong>{el.timestamp}</strong></div>
+                  </div>
+                  </div>
+                }
+              </div>
+            ))
+            setmsgList(mList)
+            $chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
+          }
+          else{
+            mList=[]
+            setmsgList([])
+          }
+        }) 
+      }  
       socket.emit('userlist', userId);      
     });
 
@@ -231,7 +237,10 @@ const ChatForm: FC<{
           </div>
         </div>
         <div id="chatWrap">  
-          <div id="chatHeader">Please enter the room</div>      
+        <div id="chat_out"><div id="chatHeader">Please enter the room</div>     
+          <div id="out" onClick={() => handleRoomOut(roomId)}> X </div>
+        </div>
+          
           <div id="chatLog">
             {msgList}
           </div>
@@ -268,13 +277,7 @@ const NewChat: FC = (props) => {
           msgs: firebase.firestore.FieldValue.arrayUnion({message: msg, uid: userId, timestamp: timeStamp})
         }).then(function() {
           //console.log('handleChat')
-          socket.emit(
-            'new message',
-            { msg },
-            (res: any) => {
-              
-            }
-          );
+          
           m.val("");
         })
       } else {
@@ -283,13 +286,7 @@ const NewChat: FC = (props) => {
           msgs: firebase.firestore.FieldValue.arrayUnion({message: msg, uid: userId, timestamp: timeStamp})
         }).then(function() {
           //console.log('handleChat')
-          socket.emit(
-            'new message',
-            { msg },
-            (res: any) => {
-              
-            }
-          );
+          
           m.val("");
         })
       }
@@ -312,12 +309,6 @@ const NewChat: FC = (props) => {
       $chatLog.append(`<div class="notice"><strong>${data}</strong> joined the room</div>`)
     });
 
-    socket.on('new message',  (data: any) => {
-      $chatWrap.show();
-      console.log(data)
-
-      $chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
-    });
 
     socket.on('join room', (data: any) => {
       let nextRoomId = data.roomId;

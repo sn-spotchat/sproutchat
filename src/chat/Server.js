@@ -56,9 +56,6 @@ io.sockets.on('connection', function (socket) {
         socket.emit('joined room', data);
     });
 
-    socket.on('new message', function (data) {
-        socket.emit('new message', data);
-    })
 
     socket.on('join room', (data) =>{
         let id = getUserBySocketId(socket.id);
@@ -120,7 +117,7 @@ io.sockets.on('connection', function (socket) {
         return Object.keys(onlineUsers).find(key => onlineUsers[key].socketId === id);
     }
 
-
+    /*
     function getUsersByRoomId(roomId) {
         let userstemp = [];
         Object.keys(onlineUsers).forEach((el) => {
@@ -134,4 +131,5 @@ io.sockets.on('connection', function (socket) {
         return userstemp;
     }
     
+    */
 });

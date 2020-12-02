@@ -155,6 +155,11 @@ nav{
   border: 1px solid #ddd;
 }
 
+#chat_log{ 
+  display: flex;
+  flex-direction: row;
+}
+
 #chatHeader {
   background-color: rgb(92, 190, 72);
   height: 60px;
