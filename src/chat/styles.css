@@ -114,12 +114,11 @@ nav{
 }
 
 #out {
-  background-color: rgb(235, 231, 187);
+  background-color: rgb(68, 90, 76);
   text-align: center;
   border-bottom: 1px solid #f0f0f0;
   width: 25%;
   cursor: pointer;
-  padding: 10px 20px;
 }
 
 .roomName {
