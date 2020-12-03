@@ -89,18 +89,24 @@ const ChatForm: FC<{
 
   const handleRoomOut = (id: string) => {
     if(window.confirm("채팅방을 나가시겠습니까?") === true){
+      
       firestore.collection("users")
       .doc(docId).onSnapshot((doc) => {
         tempList = doc.get("list").filter((el: storeData) => el.name !== id)
         firestore.collection("users").doc(docId).update({list: tempList})
       }) 
+      history.push("/home")
 
+      //나왔다가 들어가기 나중에 구현
+
+      /*
       $('#chatHeader').html(`Please enter the room`);
       $('#chatLog').html("");
       memSet.clear();
       $("#memberSelect").html("")
       console.log('room out')
-      
+      */
+
     }
   }
 
@@ -178,7 +184,10 @@ const ChatForm: FC<{
               </div>
             ))
             setmsgList(mList)
-            $chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
+            if($chatLog.length){
+              $chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
+            }
+            
           }
           else{
             mList=[]
@@ -238,7 +247,7 @@ const ChatForm: FC<{
         </div>
         <div id="chatWrap">  
         <div id="chat_out"><div id="chatHeader">Please enter the room</div>     
-          <div id="out" onClick={() => handleRoomOut(roomId)}> X </div>
+          <div id="out" onClick={() => handleRoomOut(roomId)}> 나가기 </div>
         </div>
           
           <div id="chatLog">
