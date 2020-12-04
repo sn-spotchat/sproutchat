@@ -34,7 +34,7 @@ const JoinForm: FC<{
             flag = 1;
           }
         })
-        if(flag == 0) {  handleJoin(id, pw) }
+        if(flag === 0) {  handleJoin(id, pw) }
       })
   })
 
@@ -97,8 +97,6 @@ const Join: FC = (props) => {
         (res: any) => {
           if (res.result) {
             alert(res.data)
-            // socketId = socket.id
-            // roomId = 1
           } else {
             alert('fail to join')
             console.info(res)

@@ -4,13 +4,11 @@ import SproutIcon from '../../../components/icon.png';
 import title from '../../../components/title.png';
 import { io } from 'socket.io-client'
 
-
 /* Styled */
 import styled from 'styled-components';
 
 /* Sub Components */
 import SideBarNav from './SideBarNav';
-import SideBarNavItem from './SideBarNav/SideBarNavItem';
 
 /* Styled Components */
 const Container = styled.div`

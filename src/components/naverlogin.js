@@ -1,8 +1,6 @@
 
 import React, {Component} from 'react';
-//import ReactDOM from "react-dom";
-//import callback from "./chat.html"
-import {BrowserRouter, Route, useHistory} from 'react-router-dom';
+import {BrowserRouter, Route} from 'react-router-dom';
 import { io } from 'socket.io-client'
 import { firestore } from '../components/firebase';
 
@@ -63,7 +61,7 @@ class Success extends Component {
             flag = 1;
           }
         })
-        if(flag == 0) {  
+        if(flag === 0) {  
           firestore
           .collection("users")
           .add({

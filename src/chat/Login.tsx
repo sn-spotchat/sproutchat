@@ -1,10 +1,9 @@
-import React, { FC, useEffect, useRef, useState} from 'react'
+import React, { FC, useEffect, useRef} from 'react'
 import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { io } from 'socket.io-client'
 import './styles.css'
 import { firestore } from '../components/firebase';
-import Join from '../routes/Board/join';
 import {items} from '../layouts/Main/SideBar/SideBar.js'
 import Naverlogin from '../components/naverlogin'
 
@@ -14,19 +13,6 @@ type FormData = {
 }
 
 var socketId = "";
-
-/*
-const NAVER_LOGIN_SCRIPT_URL = 'https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js'
-
-
-function appendScript(src: string) {
-  const script = document.createElement('script')
-  script.type = 'text/javascript'
-  script.async = true
-  script.src = src
-
-  document.head.appendChild(script)
-}*/
 
 const LoginForm: FC<{
   handleLogin: (id: string, pw: string) => void
@@ -106,12 +92,12 @@ const NewLogin: FC = (props) => {
       .where("id", "==", data.id).get()
       .then((docs) => {
         docs.forEach((doc) => {
-          if(doc.data().pw == data.pw){
+          if(doc.data().pw === data.pw){
             flag = 1
             //alert(`로그인에 성공했습니다\n${data.id}님 환영합니다.`)
             socket.emit('userInfo', doc.id);
             items.map((item) => {
-              if(item.label == "Login"){
+              if(item.label === "Login"){
                 item.label = "My Page"
                 item.href = "/mypage"
               }
@@ -119,13 +105,9 @@ const NewLogin: FC = (props) => {
             history.push('/mypage') //화면 전환
           }
         })
-        if(flag==0) { alert('아이디 또는 비밀번호를 확인해주세요') }
+        if(flag===0) { alert('아이디 또는 비밀번호를 확인해주세요') }
       })
   }
-
- /* useEffect(() => {
-    appendScript(NAVER_LOGIN_SCRIPT_URL)
-  }, [])*/
 
   useEffect(() => {
     socket.on('connect', () => {

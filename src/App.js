@@ -6,7 +6,6 @@ import RouteWithLayout from './layouts/RouteWithLayout';
 import MainLayout from './layouts/Main';
 
 import Home from './routes/Home';
-//import Login from './routes/Board/login';
 import NewLogin from './chat/Login';
 import NewChat from './chat/Chatting';
 import Join from './chat/Join';

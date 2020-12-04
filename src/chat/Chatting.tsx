@@ -9,7 +9,6 @@ import firebase from 'firebase';
 import 'firebase/firestore';
 import $ from 'jquery';
 
-
 type FormData = {
   id: string
   pw: string
@@ -31,10 +30,8 @@ type storeData = {
 }
 
 var docId = "";
-var socketId = "";
 var roomId = "";
 var userId = "";
-
 
 const ChatForm: FC<{
   handleChat: (msg: string) => void
@@ -47,14 +44,12 @@ const ChatForm: FC<{
   const history = useHistory();
   const onSubmit = handleSubmit(({ msg }) => {
     
-    //console.log(msg)
     if (!msg) {
       alert('check validation')
       return false
     }
 
     handleChat(msg);
-    
   })
 
   const [msgList, setmsgList] = useState([]);
@@ -62,11 +57,7 @@ const ChatForm: FC<{
 
   const [roomList, setRoomList] = useState([]);
   let tempList = [];
-  
-  
-  //const [memList, setmemList] = useState([]);
-  //let mbList = [];
-  
+
   var memSet = new Set<string>();
   let uid = ""
 
@@ -75,7 +66,7 @@ const ChatForm: FC<{
   const handleLogout = () => {
     if(window.confirm("로그아웃 하시겠습니까?") === true){
       items.map((item)=>{
-          if(item.label == "My Page"){
+          if(item.label === "My Page"){
               item.label = "Login"
               item.href = "/login"
           }
@@ -94,19 +85,10 @@ const ChatForm: FC<{
       .doc(docId).onSnapshot((doc) => {
         tempList = doc.get("list").filter((el: storeData) => el.name !== id)
         firestore.collection("users").doc(docId).update({list: tempList})
+        id="" ///나왔다가 같은 방 다시 들어갈 수 있음.
       }) 
+
       history.push("/home")
-
-      //나왔다가 들어가기 나중에 구현
-
-      /*
-      $('#chatHeader').html(`Please enter the room`);
-      $('#chatLog').html("");
-      memSet.clear();
-      $("#memberSelect").html("")
-      console.log('room out')
-      */
-
     }
   }
 
@@ -121,16 +103,13 @@ const ChatForm: FC<{
       if(data !== ''){
         docId = data
         if(limit < 5){
-          //console.log("My page: " + data)
           limit += 1;
           firestore.collection("users")
           .doc(data).onSnapshot((doc) => {
-              //console.log(doc.get("list"))
               userId = doc.get('id')
               tempList = doc.get("list").map((el: storeData) => (
                       <div className="roomName">
                           <div className="roomEl active" data-id={el.name}>{el.name}</div>
-                          {/*<div id="out" onClick={() => handleRoomOut(el.id)}>나가기</div>*/}
                       </div>
               ))
               setRoomList(tempList)
@@ -153,9 +132,7 @@ const ChatForm: FC<{
         socket.emit('join room', {roomId});
       }
 
-      //$chatLog.html("");
       $('#chatHeader').html(`${roomId}`);
-      //$('#chatHeader').append(`<button id="out" onClick={() => ${handleRoomOut(roomId)}}> X </button>`)
 
       //db에서 내용 불러오기
       if(limit < 10){
@@ -164,14 +141,14 @@ const ChatForm: FC<{
           if(doc.exists){
             mList = doc.get("msgs").map((el: LogData) => (         
               <div>
-                { userId == el.uid
+                { userId === el.uid
                   &&
                   <div className="myMsg msgEl">
                     <div className="timestamp"><strong>{el.timestamp}</strong></div>
                     <div className="msg">{el.message}</div>
                   </div>
                 }
-                { userId != el.uid
+                { userId !== el.uid
                   &&
                   <div>
                   <div className="anotherMsg msgEl">
@@ -212,14 +189,13 @@ const ChatForm: FC<{
           const List = Array.from(memSet);
           console.log(List)
           console.log(typeof(List[0]))
-          if(flag == 0){
+          if(flag === 0){
             for(var i = 0; i < List.length; i++){
-              if(userId == List[i]){
+              if(userId === List[i]){
                 $memberSelect.append(`<div class="memberEl">${List[i]}(me)</div>`)
               }else{
                 $memberSelect.append(`<div class="memberEl">${List[i]}</div>`)
               }
-              
             }  
             flag = 1;
           }
@@ -285,47 +261,18 @@ const NewChat: FC = (props) => {
         docRef.update({
           msgs: firebase.firestore.FieldValue.arrayUnion({message: msg, uid: userId, timestamp: timeStamp})
         }).then(function() {
-          //console.log('handleChat')
           
           m.val("");
         })
       } else {
-        
         docRef.set({
           msgs: firebase.firestore.FieldValue.arrayUnion({message: msg, uid: userId, timestamp: timeStamp})
         }).then(function() {
-          //console.log('handleChat')
-          
           m.val("");
         })
       }
     });  
   }
-
-  useEffect(() => {
-    var $chatLog = $('#chatLog');
-    var $chatWrap = $('#chatWrap');
-    
-    socket.on('room', (data: FormData, cb?: Function) => {
-      console.log('room')
-    })
-
-    socket.on('lefted room', (data: string) => {
-      $chatLog.append(`<div class="notice"><strong>${data}</strong> lefted the room</div>`)
-    });
-
-    socket.on('joined room', (data: string) => {
-      $chatLog.append(`<div class="notice"><strong>${data}</strong> joined the room</div>`)
-    });
-
-
-    socket.on('join room', (data: any) => {
-      let nextRoomId = data.roomId;
-      console.log('join room 2')
-    });
-
-
-  }, [socket])
 
   return (
     <div className="NewChat">
