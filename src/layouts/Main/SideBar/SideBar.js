@@ -58,12 +58,10 @@ const SideBar = props => {
         <div>
           <form type="submit">
             <p>
-            
-            <img src={ SproutIcon } width='50px' height='32px' padding-left='100px' padding-top='10px' alt=""/>
-            <span>
-              {"   "}
-            </span>
-            <img src ={title} width='130px' height='32px' alt=""/>
+            <bt></bt>
+            <img src={ SproutIcon } width='60px' height='40px' padding-left='100px' padding-top='10px' alt=""/>
+            <bt></bt>
+            <img src ={title} width='140px' height='40px' alt=""/>
             
             </p>
           </form>

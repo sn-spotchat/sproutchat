@@ -20,7 +20,7 @@ const JoinForm: FC<{
 
   const onSubmit = handleSubmit(({ id, pw }) => {
     if (!id || !pw) {
-      alert('check validation')
+      alert('아이디와 비밀번호를 모두 입력해주세요.')
       return false
     }
 
@@ -43,7 +43,7 @@ const JoinForm: FC<{
       <form onSubmit={onSubmit} id="JoinForm">
           <div>
 
-            <h1>NEW JOIN</h1>
+            <h1>JOIN</h1>
             <p>
               <input
                 ref={register}

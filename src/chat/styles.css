@@ -24,13 +24,15 @@
 #joinpagebtn {
   width: auto;
   height: 10%;
-  margin-top: 10%;
+  margin-top: 155px;
+  margin-bottom: 20px;
 }
 
 #loginpagebtn {
   width: auto;
   height: 10%;
-  margin-top: 10%;
+  margin-top: 200px;
+  margin-bottom: 20px;
 }
 
 .JoinPage {
@@ -45,15 +47,14 @@
 
 #JoinForm {
   float: left;
-  /*display: none;*/
-  
+  border: 1px solid rgb(16, 63, 34);
   text-align: center;
   margin: 10%; 
 }
 
 #LoginForm {
   float: left;
-  
+  border: 1px solid rgb(16, 63, 34);
   text-align: center;
   margin: 10%; 
 }
@@ -114,11 +115,11 @@ nav{
 }
 
 #out {
-  background-color: rgb(235, 86, 66);
+  background-color: rgb(248, 70, 58);
   text-align: center;
   padding: 20px 20px;
   border-bottom: 1px solid #f0f0f0;
-  width: 100px;
+  width: 80px;
   cursor: pointer;
 }
 

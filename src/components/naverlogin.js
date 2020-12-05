@@ -24,7 +24,7 @@ class NaverLogin extends Component{
     componentDidMount() {
         var naver_id_login = new window.naver_id_login(client_id, redirectURI)
         var state = naver_id_login.getUniqState()
-        naver_id_login.setButton("white", 2,40)
+        naver_id_login.setButton("white", 3,40)
         naver_id_login.setDomain("http://localhost:3000/login/chat")
         naver_id_login.setState(state)
         naver_id_login.init_naver_id_login()

@@ -37,6 +37,7 @@ const MyPage: FC = (props) => {
         socket.on('getUserId', (data: string) => {            
             if(data !== '') {
                 if(userId === ''){
+                    
                     firestore.collection("users")
                     .doc(data).onSnapshot((doc) => {
                     userId = doc.get('id')
@@ -48,6 +49,8 @@ const MyPage: FC = (props) => {
                         ))
                     setRoomList(tempList)
                     }
+                    $("#mypage").html("")
+                    $("#mypage").append(`<div>환영합니다\t ${userId}회원님</div>`)
                 }) 
                 }                 
             }
@@ -69,7 +72,7 @@ const MyPage: FC = (props) => {
       
         <div id="mycontentCover">
             <span id="mypage">
-            <big>환영합니다 {userId}회원님</big>
+            
             </span>
             <div id="myroomWrap">
             <div id="roomList">

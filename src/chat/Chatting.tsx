@@ -177,23 +177,31 @@ const ChatForm: FC<{
 
 
     socket.on('userlist', (data: string) => {
+
+      
       firestore.collection("messages")
       .doc(roomId).onSnapshot((doc) => {
-
+        
         if(doc.exists){    
           doc.get("msgs").map((el: LogData) => {
             uid = el.uid
             memSet.add(uid)
           })
+          
 
           const List = Array.from(memSet);
           console.log(List)
           console.log(typeof(List[0]))
           if(flag === 0){
+            console.log(roomId + ' ' + userId)
             for(var i = 0; i < List.length; i++){
+              
               if(userId === List[i]){
                 $memberSelect.append(`<div class="memberEl">${List[i]}(me)</div>`)
-              }else{
+              }else
+               if (List[i] === roomId){
+                $memberSelect.append(`<div class="memberEl">${List[i]}(점주)</div>`)
+              }else {
                 $memberSelect.append(`<div class="memberEl">${List[i]}</div>`)
               }
             }  

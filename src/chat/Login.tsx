@@ -24,7 +24,7 @@ const LoginForm: FC<{
   const onSubmit = handleSubmit(({ id, pw }) => {   
     console.log(id, pw)
     if (!id || !pw) {
-      alert('check validation')
+      alert('아이디와 비밀번호를 모두 입력해주세요.')
       
       return false
     }
@@ -35,7 +35,7 @@ const LoginForm: FC<{
     <div className="LoginPage">
       <form onSubmit={onSubmit} id="LoginForm">
         <div>
-          <h1>NEW LOGIN</h1>
+          <h1>LOGIN</h1>
           <p>
             <input
               ref={register}
@@ -56,6 +56,7 @@ const LoginForm: FC<{
           </p>
           <p>
             <input className="btn" type="submit" value="로그인" />
+            <br></br>
           </p>
           <Naverlogin/>
         </div>
