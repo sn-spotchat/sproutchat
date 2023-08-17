@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useRef} from 'react'
-import { useHistory } from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { io } from 'socket.io-client'
+import {Manager} from 'socket.io-client'
 import './styles.css'
 import { firestore } from '../components/firebase';
-import {items} from '../layouts/Main/SideBar/SideBar.js'
+import {items} from '../layouts/Main/SideBar/SideBar.jsx'
 import Naverlogin from '../components/naverlogin'
 
 type FormData = {
@@ -19,13 +19,13 @@ const LoginForm: FC<{
 }> = (props) => {
   const { handleLogin } = props
   const { register, handleSubmit } = useForm<FormData>()
-  const history = useHistory();
+  const navigate = useNavigate();
 
-  const onSubmit = handleSubmit(({ id, pw }) => {   
+  const onSubmit = handleSubmit(({ id, pw }) => {
     console.log(id, pw)
     if (!id || !pw) {
       alert('아이디와 비밀번호를 모두 입력해주세요.')
-      
+
       return false
     }
     handleLogin(id, pw)
@@ -60,29 +60,28 @@ const LoginForm: FC<{
           </p>
           <Naverlogin/>
         </div>
-            
-        <button className="btn" id="joinpagebtn" onClick={() => {history.push('/join')}}>
+
+        <button className="btn" id="joinpagebtn" onClick={() => {navigate('/join')}}>
           회원가입
           <br></br>
           하러가기
-        </button> 
+        </button>
       </form>
-       
+
     </div>
-          
+
   )
 }
 
-const NewLogin: FC = (props) => {
-  const history = useHistory();
-  const socket = useRef(io('http://localhost:3005')).current
-  
+const NewLogin: FC = () => {
+  const navigate = useNavigate();
+  const socket = useRef(new Manager('http://localhost:3005')).current
+
   const handleLogin = (id: string, pw: string) => {
     socket.emit(
       'login',
-      { id, pw }, (res: any
-    ) => {
-      socketId = socket.id;
+      { id, pw }, () => {
+      socketId = socket.socket(id).id;
     })
   }
 
@@ -103,7 +102,7 @@ const NewLogin: FC = (props) => {
                 item.href = "/mypage"
               }
             })
-            history.push('/mypage') //화면 전환
+            navigate('/mypage') //화면 전환
           }
         })
         if(flag===0) { alert('아이디 또는 비밀번호를 확인해주세요') }
@@ -117,9 +116,9 @@ const NewLogin: FC = (props) => {
     socket.on('disconnect', () => {
       console.log('disconnected')
     })
-    socket.on('joinpage', (data: any) => {
+    socket.on('joinpage', () => {
       console.log('on')
-      history.push('/join')
+      navigate('/join')
     })
     socket.on('login', (data: FormData, cb?: Function) => {
       loginCheck(data)

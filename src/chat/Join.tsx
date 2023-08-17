@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { io } from 'socket.io-client'
+import { Manager } from 'socket.io-client'
 import './styles.css'
 
 import { firestore } from '../components/firebase';
@@ -15,7 +15,7 @@ const JoinForm: FC<{
   handleJoin: (id: string, pw: string) => void
 }> = (props) => {
   const { handleJoin } = props
-  const history = useHistory();
+  const navigate = useNavigate();
   const { register, handleSubmit } = useForm<FormData>()
 
   const onSubmit = handleSubmit(({ id, pw }) => {
@@ -42,7 +42,6 @@ const JoinForm: FC<{
     <div className="JoinPage">
       <form onSubmit={onSubmit} id="JoinForm">
           <div>
-
             <h1>JOIN</h1>
             <p>
               <input
@@ -67,20 +66,20 @@ const JoinForm: FC<{
             </p>
           </div>
 
-          <button className="btn" id="loginpagebtn" onClick={() => {history.push('/login')}}>
+          <button className="btn" id="loginpagebtn" onClick={() => {navigate('/login')}}>
           로그인
           <br></br>
           하러가기
-          </button> 
+          </button>
         </form>
- 
+
     </div>
   )
 }
 
-const Join: FC = (props) => {
-  const history = useHistory();
-  const socket = useRef(io('http://localhost:3005')).current
+const Join: FC = () => {
+  const navigate = useNavigate();
+  const socket = useRef(new Manager('http://localhost:3005')).current
 
   const handleJoin = (id: string, pw: string) => {
       firestore
@@ -112,17 +111,17 @@ const Join: FC = (props) => {
     socket.on('disconnect', () => {
       console.log('disconnected')
     })
-    socket.on('loginpage', (data: any) => {
+    socket.on('loginpage', () => {
       console.log('on')
-      history.push('/login')
+      navigate('/login')
     })
 
     socket.on('join', (data: FormData, cb?: Function) => {
-        alert(`회원가입에 성공했습니다\n${data.id}님 환영합니다.`)
-        //화면 전환 
-        history.push('/login')
+      alert(`회원가입에 성공했습니다\n${data.id}님 환영합니다.`)
+      //화면 전환
+      navigate('/login')
     })
-  }, [socket])
+  }, [socket, navigate])
 
   return (
     <div className="Join">

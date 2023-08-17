@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import SproutIcon from '../../../components/icon.png';
 import title from '../../../components/title.png';
-import { io } from 'socket.io-client'
+import { Manager } from 'socket.io-client'
 
 /* Styled */
 import styled from 'styled-components';
@@ -35,10 +35,9 @@ const SideBar = props => {
 
   const [id, setId] = useState('');
 
-  const socket = useRef(io('http://localhost:3005')).current
-  
+  const socket = useRef(new Manager('http://localhost:3005')).current
+
   useEffect(() => {
-    console.log("Sidebar")
     socket.on('getUserId', (data) => {
         if(data !== ""){
           items[0].label = "My Page"
@@ -62,7 +61,6 @@ const SideBar = props => {
             <img src={ SproutIcon } width='60px' height='40px' padding-left='100px' padding-top='10px' alt=""/>
             <bt></bt>
             <img src ={title} width='140px' height='40px' alt=""/>
-            
             </p>
           </form>
         </div>

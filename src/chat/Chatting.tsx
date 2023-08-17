@@ -1,18 +1,13 @@
 import React, { FC, useEffect, useRef, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { io } from 'socket.io-client'
+import {Manager} from 'socket.io-client'
 import { firestore } from '../components/firebase';
 import './styles.css'
-import {items} from '../layouts/Main/SideBar/SideBar.js'
+import {items} from '../layouts/Main/SideBar/SideBar.jsx'
 import firebase from 'firebase';
 import 'firebase/firestore';
 import $ from 'jquery';
-
-type FormData = {
-  id: string
-  pw: string
-}
 
 type ChatData = {
   msg: string
@@ -35,15 +30,15 @@ var userId = "";
 
 const ChatForm: FC<{
   handleChat: (msg: string) => void
-  
+
 }> = (props) => {
-  const socket = useRef(io('http://localhost:3005')).current
+  const socket = useRef(new Manager('http://localhost:3005')).current
   const { handleChat } = props
-  
+
   const { register, handleSubmit } = useForm<ChatData>()
-  const history = useHistory();
+  const navigate = useNavigate();
   const onSubmit = handleSubmit(({ msg }) => {
-    
+
     if (!msg) {
       alert('check validation')
       return false
@@ -64,7 +59,7 @@ const ChatForm: FC<{
   var limit = 0
 
   const handleLogout = () => {
-    if(window.confirm("로그아웃 하시겠습니까?") === true){
+    if(window.confirm("로그아웃 하시겠습니까?")){
       items.map((item)=>{
           if(item.label === "My Page"){
               item.label = "Login"
@@ -74,21 +69,21 @@ const ChatForm: FC<{
       userId = ''
       docId = ''
       socket.emit('userInfo', '');
-      history.push('/home');
+      navigate('/home');
     }
   }
 
   const handleRoomOut = (id: string) => {
-    if(window.confirm("채팅방을 나가시겠습니까?") === true){
-      
+    if(window.confirm("채팅방을 나가시겠습니까?")){
+
       firestore.collection("users")
       .doc(docId).onSnapshot((doc) => {
         tempList = doc.get("list").filter((el: storeData) => el.name !== id)
         firestore.collection("users").doc(docId).update({list: tempList})
         id="" ///나왔다가 같은 방 다시 들어갈 수 있음.
-      }) 
+      })
 
-      history.push("/home")
+      navigate("/home")
     }
   }
 
@@ -113,7 +108,7 @@ const ChatForm: FC<{
                       </div>
               ))
               setRoomList(tempList)
-          })   
+          })
         }
       }
     })
@@ -139,7 +134,7 @@ const ChatForm: FC<{
         firestore.collection("messages")
         .doc(roomId).onSnapshot((doc) => {
           if(doc.exists){
-            mList = doc.get("msgs").map((el: LogData) => (         
+            mList = doc.get("msgs").map((el: LogData) => (
               <div>
                 { userId === el.uid
                   &&
@@ -164,30 +159,30 @@ const ChatForm: FC<{
             if($chatLog.length){
               $chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
             }
-            
+
           }
           else{
             mList=[]
             setmsgList([])
           }
-        }) 
-      }  
-      socket.emit('userlist', userId);      
+        })
+      }
+      socket.emit('userlist', userId);
     });
 
 
-    socket.on('userlist', (data: string) => {
+    socket.on('userlist', () => {
 
-      
+
       firestore.collection("messages")
       .doc(roomId).onSnapshot((doc) => {
-        
-        if(doc.exists){    
+
+        if(doc.exists){
           doc.get("msgs").map((el: LogData) => {
             uid = el.uid
             memSet.add(uid)
           })
-          
+
 
           const List = Array.from(memSet);
           console.log(List)
@@ -195,7 +190,7 @@ const ChatForm: FC<{
           if(flag === 0){
             console.log(roomId + ' ' + userId)
             for(var i = 0; i < List.length; i++){
-              
+
               if(userId === List[i]){
                 $memberSelect.append(`<div class="memberEl">${List[i]}(me)</div>`)
               }else
@@ -204,7 +199,7 @@ const ChatForm: FC<{
               }else {
                 $memberSelect.append(`<div class="memberEl">${List[i]}</div>`)
               }
-            }  
+            }
             flag = 1;
           }
         }
@@ -213,13 +208,13 @@ const ChatForm: FC<{
   }, [socket])
 
   return (
-    <body> 
+    <body>
       <nav>
         <button className="btn" onClick={() => {handleLogout()}}>
           Logout
         </button>
       </nav>
-      
+
       <div id="contentCover">
         <div id="roomWrap">
           <div id="roomList">
@@ -229,11 +224,11 @@ const ChatForm: FC<{
             </span>
           </div>
         </div>
-        <div id="chatWrap">  
-        <div id="chat_out"><div id="chatHeader">Please enter the room</div>     
+        <div id="chatWrap">
+        <div id="chat_out"><div id="chatHeader">Please enter the room</div>
           <div id="out" onClick={() => handleRoomOut(roomId)}> 나가기 </div>
         </div>
-          
+
           <div id="chatLog">
             {msgList}
           </div>
@@ -246,17 +241,16 @@ const ChatForm: FC<{
             <div id="memberList">
 
               <div id="memberHeader">참여자</div>
-              <div id="memberSelect"></div>     
+              <div id="memberSelect"></div>
 
             </div>
-        </div>   
+        </div>
       </div>
     </body>
   )
 }
 
-const NewChat: FC = (props) => {
-  const socket = useRef(io('http://localhost:3005')).current
+const NewChat: FC = () => {
 
   const handleChat = (msg: string) => {
     let m = $("#message");
@@ -269,7 +263,7 @@ const NewChat: FC = (props) => {
         docRef.update({
           msgs: firebase.firestore.FieldValue.arrayUnion({message: msg, uid: userId, timestamp: timeStamp})
         }).then(function() {
-          
+
           m.val("");
         })
       } else {
@@ -279,7 +273,7 @@ const NewChat: FC = (props) => {
           m.val("");
         })
       }
-    });  
+    });
   }
 
   return (

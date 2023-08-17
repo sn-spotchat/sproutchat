@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import { firestore } from './firebase';
 import sproutIcon from './icon.png'
 import searchIcon from './search.png'
-import { RenderAfterNavermapsLoaded, NaverMap, Marker } from 'react-naver-maps'; // 패키지 불러오기
-import {withRouter} from 'react-router-dom';
-import { io } from 'socket.io-client';
+import {NaverMap, Marker, InfoWindow, NavermapsProvider, Container as MapDiv, useNavermaps} from 'react-naver-maps'; // 패키지 불러오기
+import { Manager } from 'socket.io-client';
 import './Map.css';
 import firebase from 'firebase';
 import 'firebase/firestore';
@@ -12,7 +11,7 @@ import { MAPS_CLIENT_ID } from '../constants/maps.constants';
 
 class Map extends Component {
 
-  //socket = useRef(io('http://localhost:3005')).current
+  //socket = useRef(Manager('http://localhost:3005')).current
   state = {
     userID: '',
     center : {lat: 37.551046251096544, lng: 126.94103448409076},
@@ -88,7 +87,7 @@ class Map extends Component {
   }
 
   componentDidMount() {
-    const socket = io("http://localhost:3005/");
+    const socket = new Manager("http://localhost:3005/");
     socket.on('getUserId' , (data) => {
       this.setState({userID: data})
     })
@@ -108,8 +107,14 @@ class Map extends Component {
     });
   }
 
+  SproutMapComponent = () => {
+    const navermaps = useNavermaps();
+    // const { stores, center } = this.state;
+    return null;
+  }
+
   render() {
-    const { stores, center } = this.state;
+    const { stores, center, recomList } = this.state;
 
     return (
       <view>
@@ -129,6 +134,7 @@ class Map extends Component {
                 height="25"
                 width="25"
                 type="image"
+                alt="search"
                 onClick={this.handleChange}
               />
             </form>
@@ -138,43 +144,57 @@ class Map extends Component {
         </div>
 
         <div className="bottom">
-          {this.state.recomList /*검색어가 포함된 가게 이름 출력*/}
+          {recomList /*검색어가 포함된 가게 이름 출력*/}
         </div>
-
-        <RenderAfterNavermapsLoaded
-        ncpClientId={MAPS_CLIENT_ID} // 자신의 네이버 계정에서 발급받은 Client ID
-        error={<p>Maps Load Error</p>}
-        loading={<p>Maps Loading...</p>}
-        >
-          <NaverMap
-          mapDivId={'maps-getting-started-uncontrolled'} // default: react-naver-map
-          style={{
-            width: '100%', // 네이버지도 가로 길이
-            height: '100vh' // 네이버지도 세로 길이
-          }}
-          center={center} // 지도 초기 위치
-          defaultZoom={17} // 지도 초기 확대 배율
+        <MapDiv style={{height: '100vh'}}>
+          <NavermapsProvider
+            ncpClientId={MAPS_CLIENT_ID} // 자신의 네이버 계정에서 발급받은 Client ID
           >
-            {stores.map(row =>
-              (<Marker
-                key={row.id}
-                position={{lat: row.latitude, lng: row.longitude}}
-                animation={row.animation}
-                icon={{
-                  url: sproutIcon,
-                  size:{width:60, height:40},
-                  scaledSize:{width:60,height:40},
-                  anchor: {x:30, y:40}
-                }}
-                title={row.name}
-                onClick={() => this.goToChat(row.id, row.name)}
-              />)
-            )}
-          </NaverMap>
-        </RenderAfterNavermapsLoaded>
+            <NaverMap
+              mapDivId={'maps-getting-started-uncontrolled'} // default: react-naver-map
+              center={center} // 지도 초기 위치
+              defaultZoom={17} // 지도 초기 확대 배율
+            >
+              {stores.map(row => (
+                <Marker
+                  key={row.id}
+                  position={{lat: row.latitude, lng: row.longitude}}
+                  animation={row.animation}
+                  icon={{
+                    url: sproutIcon,
+                    size:{width:60, height:40},
+                    scaledSize:{width:60,height:40},
+                    anchor: {x:30, y:40}
+                  }}
+                  title={row.name}
+                  onClick={() => this.goToChat(row.id, row.name)}
+                >
+                  <InfoWindow
+                    anchor={{
+                      x: 0,
+                      y: 0,
+                    }}
+                    visible={row.animation === 1}
+                    onClose={() => {
+                      // Close the InfoWindow when clicked anywhere else on the map
+                      this.setState({
+                        stores: stores.map(store => ({
+                          ...store,
+                          animation: 0,
+                        })),
+                      });
+                    }}
+                    content={row.name}>
+                  </InfoWindow>
+                </Marker>)
+              )}
+              {/*<this.SproutMapComponent />*/}
+            </NaverMap>
+          </NavermapsProvider>
+        </MapDiv>
       </view>
     );
   }
 }
 
-export default withRouter(Map);
+export default Map;

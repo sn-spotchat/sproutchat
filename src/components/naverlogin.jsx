@@ -1,12 +1,12 @@
 
 import React, {Component} from 'react';
 import {BrowserRouter, Route} from 'react-router-dom';
-import { io } from 'socket.io-client'
-import { firestore } from '../components/firebase';
+import {Manager} from 'socket.io-client'
+import { firestore } from './firebase';
 
-const socket = io('http://localhost:3005')
+const socket = new Manager('http://localhost:3005')
 
-const naverlogin = ()=>{
+const naverlogin = () => {
     return (
         <BrowserRouter>
         <div>
@@ -42,10 +42,10 @@ class Success extends Component {
       super(props)
       window.naverSignInCallback = this.naverSignInCallback.bind(this)
     }
-    
+
     naverSignInCallback() {
      var naver_id_login = new window.naver_id_login('8HkITidEmr1tQaw5jtAL', "http://localhost:3000/login/chat")
-     
+
       this.setState({
         id: naver_id_login.getProfileData('email'),
         pw: naver_id_login.getProfileData('id')
@@ -61,7 +61,7 @@ class Success extends Component {
             flag = 1;
           }
         })
-        if(flag === 0) {  
+        if(flag === 0) {
           firestore
           .collection("users")
           .add({
@@ -71,7 +71,7 @@ class Success extends Component {
         }
         socket.emit('naverlogin',{id: this.state.id, pw: this.state.pw})
 
-      }) 
+      })
 
     }
 
