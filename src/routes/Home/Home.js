@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Map from '../../components/Map.js';
+import Map from '../../components/Map.jsx';
 
 /* Styled */
 import styled from 'styled-components';

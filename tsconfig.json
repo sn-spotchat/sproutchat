@@ -22,7 +22,7 @@
   },
   "include": [
     "src",
-    "src/chat/Server.js",
+    "src/server/Server.js",
     "src/setProxy.js",
     "src/serverindex.js"
   ]

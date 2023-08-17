@@ -8,6 +8,7 @@ import { io } from 'socket.io-client';
 import './Map.css';
 import firebase from 'firebase';
 import 'firebase/firestore';
+import { MAPS_CLIENT_ID } from '../constants/maps.constants';
 
 class Map extends Component {
 
@@ -21,7 +22,7 @@ class Map extends Component {
   }
 
   /*검색창에 쓴 검색어를 state.place에 저장*/
-  handleChange = (e) => {
+  handleChange = () => {
     this.setState({
       place: document.getElementById('search').value
     })
@@ -55,7 +56,7 @@ class Map extends Component {
         list.push('검색 결과가 없습니다.');
       }
     }
-    
+
     this.setState({recomList: list});
 
     e.preventDefault();
@@ -106,28 +107,28 @@ class Map extends Component {
       });
     });
   }
-  
+
   render() {
     const { stores, center } = this.state;
 
-    return ( 
+    return (
       <view>
         <div className="top">
           <div className="search_container">
             <form onSubmit={this.handleSubmit}>
-              <input 
-                className="input" 
-                type="text" 
+              <input
+                className="input"
+                type="text"
                 id="search"
                 placeholder="search..."
               />
-              
-              <input 
-                className="search_btn" 
+
+              <input
+                className="search_btn"
                 src={searchIcon}
-                height="25" 
-                width="25" 
-                type="image" 
+                height="25"
+                width="25"
+                type="image"
                 onClick={this.handleChange}
               />
             </form>
@@ -141,7 +142,7 @@ class Map extends Component {
         </div>
 
         <RenderAfterNavermapsLoaded
-        ncpClientId={'8tdwhciu8m'} // 자신의 네이버 계정에서 발급받은 Client ID
+        ncpClientId={MAPS_CLIENT_ID} // 자신의 네이버 계정에서 발급받은 Client ID
         error={<p>Maps Load Error</p>}
         loading={<p>Maps Loading...</p>}
         >
@@ -154,13 +155,13 @@ class Map extends Component {
           center={center} // 지도 초기 위치
           defaultZoom={17} // 지도 초기 확대 배율
           >
-            {stores.map(row => 
+            {stores.map(row =>
               (<Marker
-                key={1}
+                key={row.id}
                 position={{lat: row.latitude, lng: row.longitude}}
                 animation={row.animation}
                 icon={{
-                  url:  sproutIcon,
+                  url: sproutIcon,
                   size:{width:60, height:40},
                   scaledSize:{width:60,height:40},
                   anchor: {x:30, y:40}
@@ -168,9 +169,9 @@ class Map extends Component {
                 title={row.name}
                 onClick={() => this.goToChat(row.id, row.name)}
               />)
-            )}  
+            )}
           </NaverMap>
-        </RenderAfterNavermapsLoaded> 
+        </RenderAfterNavermapsLoaded>
       </view>
     );
   }
